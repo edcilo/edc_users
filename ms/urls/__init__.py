@@ -1,6 +1,7 @@
 from flask import jsonify
 from ms import app
 from ms.controllers import userController
+from ms.middlewares import auth
 
 
 @app.route("/")
@@ -21,10 +22,13 @@ def register(): return userController.register()
 def login(): return userController.login()
 
 @app.route('/refresh', methods=['POST'])
+@auth.auth
 def refresh(): return userController.refresh()
 
 @app.route('/check', methods=['POST'])
+@auth.auth
 def check(): return userController.check()
 
 @app.route('/profile')
+@auth.auth
 def profile(): return userController.profile()

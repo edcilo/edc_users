@@ -6,3 +6,4 @@ app = Flask(__name__)
 
 import ms.config
 import ms.urls
+import ms.models

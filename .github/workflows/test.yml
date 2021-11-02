@@ -15,8 +15,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Docker build
+      - name: Docker - build image
         run: docker build -t msaqusers .
+
+      - name: Docker - run image
+        run: docker run --name msaqusers -d msaqusers
 
       # - name: Set up Python 3.8
       #   uses: actions/setup-python@v2

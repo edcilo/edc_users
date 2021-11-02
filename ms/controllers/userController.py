@@ -10,7 +10,7 @@ class UserController():
         form = RegisterForm()
 
         if not form.validate_on_submit():
-            return jsonify({ "errors": form.errors }), 400
+            return jsonify({'errors': form.errors}), 400
 
         data = userRepo.form_to_dict(form)
         user = userRepo.add(data)
@@ -22,7 +22,7 @@ class UserController():
         form = LoginForm()
 
         if not form.validate_on_submit():
-            return jsonify({ "errors": form.errors }), 400
+            return jsonify({'errors': form.errors}), 400
 
         user = userRepo.find_by_attr('username', form.username.data)
         serializer = UserSerializer(user)

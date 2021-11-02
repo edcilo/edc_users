@@ -1,4 +1,5 @@
-import os, time
+import os
+import time
 from datetime import datetime, timezone
 from ms import app
 
@@ -13,6 +14,7 @@ time.tzset()
 
 def now():
     return datetime.now(tz=utc)
+
 
 def epoch_now():
     return int(time.time())

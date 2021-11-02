@@ -1,4 +1,4 @@
-from ms.serializers.Serializer import Serializer
+from .Serializer import Serializer
 
 
 class UserSerializer(Serializer):

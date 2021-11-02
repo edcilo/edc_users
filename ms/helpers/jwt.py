@@ -4,14 +4,15 @@ from ms.helpers import time
 
 
 class JwtHelper():
-    def __init__(self, algorithms=None, token_lifetime=None, refresh_token_lifetime=None, token_type=None):
+    def __init__(self, algorithms=None, token_lifetime=None,
+                 refresh_token_lifetime=None, token_type=None):
         self.key = app.config.get('SECRET_KEY')
         self.algorithms = algorithms or 'HS256'
         self.token_type = token_type or 'Bearer'
         self.token_lifetime = token_lifetime or 43200
         self.refresh_token_lifetime = refresh_token_lifetime or 86400
 
-    def encode(self, payload, lifetime: int) -> str :
+    def encode(self, payload, lifetime: int) -> str:
         payload['exp'] = time.epoch_now() + lifetime
         encoded = jwt.encode(payload, self.key, algorithm=self.algorithms)
         return encoded
@@ -33,7 +34,10 @@ class JwtHelper():
         try:
             payload = self.decode(token)
             return time.epoch_now() <= payload['exp']
-        except (jwt.InvalidSignatureError, jwt.DecodeError, jwt.ExpiredSignatureError, KeyError):
+        except (jwt.InvalidSignatureError,
+                jwt.DecodeError,
+                jwt.ExpiredSignatureError,
+                KeyError):
             return False
 
 

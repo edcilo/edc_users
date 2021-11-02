@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, Response
 from ms.forms import RegisterForm, LoginForm
 from ms.helpers.jwt import jwtHelper
 from ms.repositories import userRepo
@@ -6,7 +6,7 @@ from ms.serializers import UserSerializer
 
 
 class UserController():
-    def register(self):
+    def register(self) -> tuple[Response, int]:
         form = RegisterForm()
 
         if not form.validate_on_submit():
@@ -18,7 +18,7 @@ class UserController():
 
         return jsonify(serializer.data), 200
 
-    def login(self):
+    def login(self) -> tuple[Response, int]:
         form = LoginForm()
 
         if not form.validate_on_submit():
@@ -31,11 +31,11 @@ class UserController():
 
         return jsonify(token), 200
 
-    def refresh(self):
-        return 'refresh from controller'
+    def refresh(self) -> tuple[Response, int]:
+        return 'refresh from controller', 200
 
-    def profile(self):
-        return 'profile from controller'
+    def profile(self) -> tuple[Response, int]:
+        return 'profile from controller', 200
 
 
 userController = UserController()

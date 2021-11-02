@@ -11,7 +11,7 @@ class User(db.Model):
     email = db.Column(db.String(250), unique=True, nullable=False)
     password = db.Column(db.String(250), nullable=False)
 
-    def __init__(self, username: str, email: str, password: str):
+    def __init__(self, username: str, email: str, password: str) -> None:
         self.username = username
         self.email = email
         self.password = generate_password_hash(password)

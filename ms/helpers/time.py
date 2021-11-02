@@ -12,9 +12,9 @@ os.environ['TZ'] = app_tz
 time.tzset()
 
 
-def now():
+def now() -> datetime:
     return datetime.now(tz=utc)
 
 
-def epoch_now():
+def epoch_now() -> int:
     return int(time.time())

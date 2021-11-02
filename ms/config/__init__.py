@@ -1,5 +1,9 @@
 import os
+from dotenv import load_dotenv
 from ms import app
+
+
+load_dotenv()
 
 
 DB_USER = os.getenv('DB_USER')

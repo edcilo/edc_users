@@ -9,6 +9,5 @@ CORS(app)
 
 
 import ms.config
-import ms.config
 import ms.urls
 import ms.models

@@ -27,7 +27,7 @@ def refresh(): return userController.refresh()
 
 @app.route('/check', methods=['POST'])
 @auth.auth
-def check(): return userController.check()
+def check(): return jsonify({}), 200
 
 @app.route('/profile')
 @auth.auth

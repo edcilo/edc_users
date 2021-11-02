@@ -22,7 +22,7 @@ def test_login(client):
     createJhonDoe()
     data = {
         'username': 'JhonDoe',
-        'password': 'secret123.'
+        'password': 'secret'
     }
     response = client.post('/login', data=data)
     assert response.status_code == 200

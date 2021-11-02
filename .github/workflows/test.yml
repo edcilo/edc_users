@@ -12,6 +12,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      APP_SECRET_KEY: secret-key
+
     steps:
       - uses: actions/checkout@v2
 
@@ -19,7 +22,7 @@ jobs:
         run: docker build -t msaqusers .
 
       - name: Docker - run container
-        run: docker run --name msaqusers -d msaqusers
+        run: docker run --name msaqusers -e APP_SECRET_KEY=$APP_SECRET_KEY -d msaqusers
 
       - name: Docker - run tests
         run: docker exec msaqusers coverage run -m pytest

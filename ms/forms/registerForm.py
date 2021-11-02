@@ -13,6 +13,15 @@ class RegisterForm(FlaskForm):
     class Meta:
         csrf = False
 
-    username = StringField('username', validators=[DataRequired(), Length(min=3, max=120), Unique(User)])
-    password = StringField('password', validators=[DataRequired(), Length(min=6, max=120)])
-    email = StringField('email', validators=[DataRequired(), Email(), Length(max=255), Unique(User)])
+    username = StringField('username', validators=[
+        DataRequired(),
+        Length(min=3, max=120),
+        Unique(User)])
+    password = StringField('password', validators=[
+        DataRequired(),
+        Length(min=6, max=120)])
+    email = StringField('email', validators=[
+        DataRequired(),
+        Email(),
+        Length(max=255),
+        Unique(User)])

@@ -1,1 +1,1 @@
-from ms.models.user import User
+from .user import User

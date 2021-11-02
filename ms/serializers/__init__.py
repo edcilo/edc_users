@@ -1,1 +1,1 @@
-from ms.serializers.userSerializer import UserSerializer
+from .userSerializer import UserSerializer

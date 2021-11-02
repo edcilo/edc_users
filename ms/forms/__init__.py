@@ -1,2 +1,2 @@
-from ms.forms.registerForm import RegisterForm
-from ms.forms.loginForm import LoginForm
+from .registerForm import RegisterForm
+from .loginForm import LoginForm

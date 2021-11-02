@@ -15,18 +15,22 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
+      - name: Docker build
+        uses: docker
+        run: docker build -t msaqusers .
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt;
-          pip install -e .
+      # - name: Set up Python 3.8
+      #   uses: actions/setup-python@v2
+      #   with:
+      #     python-version: 3.8
 
-      - name: Test with unittest
-        run: |
-          coverage run -m pytest
-          coverage report
+      # - name: Install dependencies
+      #   run: |
+      #     python -m pip install --upgrade pip
+      #     pip install -r requirements.txt;
+      #     pip install -e .
+
+      # - name: Test with unittest
+      #   run: |
+      #     coverage run -m pytest
+      #     coverage report

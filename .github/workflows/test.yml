@@ -16,7 +16,6 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Docker build
-        uses: docker
         run: docker build -t msaqusers .
 
       # - name: Set up Python 3.8

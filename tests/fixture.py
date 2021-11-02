@@ -19,7 +19,7 @@ class DB():
             })
             init(directory=migrations_path)
             migrate(directory=migrations_path)
-            upgrade()
+            upgrade(directory=migrations_path)
     def cleanup(self, app):
         for dir in os.listdir('/tmp'):
             if (re.search('migrations_*', dir)):

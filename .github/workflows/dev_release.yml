@@ -1,8 +1,10 @@
-name: Release on EKS
+name: Release on dev EKS
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
 
   workflow_dispatch:
 
@@ -13,10 +15,11 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      DOCKER_IMAGE: edcilo/ms_aq_users
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
-      CLUSTER_NAME: cluster-1
+      CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
 
     steps:
       - name: Check out the repo
@@ -32,7 +35,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3.5.0
         with:
-          images: edcilo/ms_aq_users
+          images: ${{ env.DOCKER_IMAGE }}
 
       - name: Version
         run: echo ${{ steps.meta.outputs.version }}
@@ -45,18 +48,18 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      # - name: Update deployment file
-      #   run: TAG=$(echo ${{ steps.meta.outputs.version }}) && sed -i 's|<IMAGE>|edcilo/ms_aq_users:'${TAG}'|' $GITHUB_WORKSPACE/k8s/deployment.yaml
+      - name: Update deployment file
+        run: TAG=$(echo ${{ steps.meta.outputs.version }}) && sed -i 's|<IMAGE>|${{ env.DOCKER_IMAGE }}:'${TAG}'|' $GITHUB_WORKSPACE/k8s/manifest.yaml
 
-      # - name: Configure AWS credentials
-      #   uses: aws-actions/configure-aws-credentials@v1
-      #   with:
-      #     aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: ${{ env.AWS_REGION }}
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
-      # - name: Save AWS kubeconfig
-      #   run: aws eks --region ${{ env.AWS_REGION }} update-kubeconfig --name ${{ env.CLUSTER_NAME }}
+      - name: Save AWS kubeconfig
+        run: aws eks --region ${{ env.AWS_REGION }} update-kubeconfig --name ${{ env.CLUSTER_NAME }}
 
-      # - name: Deploy to EKS
-      #   run: kubectl apply -f $GITHUB_WORKSPACE/k8s/deployment.yaml
+      - name: Deploy to EKS
+        run: kubectl apply -f $GITHUB_WORKSPACE/k8s/manifest.yaml

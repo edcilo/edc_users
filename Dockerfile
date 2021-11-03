@@ -2,7 +2,7 @@ FROM python:3.10-alpine
 
 ENV PYTHONUNBUFFERED=1
 ENV FLASK_APP=ms
-ENV FLASK_ENV=development
+ENV FLASK_ENV=production
 
 RUN apk update \
     && apk add --no-cache \
@@ -12,11 +12,13 @@ RUN apk update \
 
 WORKDIR /app
 
+RUN /usr/local/bin/python -m pip install --upgrade pip
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY . .
 RUN pip install -e .
+RUN chmod a+rx ./start.sh
 
 EXPOSE 5000
-CMD flask run --host=0.0.0.0
+CMD ["./start.sh"]

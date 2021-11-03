@@ -16,19 +16,28 @@ def hello_world():
 
 
 @app.route('/register', methods=['POST'])
-def register(): return userController.register()
+def register():
+    return userController.register()
+
 
 @app.route('/login', methods=['POST'])
-def login(): return userController.login()
+def login():
+    return userController.login()
+
 
 @app.route('/refresh', methods=['POST'])
 @auth.auth
-def refresh(): return userController.refresh()
+def refresh():
+    return userController.refresh()
+
 
 @app.route('/check', methods=['POST'])
 @auth.auth
-def check(): return jsonify({}), 200
+def check():
+    return jsonify({}), 200
+
 
 @app.route('/profile')
 @auth.auth
-def profile(): return userController.profile()
+def profile():
+    return userController.profile()

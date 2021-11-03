@@ -9,5 +9,7 @@ class LoginForm(FlaskForm):
     class Meta:
         csrf = False
 
-    password = StringField('password', validators=[DataRequired(),])
-    username = StringField('username', validators=[DataRequired(), CheckPassword(User)])
+    password = StringField('password', validators=[DataRequired(), ])
+    username = StringField('username', validators=[
+        DataRequired(),
+        CheckPassword(User)])

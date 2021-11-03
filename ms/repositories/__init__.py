@@ -1,1 +1,1 @@
-from ms.repositories.userRepository import userRepo
+from .userRepository import userRepo

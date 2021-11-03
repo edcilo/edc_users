@@ -2,9 +2,9 @@ name: Test application
 
 on:
   push:
-    branches: [ main, staging ]
+    branches: [ main, develop ]
   pull_request:
-    branches: [ main, staging ]
+    branches: [ main, develop ]
 
   workflow_dispatch:
 

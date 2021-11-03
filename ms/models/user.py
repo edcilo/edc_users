@@ -11,12 +11,12 @@ class User(db.Model):
     email = db.Column(db.String(250), unique=True, nullable=False)
     password = db.Column(db.String(250), nullable=False)
 
-    def __init__(self, username: str, email: str, password: str):
+    def __init__(self, username: str, email: str, password: str) -> None:
         self.username = username
         self.email = email
         self.password = generate_password_hash(password)
 
-    def __repr__(self) -> str :
+    def __repr__(self) -> str:
         return f'<User id={self.id} username={self.username}>'
 
     def verify_password(self, password: str) -> bool:

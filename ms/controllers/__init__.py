@@ -1,1 +1,1 @@
-from ms.controllers.userController import userController
+from .userController import userController

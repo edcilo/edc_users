@@ -1,8 +1,10 @@
-name: Release on EKS
+name: Release on dev EKS
 
 on:
-  release:
-    types: [published]
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
 
   workflow_dispatch:
 

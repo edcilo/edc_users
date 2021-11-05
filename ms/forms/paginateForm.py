@@ -7,6 +7,7 @@ class PaginateForm(Form):
     class Meta:
         csrf = False
 
+    q = StringField('q', validators=[])
     order = StringField('order', validators=[])
     page = IntegerField('page', validators=[])
     per_page = IntegerField('per_page', validators=[])

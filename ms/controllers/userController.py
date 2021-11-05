@@ -10,6 +10,7 @@ class UserController():
     def list(self, form):
         params = {
             'paginate': True,
+            'search': form.q.data,
             'order': form.order.data or 'desc',
             'page': form.page.data or 1,
             'per_page': form.per_page.data or 15,

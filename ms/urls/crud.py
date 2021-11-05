@@ -1,27 +1,33 @@
 from ms import app
 from ms.controllers import userController
+from ms.middlewares import auth
 
 
 @app.route('/')
-def list():
+@auth.auth
+def list(jwt_payload):
     return userController.list()
 
 
 @app.route('/', methods=['POST'])
-def create():
+@auth.auth
+def create(jwt_payload):
     return userController.create()
 
 
 @app.route('/<id>')
-def detail(id):
+@auth.auth
+def detail(id, jwt_payload):
     return userController.detail(id)
 
 
 @app.route('/<id>', methods=['PUT'])
-def update(id):
+@auth.auth
+def update(id, jwt_payload):
     return userController.update(id)
 
 
 @app.route('/<id>', methods=['DELETE'])
-def delete(id):
+@auth.auth
+def delete(id, jwt_payload):
     return userController.delete(id)

@@ -13,5 +13,5 @@ def createJhonDoe():
         'email': 'jhon.doe@example.com'
     })
 
-def createJWT():
-    return jwtHelper.get_tokens({})
+def createJWT(payload):
+    return jwtHelper.get_tokens(payload)

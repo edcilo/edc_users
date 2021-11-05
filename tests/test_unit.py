@@ -79,5 +79,5 @@ def test_user_repo_find_by_attr(client):
 def test_user_serializer(client):
     user = createJhonDoe()
     serializer = UserSerializer(user)
-    assert isinstance(serializer.data, dict)
-    assert list(serializer.data.keys()) == ['id', 'username', 'email']
+    assert isinstance(serializer.get_data(), dict)
+    assert list(serializer.get_data().keys()) == ['id', 'username', 'email']

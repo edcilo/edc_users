@@ -12,14 +12,14 @@ class AuthController():
         data = userRepo.form_to_dict(form, ('email', 'username', 'password'))
         user = userRepo.add(data)
         serializer = UserSerializer(user)
-        token = jwtHelper.get_tokens(serializer.data)
+        token = jwtHelper.get_tokens(serializer.get_data())
         return jsonify(token), 200
 
     @form_validator(LoginForm)
     def login(self, form) -> tuple[Response, int]:
         user = userRepo.find_by_attr('username', form.username.data)
         serializer = UserSerializer(user)
-        token = jwtHelper.get_tokens(serializer.data)
+        token = jwtHelper.get_tokens(serializer.get_data())
         return jsonify(token), 200
 
     def refresh(self) -> tuple[Response, int]:

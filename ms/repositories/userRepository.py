@@ -30,6 +30,14 @@ class UserRepository(Repository):
         user = q.first_or_404() if fail else q.first()
         return user
 
+    def get_all(self, order_column: str = 'id', order: str = 'asc',
+                paginate: bool = False, page: int = 1, per_page: int = 15):
+        column = getattr(self.model, order_column)
+        order_by = getattr(column, order)
+        q = self.model.query.order_by(order_by())
+        users = q.paginate(page, per_page=per_page) if paginate else q.all()
+        return users
+
     def update(self, id: int, data: dict, fail: bool = False) -> User:
         user = self.find(id, fail=fail)
         user.update(**data)

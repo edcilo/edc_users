@@ -2,6 +2,11 @@ from ms import app
 from ms.controllers import userController
 
 
+@app.route('/')
+def list():
+    return userController.list()
+
+
 @app.route('/', methods=['POST'])
 def create():
     return userController.create()

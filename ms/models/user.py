@@ -6,6 +6,11 @@ from ms.db import db
 class User(db.Model):
     __tablename__ = 'users'
 
+    fillable = (
+        'username',
+        'email'
+    )
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(250), unique=True, nullable=False)
     email = db.Column(db.String(250), unique=True, nullable=False)
@@ -17,7 +22,7 @@ class User(db.Model):
         self.password = generate_password_hash(password)
 
     def __repr__(self) -> str:
-        return f'<User id={self.id} username={self.username}>'
+        return f"<User '{self.id}' '{self.username}'>"
 
     def verify_password(self, password: str) -> bool:
         return check_password_hash(self.password, password)

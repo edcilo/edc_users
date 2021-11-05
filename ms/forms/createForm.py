@@ -10,7 +10,7 @@ from wtforms.validators import (
 )
 
 
-class RegisterForm(Form):
+class CreateForm(Form):
     class Meta:
         csrf = False
 

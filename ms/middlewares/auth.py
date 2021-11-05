@@ -18,7 +18,7 @@ def auth(f: callable) -> callable:
             abort(403)
 
         payload = jwtHelper.decode(authorization)
-        print(payload)
+        kwargs['jwt_payload'] = payload
 
         return f(*args, **kwargs)
     return decorated_function

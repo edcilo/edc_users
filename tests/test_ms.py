@@ -4,7 +4,7 @@ from helpers import createJhonDoe, createJWT
 
 
 def test_index(client):
-    response = client.get('/')
+    response = client.get('/about')
     assert response.status_code == 200
     assert response.content_type == 'application/json'
 
@@ -28,16 +28,20 @@ def test_login(client):
     assert response.status_code == 200
 
 def test_refresh_token(client):
-    refresh_token = createJWT()['refresh_token']
+    user = createJhonDoe()
+    refresh_token = createJWT({'id': user.id})['refresh_token']
     headers = {'Authorization': f'Bearer {refresh_token}'}
+    print(refresh_token, headers)
     response = client.post('/refresh', headers=headers)
+    print(response)
     assert response.status_code == 200
 
 def test_check(client):
-    token = createJWT()['token']
+    user = createJhonDoe()
+    token = createJWT({'id': user.id})['token']
     headers = {'Authorization': f'Bearer {token}'}
     response = client.post('/check', headers=headers)
-    assert response.status_code == 200
+    assert response.status_code == 204
 
 def test_profile(client):
     createJhonDoe()

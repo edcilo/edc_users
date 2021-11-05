@@ -38,7 +38,7 @@ class UserController():
         return 'profile from controller', 200
 
     def detail(self, id: int) -> tuple[Response, int]:
-        user = userRepo.find(id)
+        user = userRepo.find(id, fail=True)
         serializer = UserSerializer(user)
 
         return jsonify(serializer.data), 200
@@ -50,7 +50,7 @@ class UserController():
             return jsonify({'errors': form.errors}), 400
 
         data = userRepo.form_to_dict(form, ('email', 'username'))
-        user = userRepo.update(id, data)
+        user = userRepo.update(id, data, fail=True)
         serializer = UserSerializer(user)
         return jsonify(serializer.data), 200
 

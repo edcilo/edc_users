@@ -9,12 +9,11 @@ class UserRepository():
     def __init__(self) -> None:
         self.model = User
 
-    def form_to_dict(self, form: FlaskForm) -> dict:
-        return {
-            "username": form.username.data,
-            "password": form.password.data,
-            "email": form.email.data if hasattr(form, 'email') else None
-        }
+    def form_to_dict(self, form: FlaskForm, cols: tuple) -> dict:
+        data = dict()
+        for c in cols:
+            data[c] = getattr(form, c).data
+        return data
 
     def add(self, data: dict) -> User:
         user = self.model(**data)
@@ -28,6 +27,13 @@ class UserRepository():
 
     def find_by_attr(self, column: str, value: str) -> User:
         user = self.model.query.filter_by(**{column: value}).first()
+        return user
+
+    def update(self, id: int, data: dict) -> User:
+        user = self.find(id)
+        user.update(**data)
+        db.session.add(user)
+        db.session.commit()
         return user
 
 

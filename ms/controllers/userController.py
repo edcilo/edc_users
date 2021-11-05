@@ -1,5 +1,5 @@
 from flask import jsonify, Response
-from ms.forms import RegisterForm, LoginForm
+from ms.forms import RegisterForm, LoginForm, UpdateForm
 from ms.helpers.jwt import jwtHelper
 from ms.repositories import userRepo
 from ms.serializers import UserSerializer
@@ -12,7 +12,7 @@ class UserController():
         if not form.validate_on_submit():
             return jsonify({'errors': form.errors}), 400
 
-        data = userRepo.form_to_dict(form)
+        data = userRepo.form_to_dict(form, ('email', 'username', 'password'))
         user = userRepo.add(data)
         serializer = UserSerializer(user)
 
@@ -36,6 +36,16 @@ class UserController():
 
     def profile(self) -> tuple[Response, int]:
         return 'profile from controller', 200
+
+    def update(self, id) -> tuple[Response, int]:
+        form = UpdateForm()
+
+        if not form.validate_on_submit():
+            return jsonify({'errors': form.errors}), 400
+
+        data = userRepo.form_to_dict(form, ('email', 'username'))
+        user = userRepo.update(id, data)
+        return f'update user {id}'
 
 
 userController = UserController()

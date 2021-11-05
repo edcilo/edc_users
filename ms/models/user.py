@@ -22,7 +22,7 @@ class User(db.Model):
         self.password = generate_password_hash(password)
 
     def __repr__(self) -> str:
-        return f'<User id={self.id} username={self.username}>'
+        return f"<User '{self.id}' '{self.username}'>"
 
     def verify_password(self, password: str) -> bool:
         return check_password_hash(self.password, password)

@@ -3,32 +3,22 @@ from ms.forms import RegisterForm, LoginForm, UpdateForm
 from ms.helpers.jwt import jwtHelper
 from ms.repositories import userRepo
 from ms.serializers import UserSerializer
+from ms.helpers.decorators import form_validator
 
 
 class UserController():
-    def register(self) -> tuple[Response, int]:
-        form = RegisterForm()
-
-        if not form.validate_on_submit():
-            return jsonify({'errors': form.errors}), 400
-
+    @form_validator(RegisterForm)
+    def register(self, form) -> tuple[Response, int]:
         data = userRepo.form_to_dict(form, ('email', 'username', 'password'))
         user = userRepo.add(data)
         serializer = UserSerializer(user)
-
         return jsonify(serializer.data), 200
 
-    def login(self) -> tuple[Response, int]:
-        form = LoginForm()
-
-        if not form.validate_on_submit():
-            return jsonify({'errors': form.errors}), 400
-
+    @form_validator(LoginForm)
+    def login(self, form) -> tuple[Response, int]:
         user = userRepo.find_by_attr('username', form.username.data)
         serializer = UserSerializer(user)
-
         token = jwtHelper.get_tokens(serializer.data)
-
         return jsonify(token), 200
 
     def refresh(self) -> tuple[Response, int]:
@@ -40,15 +30,10 @@ class UserController():
     def detail(self, id: int) -> tuple[Response, int]:
         user = userRepo.find(id, fail=True)
         serializer = UserSerializer(user)
-
         return jsonify(serializer.data), 200
 
-    def update(self, id) -> tuple[Response, int]:
-        form = UpdateForm()
-
-        if not form.validate_on_submit():
-            return jsonify({'errors': form.errors}), 400
-
+    @form_validator(UpdateForm)
+    def update(self, id, form) -> tuple[Response, int]:
         data = userRepo.form_to_dict(form, ('email', 'username'))
         user = userRepo.update(id, data, fail=True)
         serializer = UserSerializer(user)

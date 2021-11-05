@@ -1,6 +1,5 @@
 from ms.models.user import User
 from ms.helpers.validators import Unique
-from flask_wtf import FlaskForm
 from .form import Form
 from wtforms import StringField
 from wtforms.validators import (

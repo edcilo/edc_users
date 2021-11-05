@@ -4,7 +4,7 @@ from helpers import createJhonDoe, createJWT
 
 
 def test_index(client):
-    response = client.get('/')
+    response = client.get('/about')
     assert response.status_code == 200
     assert response.content_type == 'application/json'
 

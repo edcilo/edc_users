@@ -1,3 +1,5 @@
+from ms.models.user import User
+from ms.helpers.validators import Unique
 from .form import Form
 from wtforms import StringField
 from wtforms.validators import (
@@ -8,7 +10,7 @@ from wtforms.validators import (
 )
 
 
-class UpdateForm(Form):
+class CreateForm(Form):
     class Meta:
         csrf = False
 
@@ -18,9 +20,12 @@ class UpdateForm(Form):
         Regexp(
             '^\\w+$',
             message="Username must contain only letters numbers or underscore"),
-        ])
+        Unique(User)])
+    password = StringField('password', validators=[
+        DataRequired(),
+        Length(min=6, max=120)])
     email = StringField('email', validators=[
         DataRequired(),
         Email(),
         Length(max=255),
-        ])
+        Unique(User)])

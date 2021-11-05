@@ -1,5 +1,5 @@
 import functools
-from flask import abort, jsonify
+from flask import jsonify
 
 
 def form_validator(formClass):

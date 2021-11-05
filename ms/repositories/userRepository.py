@@ -1,23 +1,18 @@
-from flask_wtf import FlaskForm
 from ms.models import User
 from ms.db import db
+from ms.repositories import Repository
 
 
-class UserRepository():
-    model = None
-
-    def __init__(self) -> None:
-        self.model = User
-
-    def form_to_dict(self, form: FlaskForm, cols: tuple) -> dict:
-        data = dict()
-        for c in cols:
-            data[c] = getattr(form, c).data
-        return data
-
+class UserRepository(Repository):
     def add(self, data: dict) -> User:
         user = self.model(**data)
         db.session.add(user)
+        db.session.commit()
+        return user
+
+    def delete(self, id: int, fail: bool = False) -> None:
+        user = self.find(id, fail=fail)
+        db.session.delete(user)
         db.session.commit()
         return user
 
@@ -39,4 +34,4 @@ class UserRepository():
         return user
 
 
-userRepo = UserRepository()
+userRepo = UserRepository(User)

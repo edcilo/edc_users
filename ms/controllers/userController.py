@@ -37,6 +37,12 @@ class UserController():
     def profile(self) -> tuple[Response, int]:
         return 'profile from controller', 200
 
+    def detail(self, id: int) -> tuple[Response, int]:
+        user = userRepo.find(id)
+        serializer = UserSerializer(user)
+
+        return jsonify(serializer.data), 200
+
     def update(self, id) -> tuple[Response, int]:
         form = UpdateForm()
 
@@ -45,7 +51,8 @@ class UserController():
 
         data = userRepo.form_to_dict(form, ('email', 'username'))
         user = userRepo.update(id, data)
-        return f'update user {id}'
+        serializer = UserSerializer(user)
+        return jsonify(serializer.data), 200
 
 
 userController = UserController()

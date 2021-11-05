@@ -24,9 +24,5 @@ class User(db.Model):
     def __repr__(self) -> str:
         return f'<User id={self.id} username={self.username}>'
 
-    def update(self, **kwargs):
-        for key, value in kwargs.items():
-            setattr(self, key, value)
-
     def verify_password(self, password: str) -> bool:
         return check_password_hash(self.password, password)

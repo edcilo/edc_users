@@ -42,6 +42,12 @@ def check():
 def profile():
     return userController.profile()
 
+
+@app.route('/<id>')
+def detail(id):
+    return userController.detail(id)
+
+
 @app.route('/<id>', methods=['PUT'])
 def update(id):
     return userController.update(id)

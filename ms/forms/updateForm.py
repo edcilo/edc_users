@@ -18,9 +18,9 @@ class UpdateForm(Form):
         Regexp(
             '^\\w+$',
             message="Username must contain only letters numbers or underscore"),
-        ])
+    ])
     email = StringField('email', validators=[
         DataRequired(),
         Email(),
         Length(max=255),
-        ])
+    ])

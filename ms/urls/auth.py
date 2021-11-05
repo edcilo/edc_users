@@ -16,17 +16,17 @@ def login():
 
 @app.route('/refresh', methods=['POST'])
 @auth.auth
-def refresh():
-    return authController.refresh()
+def refresh(jwt_payload):
+    return authController.refresh(jwt_payload)
 
 
 @app.route('/check', methods=['POST'])
 @auth.auth
-def check():
-    return jsonify({}), 200
+def check(jwt_payload):
+    return {}, 204
 
 
 @app.route('/profile')
 @auth.auth
-def profile():
-    return authController.profile()
+def profile(jwt_payload):
+    return authController.profile(jwt_payload)

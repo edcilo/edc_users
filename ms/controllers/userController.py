@@ -21,7 +21,7 @@ class UserController():
 
     @form_validator(CreateForm)
     def create(self, form) -> tuple[Response, int]:
-        data = userRepo.form_to_dict(form, ('email', 'username', 'password'))
+        data = userRepo.form_to_dict(form, ('email', 'phone', 'password'))
         user = userRepo.add(data)
         serializer = UserSerializer(user)
         return jsonify(serializer.get_data()), 200

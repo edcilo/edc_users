@@ -16,7 +16,7 @@ class User(db.Model):
         'mothername',
     )
 
-    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = db.Column(db.String(length=36), default=lambda: str(uuid.uuid4()), primary_key=True)
     email = db.Column(db.String(255), unique=True, nullable=False)
     phone = db.Column(db.String(15), unique=True, nullable=False)
     password = db.Column(db.String(250), nullable=False)
@@ -32,7 +32,7 @@ class User(db.Model):
         self.password = generate_password_hash(password)
 
     def __repr__(self) -> str:
-        return f"<User '{self.id}' '{self.username}'>"
+        return f"<User '{self.id}' '{self.email}'>"
 
     def verify_password(self, password: str) -> bool:
         return check_password_hash(self.password, password)

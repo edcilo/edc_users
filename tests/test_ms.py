@@ -10,7 +10,7 @@ def test_index(client):
 
 def test_register(client):
     data = {
-        'username': 'JhonDoe',
+        'phone': '1231231231',
         'password': 'secret',
         'email': 'jhon.doe@example.com'
     }
@@ -21,7 +21,7 @@ def test_register(client):
 def test_login(client):
     createJhonDoe()
     data = {
-        'username': 'JhonDoe',
+        'phone': '1231231231',
         'password': 'secret'
     }
     response = client.post('/login', data=data)
@@ -46,7 +46,7 @@ def test_check(client):
 def test_profile(client):
     createJhonDoe()
     data = {
-        'username': 'JhonDoe',
+        'phone': '1231231231',
         'password': 'secret'
     }
     response = client.post('/login', data=data)

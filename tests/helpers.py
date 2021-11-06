@@ -8,9 +8,9 @@ def createUser(data):
 
 def createJhonDoe():
     return createUser({
-        'username': 'JhonDoe',
+        'phone': '1231231231',
+        'email': 'jhon.doe@example.com',
         'password': 'secret',
-        'email': 'jhon.doe@example.com'
     })
 
 def createJWT(payload):

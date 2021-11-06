@@ -21,7 +21,7 @@ def test_register(client):
 def test_login(client):
     createJhonDoe()
     data = {
-        'phone': '1231231231',
+        'username': '1231231231',
         'password': 'secret'
     }
     response = client.post('/login', data=data)
@@ -46,7 +46,7 @@ def test_check(client):
 def test_profile(client):
     createJhonDoe()
     data = {
-        'phone': '1231231231',
+        'username': '1231231231',
         'password': 'secret'
     }
     response = client.post('/login', data=data)

@@ -16,7 +16,10 @@ class User(db.Model):
         'mothername',
     )
 
-    id = db.Column(db.String(length=36), default=lambda: str(uuid.uuid4()), primary_key=True)
+    id = db.Column(
+        db.String(length=36),
+        default=lambda: str(uuid.uuid4()),
+        primary_key=True)
     email = db.Column(db.String(255), unique=True, nullable=False)
     phone = db.Column(db.String(15), unique=True, nullable=False)
     password = db.Column(db.String(250), nullable=False)
@@ -24,7 +27,10 @@ class User(db.Model):
     lastname = db.Column(db.String(50), nullable=True)
     mothername = db.Column(db.String(50), nullable=True)
     is_active = db.Column(db.Boolean, default=True, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow, nullable=False)
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.datetime.utcnow,
+        nullable=False)
 
     def __init__(self, email: str, phone: str, password: str) -> None:
         self.phone = phone

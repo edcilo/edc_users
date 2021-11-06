@@ -17,7 +17,8 @@ class AuthController():
 
     @form_validator(LoginForm)
     def login(self, form) -> tuple[Response, int]:
-        user = userRepo.find_by_attr('username', form.username.data)
+        username = form.username.data
+        user = userRepo.find_or({'phone': username, 'email': username})
         serializer = JwtSerializer(user)
         token = jwtHelper.get_tokens(serializer.get_data())
         return jsonify(token), 200

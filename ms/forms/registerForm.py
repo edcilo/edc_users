@@ -22,7 +22,7 @@ class RegisterForm(Form):
     phone = StringField('phone', validators=[
         DataRequired(),
         Length(max=15),
-        Regexp('^\+?1?\d{9,15}$'),
+        Regexp('^\\+?1?\\d{9,15}$'),
         Unique(User)])
     password = StringField('password', validators=[
         DataRequired(),

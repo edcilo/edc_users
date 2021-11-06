@@ -30,6 +30,16 @@ class UserRepository(Repository):
         user = q.first_or_404() if fail else q.first()
         return user
 
+    def find_or(self, filter: dict[str, str], fail: bool = False) -> User:
+        filters = [
+            getattr(
+                self.model,
+                key) == val for key,
+            val in filter.items()]
+        q = self.model.query.filter(or_(*filters))
+        user = q.first_or_404() if fail else q.first()
+        return user
+
     def get_all(self,
                 search=None,
                 order_column: str = 'id',

@@ -42,6 +42,7 @@ class CheckPassword():
             if isinstance(column, str) \
             else [getattr(self.model, key) == field.data for key in column]
 
-        user = self.model.query.filter(or_(*filters)).first()
+        user = self.model.query.filter(
+            or_(*filters)).filter_by(deleted=False).first()
         if user is None or not user.verify_password(password):
             raise ValidationError(message)

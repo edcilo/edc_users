@@ -21,7 +21,7 @@ class UserRepository(Repository):
     def find(self, id: int, fail: bool = False, strict: bool = True) -> User:
         filters = {'id': id}
         if strict:
-            filters['is_active'] = True
+            filters['deleted'] = False
         q = self.model.query.filter_by(**filters)
         user = q.first_or_404() if fail else q.first()
         return user
@@ -33,7 +33,7 @@ class UserRepository(Repository):
                      strict: bool = True) -> User:
         q = self.model.query.filter_by(**{column: value})
         if strict:
-            q = q.filter_by(is_active=True)
+            q = q.filter_by(deleted=False)
         user = q.first_or_404() if fail else q.first()
         return user
 
@@ -48,7 +48,7 @@ class UserRepository(Repository):
             val in filter.items()]
         q = self.model.query.filter(or_(*filters))
         if strict:
-            q = q.filter_by(is_active=True)
+            q = q.filter_by(deleted=False)
         user = q.first_or_404() if fail else q.first()
         return user
 
@@ -67,14 +67,14 @@ class UserRepository(Repository):
             q = q.filter(or_(self.model.phone.like(f'%{search}%'),
                              self.model.email.like(f'%{search}%')))
         if strict:
-            q = q.filter_by(is_active=True)
+            q = q.filter_by(deleted=False)
         q = q.order_by(order_by())
         users = q.paginate(page, per_page=per_page) if paginate else q.all()
         return users
 
     def soft_delete(self, id: uuid, fail: bool = False) -> User:
         user = self.find(id, fail=fail)
-        user.update(is_active=False)
+        user.update(deleted=True)
         db.session.add(user)
         db.session.commit()
         return user

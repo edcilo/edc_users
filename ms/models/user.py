@@ -28,6 +28,7 @@ class User(db.Model):
     lastname = db.Column(db.String(50), nullable=True)
     mothername = db.Column(db.String(50), nullable=True)
     is_active = db.Column(db.Boolean, default=True, nullable=False)
+    deleted = db.Column(db.Boolean, default=False, nullable=False)
     created_at = db.Column(
         db.DateTime,
         default=datetime.datetime.utcnow,

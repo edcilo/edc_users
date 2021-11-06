@@ -9,7 +9,7 @@ from ms.helpers.decorators import form_validator
 class AuthController():
     @form_validator(RegisterForm)
     def register(self, form) -> tuple[Response, int]:
-        data = userRepo.form_to_dict(form, ('email', 'username', 'password'))
+        data = userRepo.form_to_dict(form, ('email', 'phone', 'password'))
         user = userRepo.add(data)
         serializer = JwtSerializer(user)
         token = jwtHelper.get_tokens(serializer.get_data())

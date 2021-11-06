@@ -5,7 +5,7 @@ class Serializer():
     original: None
     data = None
     pagination = None
-    response: tuple[str] = list()
+    response: dict[str, str] = dict()
     is_collection: bool = False
     is_paginated: bool = False
 
@@ -44,6 +44,6 @@ class Serializer():
 
     def serialize(self, model) -> None:
         data = {}
-        for attr in self.response:
-            data[attr] = getattr(model, attr, None)
+        for attr, type in self.response.items():
+            data[attr] = type(getattr(model, attr, None))
         return data

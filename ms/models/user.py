@@ -1,4 +1,6 @@
 import datetime
+import uuid
+from sqlalchemy.dialects.postgresql import UUID
 from werkzeug.security import generate_password_hash, check_password_hash
 from ms.db import db
 
@@ -7,17 +9,25 @@ class User(db.Model):
     __tablename__ = 'users'
 
     fillable = (
-        'username',
-        'email'
+        'phone',
+        'email',
+        'name',
+        'lastname',
+        'mothername',
     )
 
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(250), unique=True, nullable=False)
-    email = db.Column(db.String(250), unique=True, nullable=False)
+    id = db.Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    email = db.Column(db.String(255), unique=True, nullable=False)
+    phone = db.Column(db.String(15), unique=True, nullable=False)
     password = db.Column(db.String(250), nullable=False)
+    name = db.Column(db.String(50), nullable=True)
+    lastname = db.Column(db.String(50), nullable=True)
+    mothername = db.Column(db.String(50), nullable=True)
+    is_active = db.Column(db.Boolean, default=True, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow, nullable=False)
 
-    def __init__(self, username: str, email: str, password: str) -> None:
-        self.username = username
+    def __init__(self, email: str, phone: str, password: str) -> None:
+        self.phone = phone
         self.email = email
         self.password = generate_password_hash(password)
 

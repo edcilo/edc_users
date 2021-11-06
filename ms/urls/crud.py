@@ -30,4 +30,9 @@ def update(id, jwt_payload):
 @app.route('/<id>', methods=['DELETE'])
 @auth.auth
 def delete(id, jwt_payload):
+    return userController.soft_delete(id)
+
+@app.route('/<id>/hard', methods=['DELETE'])
+@auth.auth
+def soft_Delete(id, jwt_payload):
     return userController.delete(id)

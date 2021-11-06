@@ -4,6 +4,7 @@ from wtforms.validators import ValidationError
 from ms.db import db
 
 
+# TODO: add self value exception for edit event
 class Unique():
     def __init__(self, model: db.Model,
                  column: Union[str, None] = None,

@@ -8,6 +8,7 @@ from ms.db import db
 class User(db.Model):
     __tablename__ = 'users'
 
+    # TODO: implement fillable
     fillable = (
         'phone',
         'email',

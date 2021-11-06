@@ -1,3 +1,4 @@
+import uuid
 from sqlalchemy import or_
 from ms.db import db
 from ms.models import User
@@ -12,13 +13,16 @@ class UserRepository(Repository):
         return user
 
     def delete(self, id: int, fail: bool = False) -> User:
-        user = self.find(id, fail=fail)
+        user = self.find(id, fail=fail, strict=False)
         db.session.delete(user)
         db.session.commit()
         return user
 
-    def find(self, id: int, fail: bool = False) -> User:
-        q = self.model.query.filter_by(id=id)
+    def find(self, id: int, fail: bool = False, strict: bool = True) -> User:
+        filters = {'id': id}
+        if strict:
+            filters['is_active'] = True
+        q = self.model.query.filter_by(**filters)
         user = q.first_or_404() if fail else q.first()
         return user
 
@@ -46,16 +50,26 @@ class UserRepository(Repository):
                 order: str = 'asc',
                 paginate: bool = False,
                 page: int = 1,
-                per_page: int = 15):
+                per_page: int = 15,
+                strict: bool = True):
         column = getattr(self.model, order_column)
         order_by = getattr(column, order)
         q = self.model.query
         if search is not None:
             q = q.filter(or_(self.model.phone.like(f'%{search}%'),
                              self.model.email.like(f'%{search}%')))
+        if strict:
+            q = q.filter_by(is_active=True)
         q = q.order_by(order_by())
         users = q.paginate(page, per_page=per_page) if paginate else q.all()
         return users
+
+    def soft_delete(self, id: uuid, fail: bool = False) -> User:
+        user = self.find(id, fail=fail)
+        user.update(is_active=False)
+        db.session.add(user)
+        db.session.commit()
+        return user
 
     def update(self, id: int, data: dict, fail: bool = False) -> User:
         user = self.find(id, fail=fail)

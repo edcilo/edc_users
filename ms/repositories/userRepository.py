@@ -51,7 +51,7 @@ class UserRepository(Repository):
         order_by = getattr(column, order)
         q = self.model.query
         if search is not None:
-            q = q.filter(or_(self.model.username.like(f'%{search}%'),
+            q = q.filter(or_(self.model.phone.like(f'%{search}%'),
                              self.model.email.like(f'%{search}%')))
         q = q.order_by(order_by())
         users = q.paginate(page, per_page=per_page) if paginate else q.all()

@@ -80,4 +80,4 @@ def test_user_serializer(client):
     user = createJhonDoe()
     serializer = UserSerializer(user)
     assert isinstance(serializer.get_data(), dict)
-    assert list(serializer.get_data().keys()) == ['id', 'username', 'email']
+    assert list(serializer.get_data().keys()) == ['id', 'phone', 'email']

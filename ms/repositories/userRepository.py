@@ -29,18 +29,26 @@ class UserRepository(Repository):
     def find_by_attr(self,
                      column: str,
                      value: str,
-                     fail: bool = False) -> User:
+                     fail: bool = False,
+                     strict: bool = True) -> User:
         q = self.model.query.filter_by(**{column: value})
+        if strict:
+            q = q.filter_by(is_active=True)
         user = q.first_or_404() if fail else q.first()
         return user
 
-    def find_or(self, filter: dict[str, str], fail: bool = False) -> User:
+    def find_or(self,
+                filter: dict[str, str],
+                fail: bool = False,
+                strict: bool = True) -> User:
         filters = [
             getattr(
                 self.model,
                 key) == val for key,
             val in filter.items()]
         q = self.model.query.filter(or_(*filters))
+        if strict:
+            q = q.filter_by(is_active=True)
         user = q.first_or_404() if fail else q.first()
         return user
 

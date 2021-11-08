@@ -39,6 +39,14 @@ class UserController():
         serializer = UserSerializer(user)
         return jsonify(serializer.get_data()), 200
 
+    def activate(self, id: uuid) -> tuple[Response, int]:
+        userRepo.activate(id, fail=True)
+        return jsonify(), 204
+
+    def deactivate(self, id: uuid) -> tuple[Response, int]:
+        userRepo.deactivate(id, fail=True)
+        return jsonify(), 204
+
     def soft_delete(self, id: uuid) -> tuple[Response, int]:
         userRepo.soft_delete(id, fail=True)
         return jsonify(), 204

@@ -87,6 +87,20 @@ def test_update(client):
     response = client.put(f'/{user.id}', headers=headers, data=data)
     assert response.status_code == 200
 
+def test_active(client):
+    user = createJhonDoe()
+    token = createJWT({'id': user.id})['token']
+    headers = {'Authorization': f'Bearer {token}'}
+    response = client.post(f'/{user.id}/activate', headers=headers)
+    assert response.status_code == 204
+
+def test_deactive(client):
+    user = createJhonDoe()
+    token = createJWT({'id': user.id})['token']
+    headers = {'Authorization': f'Bearer {token}'}
+    response = client.delete(f'/{user.id}/activate', headers=headers)
+    assert response.status_code == 204
+
 def test_softdelete(client):
     user = createJhonDoe()
     token = createJWT({'id': user.id})['token']

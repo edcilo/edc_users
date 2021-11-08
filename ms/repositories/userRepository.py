@@ -6,8 +6,22 @@ from ms.repositories import Repository
 
 
 class UserRepository(Repository):
+    def activate(self, id: uuid, fail: bool = False) -> User:
+        user = self.find(id, fail=fail)
+        user.update(is_active=True)
+        db.session.add(user)
+        db.session.commit()
+        return user
+
     def add(self, data: dict) -> User:
         user = self.model(**data)
+        db.session.add(user)
+        db.session.commit()
+        return user
+
+    def deactivate(self, id: uuid, fail: bool = False) -> User:
+        user = self.find(id, fail=fail)
+        user.update(is_active=False)
         db.session.add(user)
         db.session.commit()
         return user

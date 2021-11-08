@@ -10,15 +10,10 @@ from wtforms.validators import (
 )
 
 
-class RegisterForm(Form):
+class CreateForm(Form):
     class Meta:
         csrf = False
 
-    email = StringField('email', validators=[
-        DataRequired(),
-        Email(),
-        Length(max=255),
-        Unique(User)])
     phone = StringField('phone', validators=[
         DataRequired(),
         Length(min=9, max=15),
@@ -27,3 +22,11 @@ class RegisterForm(Form):
     password = StringField('password', validators=[
         DataRequired(),
         Length(min=6, max=120)])
+    email = StringField('email', validators=[
+        DataRequired(),
+        Email(),
+        Length(max=255),
+        Unique(User)])
+    name = StringField('name', validators=[Length(max=50), ])
+    lastname = StringField('lastname', validators=[Length(max=50), ])
+    mothername = StringField('mothername', validators=[Length(max=50), ])

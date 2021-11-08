@@ -2,4 +2,10 @@ from .Serializer import Serializer
 
 
 class UserSerializer(Serializer):
-    response = ("id", "username", "email",)
+    response = {
+        "id": str,
+        "phone": str,
+        "email": str,
+        "name": str,
+        "lastname": str,
+        "mothername": str}

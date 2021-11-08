@@ -19,10 +19,16 @@ spec:
       containers:
       - name: ms-users
         image: <IMAGE>
+        imagePullPolicy: Always
         ports:
         - name: http
           containerPort: 5000
         env:
+        - name: FLASK_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: ms-users-configmap
+              key: FLASK_ENV
         - name: APP_NAME
           valueFrom:
             configMapKeyRef:

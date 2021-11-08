@@ -1,41 +1,66 @@
+import uuid
 from flask import jsonify, Response
-from ms.forms import RegisterForm, LoginForm
-from ms.helpers.jwt import jwtHelper
+from ms.forms import CreateForm, UpdateForm, PaginateForm
 from ms.repositories import userRepo
 from ms.serializers import UserSerializer
+from ms.helpers.decorators import form_validator
 
 
 class UserController():
-    def register(self) -> tuple[Response, int]:
-        form = RegisterForm()
+    @form_validator(PaginateForm, 'GET')
+    def list(self, form):
+        params = {
+            'paginate': True,
+            'search': form.q.data,
+            'order': form.order.data or 'desc',
+            'page': form.page.data or 1,
+            'per_page': form.per_page.data or 15,
+        }
+        collection = userRepo.get_all(**params)
+        serializer = UserSerializer(collection, paginate=True)
+        return jsonify(serializer.get_data()), 200
 
-        if not form.validate_on_submit():
-            return jsonify({'errors': form.errors}), 400
-
-        data = userRepo.form_to_dict(form)
+    @form_validator(CreateForm)
+    def create(self, form) -> tuple[Response, int]:
+        data = userRepo.form_to_dict(form,
+            ('email', 'phone', 'password', 'name', 'lastname', 'mothername'))
         user = userRepo.add(data)
         serializer = UserSerializer(user)
+        return jsonify(serializer.get_data()), 200
 
-        return jsonify(serializer.data), 200
-
-    def login(self) -> tuple[Response, int]:
-        form = LoginForm()
-
-        if not form.validate_on_submit():
-            return jsonify({'errors': form.errors}), 400
-
-        user = userRepo.find_by_attr('username', form.username.data)
+    def detail(self, id: uuid) -> tuple[Response, int]:
+        user = userRepo.find(id, fail=True)
         serializer = UserSerializer(user)
+        return jsonify(serializer.get_data()), 200
 
-        token = jwtHelper.get_tokens(serializer.data)
+    @form_validator(UpdateForm)
+    def update(self, id: uuid, form) -> tuple[Response, int]:
+        data = userRepo.form_to_dict(form,
+            ('email', 'phone', 'name', 'lastname', 'mothername'))
+        user = userRepo.update(id, data, fail=True)
+        serializer = UserSerializer(user)
+        return jsonify(serializer.get_data()), 200
 
-        return jsonify(token), 200
+    def activate(self, id: uuid) -> tuple[Response, int]:
+        userRepo.activate(id, fail=True)
+        return jsonify(), 204
 
-    def refresh(self) -> tuple[Response, int]:
-        return 'refresh from controller', 200
+    def deactivate(self, id: uuid) -> tuple[Response, int]:
+        userRepo.deactivate(id, fail=True)
+        return jsonify(), 204
 
-    def profile(self) -> tuple[Response, int]:
-        return 'profile from controller', 200
+    def soft_delete(self, id: uuid) -> tuple[Response, int]:
+        userRepo.soft_delete(id, fail=True)
+        return jsonify(), 204
+
+    def restore(self, id: uuid) -> tuple[Response, int]:
+        user = userRepo.restore(id, fail=True)
+        serializer = UserSerializer(user)
+        return jsonify(serializer.get_data()), 200
+
+    def delete(self, id: uuid) -> tuple[Response, int]:
+        userRepo.delete(id, fail=True)
+        return jsonify(), 204
 
 
 userController = UserController()

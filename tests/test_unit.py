@@ -45,30 +45,30 @@ def test_time_helper_epoch():
 
 def test_user_repo_add(client):
     data = {
-        'username': 'jhon.doe',
-        'password': 'secret',
+        'phone': '1231231231',
         'email': 'jhon.doe@example.com',
+        'password': 'secret',
     }
     user = userRepo.add(data)
     assert isinstance(user, User)
-    assert user.username == data['username']
+    assert user.email == data['email']
 
 def test_user_repo_find(client):
     data = {
-        'username': 'jhon.doe',
-        'password': 'secret',
+        'phone': '1231231231',
         'email': 'jhon.doe@example.com',
+        'password': 'secret',
     }
-    userRepo.add(data)
-    user = userRepo.find(1)
+    new_user = userRepo.add(data)
+    user = userRepo.find(new_user.id)
     assert isinstance(user, User)
-    assert user.id == 1
+    assert user.id == new_user.id
 
 def test_user_repo_find_by_attr(client):
     data = {
-        'username': 'jhon.doe',
-        'password': 'secret',
+        'phone': '1231231231',
         'email': 'jhon.doe@example.com',
+        'password': 'secret',
     }
     userRepo.add(data)
     user = userRepo.find_by_attr('email', data['email'])
@@ -80,4 +80,4 @@ def test_user_serializer(client):
     user = createJhonDoe()
     serializer = UserSerializer(user)
     assert isinstance(serializer.get_data(), dict)
-    assert list(serializer.get_data().keys()) == ['id', 'username', 'email']
+    assert list(serializer.get_data().keys()) == ['id', 'phone', 'email', 'name', 'lastname', 'mothername']

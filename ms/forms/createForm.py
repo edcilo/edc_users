@@ -14,12 +14,10 @@ class CreateForm(Form):
     class Meta:
         csrf = False
 
-    username = StringField('username', validators=[
+    phone = StringField('phone', validators=[
         DataRequired(),
-        Length(min=3, max=120),
-        Regexp(
-            '^\\w+$',
-            message="Username must contain only letters numbers or underscore"),
+        Length(min=9, max=15),
+        Regexp('^\\+?1?\\d{9,15}$'),
         Unique(User)])
     password = StringField('password', validators=[
         DataRequired(),
@@ -29,3 +27,6 @@ class CreateForm(Form):
         Email(),
         Length(max=255),
         Unique(User)])
+    name = StringField('name', validators=[Length(max=50), ])
+    lastname = StringField('lastname', validators=[Length(max=50), ])
+    mothername = StringField('mothername', validators=[Length(max=50), ])

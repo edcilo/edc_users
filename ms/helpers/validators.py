@@ -1,8 +1,10 @@
+from sqlalchemy import or_
 from typing import Union
-from ms.db import db
 from wtforms.validators import ValidationError
+from ms.db import db
 
 
+# TODO: add self value exception for edit event
 class Unique():
     def __init__(self, model: db.Model,
                  column: Union[str, None] = None,
@@ -23,7 +25,7 @@ class Unique():
 
 class CheckPassword():
     def __init__(self, model: db.Model,
-                 column: Union[str, None] = None,
+                 column: Union[str, list, tuple, None] = None,
                  password_field: Union[str, None] = None,
                  message: Union[str, None] = None) -> None:
         self.model = model
@@ -36,7 +38,11 @@ class CheckPassword():
         column = self.column or field.name
         message = self.message or 'These credentials do not match our records.'
 
-        user = self.model.query.filter_by(**{column: field.data}).first()
-        print(user, column, field.data, password)
+        filters = [getattr(self.model, column) == field.data] \
+            if isinstance(column, str) \
+            else [getattr(self.model, key) == field.data for key in column]
+
+        user = self.model.query.filter(
+            or_(*filters)).filter_by(deleted=False).first()
         if user is None or not user.verify_password(password):
             raise ValidationError(message)

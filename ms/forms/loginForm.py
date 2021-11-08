@@ -12,4 +12,4 @@ class LoginForm(Form):
     password = StringField('password', validators=[DataRequired(), ])
     username = StringField('username', validators=[
         DataRequired(),
-        CheckPassword(User)])
+        CheckPassword(User, column=('email', 'phone'))])

@@ -14,18 +14,16 @@ class RegisterForm(Form):
     class Meta:
         csrf = False
 
-    username = StringField('username', validators=[
-        DataRequired(),
-        Length(min=3, max=120),
-        Regexp(
-            '^\\w+$',
-            message="Username must contain only letters numbers or underscore"),
-        Unique(User)])
-    password = StringField('password', validators=[
-        DataRequired(),
-        Length(min=6, max=120)])
     email = StringField('email', validators=[
         DataRequired(),
         Email(),
         Length(max=255),
         Unique(User)])
+    phone = StringField('phone', validators=[
+        DataRequired(),
+        Length(min=9, max=15),
+        Regexp('^\\+?1?\\d{9,15}$'),
+        Unique(User)])
+    password = StringField('password', validators=[
+        DataRequired(),
+        Length(min=6, max=120)])

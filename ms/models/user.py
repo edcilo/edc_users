@@ -34,10 +34,20 @@ class User(db.Model):
         default=datetime.datetime.utcnow,
         nullable=False)
 
-    def __init__(self, email: str, phone: str, password: str) -> None:
+    def __init__(
+            self,
+            email: str,
+            phone: str,
+            password: str,
+            name: str = None,
+            lastname: str = None,
+            mothername: str = None) -> None:
         self.phone = phone
         self.email = email
         self.password = generate_password_hash(password)
+        self.name = name
+        self.lastname = lastname
+        self.mothername = mothername
 
     def __repr__(self) -> str:
         return f"<User '{self.id}' '{self.email}'>"

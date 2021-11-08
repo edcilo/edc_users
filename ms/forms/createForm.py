@@ -27,3 +27,6 @@ class CreateForm(Form):
         Email(),
         Length(max=255),
         Unique(User)])
+    name = StringField('name', validators=[Length(max=50), ])
+    lastname = StringField('lastname', validators=[Length(max=50), ])
+    mothername = StringField('mothername', validators=[Length(max=50), ])

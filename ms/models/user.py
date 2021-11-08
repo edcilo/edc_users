@@ -52,5 +52,8 @@ class User(db.Model):
     def __repr__(self) -> str:
         return f"<User '{self.id}' '{self.email}'>"
 
+    def get_fullname(self):
+        return f'{self.name} {self.lastname}'
+
     def verify_password(self, password: str) -> bool:
         return check_password_hash(self.password, password)

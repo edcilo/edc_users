@@ -54,3 +54,48 @@ def test_profile(client):
     headers = {'Authorization': f'Bearer {token}'}
     response = client.get('/profile', headers=headers)
     assert response.status_code == 200
+
+def test_create(client):
+    user = createJhonDoe()
+    token = createJWT({'id': user.id})['token']
+    headers = {'Authorization': f'Bearer {token}'}
+    data = {
+        'phone': '1231231232',
+        'email': 'jhon.doe.2@example.com',
+        'password': 'secret'
+    }
+    response = client.post('/', headers=headers, data=data)
+    assert response.status_code == 200
+
+def test_read(client):
+    user = createJhonDoe()
+    token = createJWT({'id': user.id})['token']
+    headers = {'Authorization': f'Bearer {token}'}
+    response = client.get(f'/{user.id}', headers=headers)
+    assert response.status_code == 200
+
+def test_update(client):
+    user = createJhonDoe()
+    token = createJWT({'id': user.id})['token']
+    headers = {'Authorization': f'Bearer {token}'}
+    data = {
+        'phone': '1231231232',
+        'email': 'jhon.doe.2@example.com',
+        'password': 'secret'
+    }
+    response = client.put(f'/{user.id}', headers=headers, data=data)
+    assert response.status_code == 200
+
+def test_softdelete(client):
+    user = createJhonDoe()
+    token = createJWT({'id': user.id})['token']
+    headers = {'Authorization': f'Bearer {token}'}
+    response = client.delete(f'/{user.id}', headers=headers)
+    assert response.status_code == 204
+
+def test_harddelete(client):
+    user = createJhonDoe()
+    token = createJWT({'id': user.id})['token']
+    headers = {'Authorization': f'Bearer {token}'}
+    response = client.delete(f'/{user.id}/hard', headers=headers)
+    assert response.status_code == 204

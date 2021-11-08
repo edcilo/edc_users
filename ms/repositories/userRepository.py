@@ -72,6 +72,13 @@ class UserRepository(Repository):
         users = q.paginate(page, per_page=per_page) if paginate else q.all()
         return users
 
+    def restore(self, id: uuid, fail: bool = False) -> User:
+        user = self.find(id, fail=fail, strict=False)
+        user.update(deleted=False)
+        db.session.add(user)
+        db.session.commit()
+        return user
+
     def soft_delete(self, id: uuid, fail: bool = False) -> User:
         user = self.find(id, fail=fail)
         user.update(deleted=True)

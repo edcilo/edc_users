@@ -33,6 +33,12 @@ def soft_delete(id, jwt_payload):
     return userController.soft_delete(id)
 
 
+@app.route("/<id>/restore", methods=['POST'])
+@auth.auth
+def restore(id, jwt_payload):
+    return userController.restore(id)
+
+
 @app.route('/<id>/hard', methods=['DELETE'])
 @auth.auth
 def delete(id, jwt_payload):

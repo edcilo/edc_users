@@ -1,5 +1,6 @@
 from fixture import app, client, db
 from helpers import createJhonDoe, createJWT
+from ms.repositories import userRepo
 
 
 
@@ -92,6 +93,19 @@ def test_softdelete(client):
     headers = {'Authorization': f'Bearer {token}'}
     response = client.delete(f'/{user.id}', headers=headers)
     assert response.status_code == 204
+
+def test_restore(client):
+    user = createJhonDoe()
+    token = createJWT({'id': user.id})['token']
+    new_user = userRepo.add({
+        'phone': '1231231232',
+        'email': 'jhon.doe.2@example.com',
+        'password': 'secret'
+    })
+    userRepo.soft_delete(new_user.id)
+    headers = {'Authorization': f'Bearer {token}'}
+    response = client.post(f'/{new_user.id}/restore', headers=headers)
+    assert response.status_code == 200
 
 def test_harddelete(client):
     user = createJhonDoe()

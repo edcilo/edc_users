@@ -43,6 +43,11 @@ class UserController():
         userRepo.soft_delete(id, fail=True)
         return jsonify(), 204
 
+    def restore(self, id: uuid) -> tuple[Response, int]:
+        user = userRepo.restore(id, fail=True)
+        serializer = UserSerializer(user)
+        return jsonify(serializer.get_data()), 200
+
     def delete(self, id: uuid) -> tuple[Response, int]:
         userRepo.delete(id, fail=True)
         return jsonify(), 204

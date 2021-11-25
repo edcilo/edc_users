@@ -20,7 +20,7 @@ jobs:
         run: docker build -t msaqusers .
 
       - name: Docker - run container
-        run: docker run --name msaqusers -e APP_SECRET_KEY=$APP_SECRET_KEY -e FLASK_ENV=development -d msaqusers
+        run: docker run --name msaqusers -e APP_SECRET_KEY=$APP_SECRET_KEY -e FLASK_ENV=testing -d msaqusers
 
       - name: Docker - logs
         run: docker logs msaqusers

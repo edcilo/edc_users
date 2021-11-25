@@ -1,29 +1,40 @@
-from ms.models.user import User
-from ms.helpers.validators import Unique
-from .form import Form
 from wtforms import StringField
 from wtforms.validators import (
     DataRequired,
     Email,
+    EqualTo,
     Length,
-    Regexp
+    Regexp,
 )
+from ms.models import User
+from ms.helpers.regex import phone_regex, password_regex
+from ms.forms.validators.unique import Unique
+from .form import FormRequest
 
 
-class RegisterForm(Form):
-    class Meta:
-        csrf = False
-
-    email = StringField('email', validators=[
-        DataRequired(),
-        Email(),
-        Length(max=255),
-        Unique(User)])
-    phone = StringField('phone', validators=[
-        DataRequired(),
-        Length(min=9, max=15),
-        Regexp('^\\+?1?\\d{9,15}$'),
-        Unique(User)])
-    password = StringField('password', validators=[
-        DataRequired(),
-        Length(min=6, max=120)])
+class RegisterForm(FormRequest):
+    def rules(self, request):
+        return {
+            'email': StringField('emai', validators=[
+                DataRequired(),
+                Email(),
+                Length(max=255),
+                Unique(User),
+            ]),
+            'phone': StringField('phone', validators=[
+                DataRequired(),
+                Length(min=9, max=15),
+                Regexp(phone_regex, message='The phone is invalid'),
+                Unique(User),
+            ]),
+            'password': StringField('password', validators=[
+                DataRequired(),
+                Length(min=6, max=255),
+                Regexp(password_regex, message='The password is invalid'),
+                EqualTo('password_confirmation')
+            ]),
+            'password_confirmation': StringField('password_confirmation',
+                                                 validators=[
+                                                     DataRequired(),
+                                                 ])
+        }

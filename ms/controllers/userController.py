@@ -1,30 +1,28 @@
 import uuid
-from flask import jsonify, Response
-from ms.forms import CreateForm, UpdateForm, PaginateForm
+from flask import jsonify, request, Response
+from ms.decorators import form_validator
+from ms.forms import BaseForm, CreateForm, UpdateForm, PaginateForm
 from ms.repositories import userRepo
 from ms.serializers import UserSerializer
-from ms.helpers.decorators import form_validator
 
 
 class UserController():
-    @form_validator(PaginateForm, 'GET')
-    def list(self, form):
+    @form_validator(PaginateForm, method='GET')
+    def list(self, form) -> tuple[Response, int]:
         params = {
             'paginate': True,
-            'search': form.q.data,
-            'order': form.order.data or 'desc',
-            'page': form.page.data or 1,
-            'per_page': form.per_page.data or 15,
+            'search': form.data['q'],
+            'order': form.data['order'] or 'desc',
+            'page': form.data['page'] or 1,
+            'per_page': form.data['per_page'] or 15,
         }
-        collection = userRepo.get_all(**params)
+        collection = userRepo.all(**params)
         serializer = UserSerializer(collection, paginate=True)
         return jsonify(serializer.get_data()), 200
 
     @form_validator(CreateForm)
     def create(self, form) -> tuple[Response, int]:
-        data = userRepo.form_to_dict(form,
-            ('email', 'phone', 'password', 'name', 'lastname', 'mothername'))
-        user = userRepo.add(data)
+        user = userRepo.add(form.data)
         serializer = UserSerializer(user)
         return jsonify(serializer.get_data()), 200
 
@@ -35,9 +33,7 @@ class UserController():
 
     @form_validator(UpdateForm)
     def update(self, id: uuid, form) -> tuple[Response, int]:
-        data = userRepo.form_to_dict(form,
-            ('email', 'phone', 'name', 'lastname', 'mothername'))
-        user = userRepo.update(id, data, fail=True)
+        user = userRepo.update(id, form.data, fail=True)
         serializer = UserSerializer(user)
         return jsonify(serializer.get_data()), 200
 

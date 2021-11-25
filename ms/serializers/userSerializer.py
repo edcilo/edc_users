@@ -1,4 +1,4 @@
-from .Serializer import Serializer
+from .serializer import Serializer
 
 
 class UserSerializer(Serializer):
@@ -8,4 +8,5 @@ class UserSerializer(Serializer):
         "email": str,
         "name": str,
         "lastname": str,
-        "mothername": str}
+        "mothername": str
+    }

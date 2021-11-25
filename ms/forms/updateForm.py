@@ -1,6 +1,3 @@
-from .form import Form
-from ms.helpers.validators import Unique
-from ms.models.user import User
 from wtforms import StringField
 from wtforms.validators import (
     DataRequired,
@@ -8,22 +5,36 @@ from wtforms.validators import (
     Length,
     Regexp
 )
+from ms.models import User
+from ms.helpers.regex import phone_regex
+from ms.forms.validators.unique import Unique
+from .form import FormRequest
 
 
-class UpdateForm(Form):
-    class Meta:
-        csrf = False
+class UpdateForm(FormRequest):
+    def rules(self, request) -> dict:
+        user_id = request.view_args.get('id')
 
-    phone = StringField('phone', validators=[
-        DataRequired(),
-        Length(min=9, max=15),
-        Regexp('^\\+?1?\\d{9,15}$'),
-        Unique(User)])
-    email = StringField('email', validators=[
-        DataRequired(),
-        Email(),
-        Length(max=255),
-    ])
-    name = StringField('name', validators=[Length(max=50), ])
-    lastname = StringField('lastname', validators=[Length(max=50), ])
-    mothername = StringField('mothername', validators=[Length(max=50), ])
+        return {
+            'email': StringField('email', validators=[
+                DataRequired(),
+                Email(),
+                Length(max=255),
+                Unique(User, except_id=user_id),
+            ]),
+            'phone': StringField('phone', validators=[
+                DataRequired(),
+                Length(min=9, max=15),
+                Regexp(phone_regex, message='The phone is invalid'),
+                Unique(User, except_id=user_id),
+            ]),
+            'name': StringField('name', validators=[
+                Length(max=50),
+            ]),
+            'lastname': StringField('lastname', validators=[
+                Length(max=50),
+            ]),
+            'mothername': StringField('lastname', validators=[
+                Length(max=50),
+            ]),
+        }

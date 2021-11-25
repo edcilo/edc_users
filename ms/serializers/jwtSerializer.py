@@ -1,5 +1,7 @@
-from .Serializer import Serializer
+from .serializer import Serializer
 
 
 class JwtSerializer(Serializer):
-    response = {"id": str}
+    response = {
+        'id': str
+    }

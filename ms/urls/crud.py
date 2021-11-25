@@ -1,57 +1,57 @@
 from ms import app
 from ms.controllers import userController
-from ms.middlewares import auth
+from ms.middlewares import middleware, AuthMiddleware
 
 
 @app.route('/')
-@auth.auth
-def list(jwt_payload):
+@middleware(AuthMiddleware)
+def list():
     return userController.list()
 
 
 @app.route('/', methods=['POST'])
-@auth.auth
-def create(jwt_payload):
+@middleware(AuthMiddleware)
+def create():
     return userController.create()
 
 
 @app.route('/<id>')
-@auth.auth
-def detail(id, jwt_payload):
+@middleware(AuthMiddleware)
+def detail(id):
     return userController.detail(id)
 
 
 @app.route('/<id>', methods=['PUT'])
-@auth.auth
-def update(id, jwt_payload):
+@middleware(AuthMiddleware)
+def update(id):
     return userController.update(id)
 
 
 @app.route('/<id>/activate', methods=['POST'])
-@auth.auth
-def activate(id, jwt_payload):
+@middleware(AuthMiddleware)
+def activate(id):
     return userController.activate(id)
 
 
 @app.route('/<id>/activate', methods=['DELETE'])
-@auth.auth
-def deactivate(id, jwt_payload):
+@middleware(AuthMiddleware)
+def deactivate(id):
     return userController.deactivate(id)
 
 
 @app.route('/<id>', methods=['DELETE'])
-@auth.auth
-def soft_delete(id, jwt_payload):
+@middleware(AuthMiddleware)
+def soft_delete(id):
     return userController.soft_delete(id)
 
 
 @app.route("/<id>/restore", methods=['POST'])
-@auth.auth
-def restore(id, jwt_payload):
+@middleware(AuthMiddleware)
+def restore(id):
     return userController.restore(id)
 
 
 @app.route('/<id>/hard', methods=['DELETE'])
-@auth.auth
-def delete(id, jwt_payload):
+@middleware(AuthMiddleware)
+def delete(id):
     return userController.delete(id)

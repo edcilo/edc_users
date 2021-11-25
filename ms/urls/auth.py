@@ -1,6 +1,7 @@
+from flask import jsonify
 from ms import app
 from ms.controllers import authController
-from ms.middlewares import auth
+from ms.middlewares import middleware, AuthMiddleware
 
 
 @app.route('/register', methods=['POST'])
@@ -14,18 +15,18 @@ def login():
 
 
 @app.route('/refresh', methods=['POST'])
-@auth.auth
-def refresh(jwt_payload):
-    return authController.refresh(jwt_payload)
+@middleware(AuthMiddleware)
+def refresh():
+    return authController.refresh()
 
 
 @app.route('/check', methods=['POST'])
-@auth.auth
-def check(jwt_payload):
+@middleware(AuthMiddleware)
+def check():
     return {}, 204
 
 
 @app.route('/profile')
-@auth.auth
-def profile(jwt_payload):
-    return authController.profile(jwt_payload)
+@middleware(AuthMiddleware)
+def profile():
+    return authController.profile()

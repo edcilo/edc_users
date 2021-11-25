@@ -25,6 +25,9 @@ jobs:
       - name: Docker - show status
         run: docker ps
 
+      - name: Docker - logs
+        run: docker logs msaqusers
+
       - name: Docker - run tests
         run: docker exec msaqusers coverage run -m pytest
 

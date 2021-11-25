@@ -5,7 +5,7 @@ from .crud import *
 
 
 @app.route("/about")
-def hello_world():
+def about():
     return jsonify({
         "data": {
             "name": app.config.get('APP_NAME'),

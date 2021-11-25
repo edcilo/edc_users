@@ -1,7 +1,7 @@
-from typing import Union
 import jwt
+from typing import Any, Union
 from ms import app
-from ms.helpers import time
+from ms.helpers.time import epoch_now
 
 
 class JwtHelper():
@@ -16,7 +16,7 @@ class JwtHelper():
         self.refresh_token_lifetime = refresh_token_lifetime or 86400
 
     def encode(self, payload: dict, lifetime: int) -> str:
-        payload['exp'] = time.epoch_now() + lifetime
+        payload['exp'] = epoch_now() + lifetime
         encoded = jwt.encode(payload, self.key, algorithm=self.algorithms)
         return encoded
 
@@ -25,7 +25,7 @@ class JwtHelper():
         payload = jwt.decode(token, self.key, algorithms=self.algorithms)
         return payload
 
-    def get_tokens(self, payload: dict) -> dict[str, str]:
+    def get_tokens(self, payload: dict) -> dict[str, Any]:
         token = self.encode(payload, self.token_lifetime)
         refresh_token = self.encode(payload, self.refresh_token_lifetime)
         return {
@@ -36,7 +36,7 @@ class JwtHelper():
     def check(self, token: str) -> bool:
         try:
             payload = self.decode(token)
-            return time.epoch_now() <= payload['exp']
+            return epoch_now() <= payload['exp']
         except (jwt.InvalidSignatureError,
                 jwt.DecodeError,
                 jwt.ExpiredSignatureError,

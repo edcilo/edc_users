@@ -1,48 +1,28 @@
-import pytest, os, shutil, random, re, string
-from pathlib import Path
-from flask_migrate import downgrade, init, migrate, stamp, upgrade
-from ms import app as ms_app
-
-
-
-class DB():
-    def set_migrations_paths(self):
-        chars = 6
-        ran = ''.join(random.choices(string.ascii_uppercase + string.digits, k = chars))
-        return ran
-    def start(self, app):
-        with app.app_context():
-            suffix = self.set_migrations_paths()
-            migrations_path = f'/tmp/migrations_{suffix}'
-            app.config.update(**{
-                'SQLALCHEMY_DATABASE_URI': f'sqlite:////tmp/test_{suffix}.db'
-            })
-            init(directory=migrations_path)
-            migrate(directory=migrations_path)
-            upgrade(directory=migrations_path)
-    def cleanup(self, app):
-        for dir in os.listdir('/tmp'):
-            if (re.search('migrations_*', dir)):
-                shutil.rmtree(f'/tmp/{dir}')
-
-        for p in Path('/tmp').glob('test_*.db'):
-            p.unlink()
+import os
+import pytest
+import random
+import string
+import shutil
+import tempfile
+from flask_migrate import init, migrate, upgrade
+from ms import app
 
 
 @pytest.fixture
-def app():
-    with ms_app.app_context():
-        pass
+def client():
+    ran = ''.join(random.choices(
+        string.ascii_uppercase + string.digits, k=6))
+    db_path = os.path.join(tempfile.gettempdir(), f'migrations_{ran}')
+    db_file = tempfile.NamedTemporaryFile()
 
-    yield ms_app
-
-@pytest.fixture
-def db():
-    return DB()
-
-@pytest.fixture
-def client(app, db):
-    db.start(app)
     with app.test_client() as client:
+        with app.app_context():
+            app.config.update(
+                SQLALCHEMY_DATABASE_URI=f'sqlite:///{db_file.name}')
+            init(directory=db_path)
+            migrate(directory=db_path)
+            upgrade(directory=db_path)
         yield client
-    db.cleanup(app)
+
+    db_file.close()
+    shutil.rmtree(db_path)

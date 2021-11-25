@@ -1,6 +1,5 @@
 import datetime
 import uuid
-from sqlalchemy.dialects.postgresql import UUID
 from werkzeug.security import generate_password_hash, check_password_hash
 from ms.db import db
 
@@ -8,8 +7,7 @@ from ms.db import db
 class User(db.Model):
     __tablename__ = 'users'
 
-    # TODO: implement fillable
-    fillable = (
+    _fillable = (
         'phone',
         'email',
         'name',
@@ -34,26 +32,18 @@ class User(db.Model):
         default=datetime.datetime.utcnow,
         nullable=False)
 
-    def __init__(
-            self,
-            email: str,
-            phone: str,
-            password: str,
-            name: str = None,
-            lastname: str = None,
-            mothername: str = None) -> None:
-        self.phone = phone
-        self.email = email
-        self.password = generate_password_hash(password)
-        self.name = name
-        self.lastname = lastname
-        self.mothername = mothername
+    def __init__(self, data: dict) -> None:
+        self.setAttrs(data)
 
     def __repr__(self) -> str:
-        return f"<User '{self.id}' '{self.email}'>"
+        return f"<User {self.id} {self.email}>"
 
-    def get_fullname(self):
+    @property
+    def fullname(self) -> str:
         return f'{self.name} {self.lastname}'
+
+    def set_password(self, password: str) -> None:
+        self.password = generate_password_hash(password)
 
     def verify_password(self, password: str) -> bool:
         return check_password_hash(self.password, password)

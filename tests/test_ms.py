@@ -1,5 +1,5 @@
-from fixture import app, client, db
-from helpers import createJhonDoe, createJWT
+from fixture import client
+from helpers import createJhonDoe, createUser, createJWT
 from ms.repositories import userRepo
 
 
@@ -12,8 +12,9 @@ def test_index(client):
 def test_register(client):
     data = {
         'phone': '1231231231',
+        'email': 'jhon.doe@example.com',
         'password': 'secret',
-        'email': 'jhon.doe@example.com'
+        'password_confirmation': 'secret',
     }
     response = client.post('/register', data=data)
     assert response.status_code == 200
@@ -125,5 +126,11 @@ def test_harddelete(client):
     user = createJhonDoe()
     token = createJWT({'id': user.id})['token']
     headers = {'Authorization': f'Bearer {token}'}
-    response = client.delete(f'/{user.id}/hard', headers=headers)
+    user_to_delete = createUser({
+        'phone': '1231231232',
+        'email': 'jhon.doe+01@example.com',
+        'password': 'secret',
+    })
+    userRepo.soft_delete(user_to_delete.id)
+    response = client.delete(f'/{user_to_delete.id}/hard', headers=headers)
     assert response.status_code == 204

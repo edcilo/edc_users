@@ -1,11 +1,24 @@
-from flask_wtf import FlaskForm
+import abc
+from flask_sqlalchemy import Model
+from ms.db import db
+from ms.forms.form import FormRequest
 
 
-class Repository():
-    model = None
+class Repository(abc.ABC):
+    def __init__(self) -> None:
+        self._model = self.get_model()
 
-    def __init__(self, model) -> None:
-        self.model = model
+    @abc.abstractmethod
+    def get_model(self) -> Model:
+        pass
 
-    def form_to_dict(self, form: FlaskForm, cols: tuple) -> dict:
-        return {c: getattr(form, c).data for c in cols}
+    def form_to_dict(self, form: FormRequest, cols: tuple) -> dict:
+        return {c: form.get(c, None) for c in cols}
+
+    def db_save(self, model: Model) -> None:
+        db.session.add(model)
+        db.session.commit()
+
+    def db_delete(self, model: Model) -> None:
+        db.session.delete(model)
+        db.session.commit()

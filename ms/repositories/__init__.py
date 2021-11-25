@@ -1,2 +1,4 @@
 from .repository import Repository
-from .userRepository import userRepo
+from .userRepository import UserRepository
+
+userRepo = UserRepository()

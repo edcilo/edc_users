@@ -1,4 +1,4 @@
-from fixture import app, client, db
+from fixture import client
 from helpers import createJhonDoe, createUser, createJWT
 from ms.repositories import userRepo
 

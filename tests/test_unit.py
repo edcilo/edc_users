@@ -1,5 +1,5 @@
 from datetime import datetime
-from fixture import app, client, db
+from fixture import client
 from helpers import createJhonDoe
 from ms.models import User
 from ms.repositories import userRepo

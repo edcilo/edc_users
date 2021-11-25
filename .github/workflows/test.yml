@@ -20,19 +20,10 @@ jobs:
         run: docker build -t msaqusers .
 
       - name: Docker - run container
-        run: docker run --name msaqusers -e APP_SECRET_KEY=$APP_SECRET_KEY -d msaqusers
-
-      - name: Docker - show status
-        run: docker ps
+        run: docker run --name msaqusers -e APP_SECRET_KEY=$APP_SECRET_KEY -e FLASK_ENV=development -d msaqusers
 
       - name: Docker - logs
         run: docker logs msaqusers
-
-      - name: Docker - run tests
-        run: docker exec msaqusers coverage run -m pytest
-
-      - name: Docker - coverage tests
-        run: docker exec msaqusers coverage report
 
       - name: Docker - stop container
         run: docker stop msaqusers

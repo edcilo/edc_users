@@ -10,9 +10,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      APP_SECRET_KEY: secret-key
-
     steps:
       - uses: actions/checkout@v2
 

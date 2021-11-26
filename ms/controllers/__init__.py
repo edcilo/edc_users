@@ -1,6 +1,8 @@
-from .userController import UserController
+from .accountController import AccountController
+from .adminController import AdminController
 from .authController import AuthController
 
 
-userController = UserController()
+accountController = AccountController()
+adminController = AdminController()
 authController = AuthController()

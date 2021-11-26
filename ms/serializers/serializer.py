@@ -1,11 +1,11 @@
 from typing import Type, Any
-from ms.db import db
+from flask_sqlalchemy import Model
 
 
 class Serializer:
     response: dict[str, Type] = dict()
 
-    def __init__(self, model: db.Model, collection: bool = False,
+    def __init__(self, model: Type[Model], collection: bool = False,
                  paginate: bool = False) -> None:
         self.__data = None
         self.__original = model

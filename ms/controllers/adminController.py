@@ -27,7 +27,7 @@ class AdminController():
     def create(self, form: Type[FormRequest]) -> tuple[Response, int]:
         user = userRepo.add(form.data)
         serializer = UserSerializer(user)
-        return jsonify(serializer.get_data()), 201
+        return jsonify(serializer.get_data()), 200
 
     def detail(self, id: str) -> tuple[Response, int]:
         user = userRepo.find(id, fail=True)

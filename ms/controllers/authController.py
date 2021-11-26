@@ -35,6 +35,9 @@ class AuthController():
         token = jwtHelper.get_tokens(serializer.get_data())
         return jsonify(token), 200
 
+    def check(self) -> tuple[Response, int]:
+        return jsonify(), 204
+
     def profile(self) -> tuple[Response, int]:
         user = request.auth.get('user')
         serializer = UserSerializer(user)

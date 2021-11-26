@@ -1,7 +1,8 @@
 from flask import jsonify
 from ms import app
 from .auth import *
-from .crud import *
+from .admin import *
+from .account import *
 
 
 @app.route("/about")

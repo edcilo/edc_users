@@ -1,4 +1,3 @@
-from flask import jsonify
 from ms import app
 from ms.controllers import authController
 from ms.middlewares import middleware, AuthMiddleware
@@ -24,9 +23,3 @@ def refresh():
 @middleware(AuthMiddleware)
 def check():
     return {}, 204
-
-
-@app.route('/profile')
-@middleware(AuthMiddleware)
-def profile():
-    return authController.profile()

@@ -83,7 +83,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      -name: ls
+      - name: ls
         run: ls /home/runner/work/msAqUsers/
 
       - name: Update deployment file

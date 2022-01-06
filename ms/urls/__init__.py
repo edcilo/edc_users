@@ -5,7 +5,7 @@ from .admin import *
 from .account import *
 
 
-@app.route("/about")
+@app.route("/api/v1/users/about")
 def about():
     return jsonify({
         "data": {

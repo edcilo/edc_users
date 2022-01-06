@@ -7,5 +7,5 @@ def test_profile(client):
     user = createJhonDoe()
     token = createJWT({'id': user.id})['token']
     headers = {'Authorization': f'Bearer {token}'}
-    res = client.get('/profile', headers=headers)
+    res = client.get('/api/v1/users/profile', headers=headers)
     assert res.status_code == 200

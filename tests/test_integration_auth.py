@@ -10,7 +10,7 @@ def test_register(client):
         'password': 'secret',
         'password_confirmation': 'secret',
     }
-    response = client.post('/register', data=data)
+    response = client.post('/api/v1/users/register', data=data)
     assert response.status_code == 200
     assert response.content_type == 'application/json'
 
@@ -20,7 +20,7 @@ def test_login(client):
         'username': '1231231231',
         'password': 'secret'
     }
-    response = client.post('/login', data=data)
+    response = client.post('/api/v1/users/login', data=data)
     assert response.status_code == 200
 
 def test_refresh_token(client):
@@ -28,7 +28,7 @@ def test_refresh_token(client):
     refresh_token = createJWT({'id': user.id})['refresh_token']
     headers = {'Authorization': f'Bearer {refresh_token}'}
     print(refresh_token, headers)
-    response = client.post('/refresh', headers=headers)
+    response = client.post('/api/v1/users/refresh', headers=headers)
     print(response)
     assert response.status_code == 200
 
@@ -36,5 +36,5 @@ def test_check(client):
     user = createJhonDoe()
     token = createJWT({'id': user.id})['token']
     headers = {'Authorization': f'Bearer {token}'}
-    response = client.post('/check', headers=headers)
+    response = client.post('/api/v1/users/check', headers=headers)
     assert response.status_code == 204

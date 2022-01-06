@@ -12,14 +12,14 @@ def test_create(client):
         'email': 'jhon.doe.2@example.com',
         'password': 'secret'
     }
-    response = client.post('/admin', headers=headers, data=data)
+    response = client.post('/api/v1/users/admin', headers=headers, data=data)
     assert response.status_code == 200
 
 def test_read(client):
     user = createJhonDoe()
     token = createJWT({'id': user.id})['token']
     headers = {'Authorization': f'Bearer {token}'}
-    response = client.get(f'/admin/{user.id}', headers=headers)
+    response = client.get(f'/api/v1/users/admin/{user.id}', headers=headers)
     assert response.status_code == 200
 
 def test_update(client):
@@ -31,28 +31,28 @@ def test_update(client):
         'email': 'jhon.doe.2@example.com',
         'password': 'secret'
     }
-    response = client.put(f'/admin/{user.id}', headers=headers, data=data)
+    response = client.put(f'/api/v1/users/admin/{user.id}', headers=headers, data=data)
     assert response.status_code == 200
 
 def test_active(client):
     user = createJhonDoe()
     token = createJWT({'id': user.id})['token']
     headers = {'Authorization': f'Bearer {token}'}
-    response = client.post(f'/admin/{user.id}/activate', headers=headers)
+    response = client.post(f'/api/v1/users/admin/{user.id}/activate', headers=headers)
     assert response.status_code == 204
 
 def test_deactive(client):
     user = createJhonDoe()
     token = createJWT({'id': user.id})['token']
     headers = {'Authorization': f'Bearer {token}'}
-    response = client.delete(f'/admin/{user.id}/activate', headers=headers)
+    response = client.delete(f'/api/v1/users/admin/{user.id}/activate', headers=headers)
     assert response.status_code == 204
 
 def test_softdelete(client):
     user = createJhonDoe()
     token = createJWT({'id': user.id})['token']
     headers = {'Authorization': f'Bearer {token}'}
-    response = client.delete(f'/admin/{user.id}', headers=headers)
+    response = client.delete(f'/api/v1/users/admin/{user.id}', headers=headers)
     assert response.status_code == 204
 
 def test_restore(client):
@@ -65,7 +65,7 @@ def test_restore(client):
     })
     userRepo.soft_delete(new_user.id)
     headers = {'Authorization': f'Bearer {token}'}
-    response = client.post(f'/admin/{new_user.id}/restore', headers=headers)
+    response = client.post(f'/api/v1/users/admin/{new_user.id}/restore', headers=headers)
     assert response.status_code == 204
 
 def test_harddelete(client):
@@ -78,5 +78,5 @@ def test_harddelete(client):
         'password': 'secret',
     })
     userRepo.soft_delete(user_to_delete.id)
-    response = client.delete(f'/admin/{user_to_delete.id}/hard', headers=headers)
+    response = client.delete(f'/api/v1/users/admin/{user_to_delete.id}/hard', headers=headers)
     assert response.status_code == 204

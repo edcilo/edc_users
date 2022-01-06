@@ -5,6 +5,6 @@ from ms.repositories import userRepo
 
 
 def test_index(client):
-    response = client.get('/about')
+    response = client.get('/api/v1/users/about')
     assert response.status_code == 200
     assert response.content_type == 'application/json'

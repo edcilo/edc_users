@@ -12,6 +12,7 @@ on:
 
 jobs:
   testing:
+    name: Run tests
     runs-on: ubuntu-latest
 
     env:

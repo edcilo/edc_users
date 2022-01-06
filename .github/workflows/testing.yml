@@ -84,7 +84,7 @@ jobs:
 
     steps:
       - name: ls
-        run: ls /home/runner/work/msAqUsers/
+        run: ls /home/runner/work/msAqUsers/msAqUsers
 
       - name: Update deployment file
         run: TAG=$(echo ${{ needs.image.outputs.version }}) && sed -i 's|<IMAGE>|${{ needs.image.outputs.image }}:'${TAG}'|' $GITHUB_WORKSPACE/k8s/manifest.yaml

@@ -83,6 +83,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      -name: ls
+        run: ls $GITHUB_WORKSPACE
+
       - name: Update deployment file
         run: TAG=$(echo ${{ needs.image.outputs.version }}) && sed -i 's|<IMAGE>|${{ needs.image.outputs.image }}:'${TAG}'|' $GITHUB_WORKSPACE/k8s/manifest.yaml
 

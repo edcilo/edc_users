@@ -3,7 +3,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ms-users
-  namespace: apps
 spec:
   replicas: 1
   selector:
@@ -85,9 +84,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: ms-users
-  namespace: apps
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
   - name: http
     port: 80

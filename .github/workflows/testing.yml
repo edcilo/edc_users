@@ -43,12 +43,12 @@ jobs:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-latest
 
+    outputs:
+      image: ${{ env.DOCKER_IMAGE }}
+      version: ${{ steps.meta.outputs.version }}
+
     env:
       DOCKER_IMAGE: edcilo/aq_ms_users_dev
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-      CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
 
     steps:
       - name: Check out the repor
@@ -76,4 +76,13 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  deploy:
+    needs: image
+    name: Deploy image in eks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Update deployment file
+        run: TAG=$(echo ${{ needs.image.outputs.version }}) && sed -i 's|<IMAGE>|${{ needs.image.outputs.image }}:'${TAG}'|' $GITHUB_WORKSPACE/k8s/manifest.yaml
 

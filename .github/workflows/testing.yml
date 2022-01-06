@@ -10,6 +10,9 @@ on:
 
   workflow_dispatch:
 
+env:
+  DOCKER_IMAGE: edcilo/aq_ms_users_dev
+
 jobs:
   testing:
     name: Run tests
@@ -44,11 +47,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      image: ${{ env.DOCKER_IMAGE }}
       version: ${{ steps.meta.outputs.version }}
-
-    env:
-      DOCKER_IMAGE: edcilo/aq_ms_users_dev
 
     steps:
       - name: Check out the repor
@@ -90,5 +89,5 @@ jobs:
         run: ls /home/runner/work/msAqUsers/msAqUsers
 
       - name: Update deployment file
-        run: TAG=$(echo ${{ needs.image.outputs.version }}) && sed -i 's|<IMAGE>|${{ needs.image.outputs.image }}:'${TAG}'|' $GITHUB_WORKSPACE/k8s/manifest.yaml
+        run: TAG=$(echo ${{ needs.image.outputs.version }}) && sed -i 's|<IMAGE>|${{ env.DOCKER_IMAGE }}:'${TAG}'|' $GITHUB_WORKSPACE/k8s/manifest.yaml
 

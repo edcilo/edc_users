@@ -83,6 +83,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+
       - name: ls
         run: ls /home/runner/work/msAqUsers/msAqUsers
 

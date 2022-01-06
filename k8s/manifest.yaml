@@ -96,14 +96,3 @@ spec:
   selector:
     app: ms-users
 
-
----
-apiVersion: getambassador.io/v3alpha1
-kind: Mapping
-metadata:
-  name: ms-users
-  namespace: apps
-spec:
-  hostname: "*"
-  prefix: /api/v1/users
-  service: ms-users

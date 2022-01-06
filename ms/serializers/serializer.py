@@ -42,5 +42,6 @@ class Serializer:
     def serialize(self, model) -> dict[str, Any]:
         data = {}
         for attr, type in self.response.items():
-            data[attr] = type(getattr(model, attr, None))
+            value = getattr(model, attr, None)
+            data[attr] = type(value) if value is not None else None
         return data

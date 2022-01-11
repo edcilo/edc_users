@@ -3,23 +3,25 @@ from ms.controllers import authController
 from ms.middlewares import middleware, AuthMiddleware
 
 
-@app.route('/api/v1/users/register', methods=['POST'])
+url_prefix = app.config.get('URL_PREFIX')
+
+@app.route(f'{url_prefix}/register', methods=['POST'])
 def register():
     return authController.register()
 
 
-@app.route('/api/v1/users/login', methods=['POST'])
+@app.route(f'{url_prefix}/login', methods=['POST'])
 def login():
     return authController.login()
 
 
-@app.route('/api/v1/users/refresh', methods=['POST'])
+@app.route(f'{url_prefix}/refresh', methods=['POST'])
 @middleware(AuthMiddleware)
 def refresh():
     return authController.refresh()
 
 
-@app.route('/api/v1/users/check', methods=['POST'])
+@app.route(f'{url_prefix}/check', methods=['POST'])
 @middleware(AuthMiddleware)
 def check():
     return {}, 204

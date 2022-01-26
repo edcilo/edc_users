@@ -1,9 +1,9 @@
 from typing import Type
 from flask import jsonify, Response
+from flaskFormRequest import FormRequest
 
 from ms.decorators import form_validator
 from ms.forms import CreateForm, PaginateForm, UpdateForm, UpdatePasswordForm
-from ms.forms.form import FormRequest
 from ms.repositories import userRepo
 from ms.serializers import UserSerializer
 

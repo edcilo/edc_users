@@ -1,43 +1,49 @@
-from wtforms import StringField
-from wtforms.validators import (
-    DataRequired,
+from typing import Iterable
+from flaskFormRequest import FormRequest
+from flaskFormRequest.validators import (
     Email,
-    Length,
-    Regexp
+    Max,
+    Min,
+    Nullable,
+    Regex,
+    Required,
+    Unique,
 )
-from ms.models import User
 from ms.helpers.regex import phone_regex, password_regex
-from ms.forms.validators.unique import Unique
-from .form import FormRequest
+from ms.models import User
 
 
 class CreateForm(FormRequest):
-    def rules(self, request):
+    def rules(self) -> dict[str, Iterable]:
         return {
-            'email': StringField('email', validators=[
-                DataRequired(),
+            'email': [
+                Required(),
+                Max(255),
                 Email(),
-                Length(max=255),
                 Unique(User),
-            ]),
-            'phone': StringField('phone', validators=[
-                DataRequired(),
-                Length(min=9, max=15),
-                Regexp(phone_regex, message='The phone is invalid'),
+            ],
+            'phone': [
+                Required(),
+                Min(9),
+                Max(15),
+                Regex(phone_regex, message='The phone is invalid'),
                 Unique(User),
-            ]),
-            'password': StringField('password', validators=[
-                DataRequired(),
-                Length(max=255),
-                Regexp(password_regex, message='The password is invalid'),
-            ]),
-            'name': StringField('name', validators=[
-                Length(max=50),
-            ]),
-            'lastname': StringField('lastname', validators=[
-                Length(max=50),
-            ]),
-            'mothername': StringField('lastname', validators=[
-                Length(max=50),
-            ]),
+            ],
+            'password': [
+                Required(),
+                Max(255),
+                Regex(password_regex, message='The password is invalid'),
+            ],
+            'name': [
+                Nullable(),
+                Max(50)
+            ],
+            'lastname': [
+                Nullable(),
+                Max(50)
+            ],
+            'mothername': [
+                Nullable(),
+                Max(50)
+            ],
         }

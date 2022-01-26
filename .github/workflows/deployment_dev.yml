@@ -1,17 +1,14 @@
-name: Testing application
+name: Deployment dev
 
 on:
   push:
-    branches:
-      - develop
-  pull_request:
     branches:
       - develop
 
   workflow_dispatch:
 
 env:
-  DOCKER_IMAGE: edcilo/aq_ms_users_dev
+  DOCKER_IMAGE: edcilo/ms_aq_users
 
 jobs:
   testing:
@@ -106,4 +103,3 @@ jobs:
 
       - name: Deploy to EKS
         run: kubectl apply -f $GITHUB_WORKSPACE/k8s/manifest.yaml
-

@@ -1,7 +1,8 @@
 import abc
+from typing import Type
 from flask_sqlalchemy import Model
+from flaskFormRequest import FormRequest
 from ms.db import db
-from ms.forms.form import FormRequest
 
 
 class Repository(abc.ABC):
@@ -12,7 +13,7 @@ class Repository(abc.ABC):
     def get_model(self) -> Model:
         pass
 
-    def form_to_dict(self, form: FormRequest, cols: tuple) -> dict:
+    def form_to_dict(self, form: Type[FormRequest], cols: tuple) -> dict:
         return {c: form.get(c, None) for c in cols}
 
     def db_save(self, model: Model) -> None:

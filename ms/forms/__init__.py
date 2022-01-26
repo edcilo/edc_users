@@ -1,4 +1,3 @@
-from .form import BaseForm
 from .createForm import CreateForm
 from .loginForm import LoginForm
 from .paginateForm import PaginateForm

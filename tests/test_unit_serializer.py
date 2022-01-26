@@ -13,6 +13,7 @@ def test_user_serializer(client):
     serializer = UserSerializer(user)
     assert tuple(serializer.get_data().keys()) == ('id', 'phone', 'email', 'name', 'lastname', 'mothername')
 
+
 def test_user_collection_serializer(client):
     user = userRepo.add({
         'username': 'jhon.doe',

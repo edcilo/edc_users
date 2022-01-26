@@ -6,8 +6,7 @@ def form_validator(FormClass, method=None):
     def form_validator_decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            data = request.args.to_dict() if method == 'GET' else request.form
-            form = FormClass(data=data, request=request)
+            form = FormClass(request)
             if not form.validate():
                 return jsonify({'errors': form.errors}), 400
             kwargs['form'] = form

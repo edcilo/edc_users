@@ -1,14 +1,14 @@
-from wtforms import IntegerField, StringField
-from wtforms.validators import AnyOf
-from .form import FormRequest
+from typing import Iterable
+from flaskFormRequest import FormRequest
+from flaskFormRequest.validators import In, Integer, Nullable
 
 
 class PaginateForm(FormRequest):
-    def rules(self, request):
+    def rules(self) -> dict[str, Iterable]:
         return {
-            'q': StringField('q', validators=[]),
-            'order': StringField('order', validators=[AnyOf(('asc', 'desc', None))]),
-            'order_column': StringField('order_column', validators=[]),
-            'page': IntegerField('page', validators=[]),
-            'per_page': IntegerField('per_page', validators=[])
+            'q': [Nullable()],
+            'order': [Nullable(), In(("asc", "desc"))],
+            'order_column': [Nullable(), In(("email", "name", "lastname", "mothername", "phone"))],
+            'page': [Nullable(), Integer()],
+            'per_page': [Nullable(), Integer()],
         }

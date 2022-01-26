@@ -9,15 +9,15 @@ from ms.serializers import UserSerializer
 
 
 class AdminController():
-    @form_validator(PaginateForm, method='GET')
+    @form_validator(PaginateForm)
     def list(self, form: Type[FormRequest]) -> tuple[Response, int]:
         params = {
             'paginate': True,
-            'search': form.data['q'],
-            'order': form.data['order'] or 'desc',
-            'order_column': form.data['order_column'] or 'id',
-            'page': form.data['page'] or 1,
-            'per_page': form.data['per_page'] or 15,
+            'search': form.data.get('q'),
+            'order': form.data.get('order', 'desc'),
+            'order_column': form.data.get('order_column', 'id'),
+            'page': form.data.get('page', 1),
+            'per_page': form.data.get('per_page', 15),
         }
         collection = userRepo.all(**params)
         serializer = UserSerializer(collection, paginate=True)

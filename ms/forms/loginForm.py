@@ -1,17 +1,11 @@
-from wtforms import StringField
-from wtforms.validators import (
-    DataRequired,
-)
-from .form import FormRequest
+from typing import Iterable
+from flaskFormRequest import FormRequest
+from flaskFormRequest.validators import Required
 
 
 class LoginForm(FormRequest):
-    def rules(self, request):
+    def rules(self) -> dict[str, Iterable]:
         return {
-            'username': StringField('username', validators=[
-                DataRequired(),
-            ]),
-            'password': StringField('password', validators=[
-                DataRequired(),
-            ])
+            'username': [Required()],
+            'password': [Required()]
         }

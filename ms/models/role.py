@@ -12,7 +12,7 @@ class Role(db.Model):
         db.String(length=36),
         default=lambda: str(uuid.uuid4()),
         primary_key=True)
-    name = db.Column(db.String(50), nullable=True)
+    name = db.Column(db.String(50), unique=True)
     created_at = db.Column(
         db.DateTime,
         default=datetime.datetime.utcnow,

@@ -2,6 +2,7 @@ import datetime
 import uuid
 from werkzeug.security import generate_password_hash, check_password_hash
 from ms.db import db
+from ms.models import Role
 
 
 class User(db.Model):
@@ -10,6 +11,7 @@ class User(db.Model):
     _fillable = (
         'phone',
         'email',
+        'role',
         'name',
         'lastname',
         'mothername',
@@ -28,7 +30,7 @@ class User(db.Model):
     is_active = db.Column(db.Boolean, default=False, nullable=False)
     role = db.Column(
         db.String(length=36),
-        db.ForeignKey('roles.id'),
+        db.ForeignKey(Role.id, ondelete='CASCADE'),
         nullable=False)
     deleted = db.Column(db.Boolean, default=False, nullable=False)
     created_at = db.Column(

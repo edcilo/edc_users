@@ -1,5 +1,6 @@
 from flask import jsonify
 from ms import app
+from .roles import *
 from .auth import *
 from .admin import *
 from .account import *

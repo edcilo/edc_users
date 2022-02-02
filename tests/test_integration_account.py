@@ -1,6 +1,5 @@
 from fixture import app, client
 from helpers import createJhonDoe, createJWT
-from ms.repositories import userRepo
 
 
 def test_profile(client):

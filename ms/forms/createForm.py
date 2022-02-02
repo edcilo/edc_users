@@ -2,6 +2,7 @@ from typing import Iterable
 from flaskFormRequest import FormRequest
 from flaskFormRequest.validators import (
     Email,
+    Exists,
     Max,
     Min,
     Nullable,
@@ -10,7 +11,7 @@ from flaskFormRequest.validators import (
     Unique,
 )
 from ms.helpers.regex import phone_regex, password_regex
-from ms.models import User
+from ms.models import Role, User
 
 
 class CreateForm(FormRequest):
@@ -20,19 +21,19 @@ class CreateForm(FormRequest):
                 Required(),
                 Max(255),
                 Email(),
-                Unique(User),
+                Unique(User)
             ],
             'phone': [
                 Required(),
                 Min(9),
                 Max(15),
                 Regex(phone_regex, message='The phone is invalid'),
-                Unique(User),
+                Unique(User)
             ],
             'password': [
                 Required(),
                 Max(255),
-                Regex(password_regex, message='The password is invalid'),
+                Regex(password_regex, message='The password is invalid')
             ],
             'name': [
                 Nullable(),
@@ -45,5 +46,9 @@ class CreateForm(FormRequest):
             'mothername': [
                 Nullable(),
                 Max(50)
+            ],
+            'role_id': [
+                Required(),
+                Exists(Role, 'id')
             ],
         }

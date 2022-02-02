@@ -1,11 +1,6 @@
 from datetime import datetime
 from fixture import client
-from helpers import createJhonDoe
-from ms.models import User
-from ms.repositories import userRepo
-from ms.serializers import UserSerializer
-from ms.helpers import ( jwt, time )
-
+from ms.helpers import jwt, time
 
 
 def test_jwt_helper_encode():
@@ -32,7 +27,6 @@ def test_jwt_helper_check():
 def test_jwt_helper_check_invalid_token():
     valid = jwt.jwtHelper.check('abcde01234.')
     assert valid == False
-
 
 def test_time_helper_now():
     now = time.now()

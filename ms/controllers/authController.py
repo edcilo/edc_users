@@ -1,15 +1,20 @@
 from flask import jsonify, request, Response
 from ms.forms import RegisterForm, LoginForm
 from ms.helpers.jwt import jwtHelper
-from ms.repositories import userRepo
+from ms.repositories import RoleRepository, UserRepository
 from ms.serializers import UserSerializer, JwtSerializer
 from ms.decorators import form_validator
 
 
 class AuthController():
+    def __init__(self) -> None:
+        self.repo = UserRepository()
+        self.roleRepo = RoleRepository()
+
     @form_validator(RegisterForm)
     def register(self, form) -> tuple[Response, int]:
-        user = userRepo.add(form.data)
+        form.data['role_id'] = self.roleRepo.find_by_attr("name", "client").id
+        user = self.repo.add(form.data)
         serializer = JwtSerializer(user)
         token = jwtHelper.get_tokens(serializer.get_data())
         return jsonify(token), 200
@@ -18,7 +23,7 @@ class AuthController():
     def login(self, form) -> tuple[Response, int]:
         username = form.data.get('username')
         password = form.data.get('password')
-        user = userRepo.find_optional(
+        user = self.repo.find_optional(
             {'phone': username, 'email': username}, fail=True)
         print(user)
         if not user.verify_password(password):

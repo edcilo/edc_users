@@ -1,4 +1,5 @@
 from .serializer import Serializer
+from .roleSerializer import RoleSerializer
 
 
 class UserSerializer(Serializer):
@@ -8,5 +9,6 @@ class UserSerializer(Serializer):
         "email": str,
         "name": str,
         "lastname": str,
-        "mothername": str
+        "mothername": str,
+        'role': RoleSerializer,
     }

@@ -1,4 +1,3 @@
-from ast import pattern
 from faker import Faker
 from flask_seeder import Seeder
 from ms.models import Role, User
@@ -14,36 +13,36 @@ class UsersSeeder(Seeder):
         clientRole = Role.query.filter_by(name="client").first()
         financialRole = Role.query.filter_by(name="financial").first()
 
-        admin = User({
-            "phone": "5512312312",
-            "email": "admin@example.com",
-            "role": adminRole.id,
-        })
-        admin.set_password('secret')
-        self.db.session.add(admin)
+        users = (
+            User({
+                "phone": "5512312312",
+                "email": "admin@example.com",
+                "role_id": adminRole.id,
+            }),
+            User({
+                "phone": "5512312313",
+                "email": "client@example.com",
+                "role_id": clientRole.id,
+            }),
+            User({
+                "phone": "5512312314",
+                "email": "financial@example.com",
+                "role_id": financialRole.id,
+            })
+        )
 
-        client = User({
-            "phone": "5512312313",
-            "email": "client@example.com",
-            "role": clientRole.id,
-        })
-        client.set_password('secret')
-        self.db.session.add(client)
-
-        financial = User({
-            "phone": "5512312314",
-            "email": "financial@example.com",
-            "role": financialRole.id,
-        })
-        financial.set_password("secret")
-        self.db.session.add(financial)
+        for _ in users:
+            user = User.query.filter_by(email=_.email).first()
+            if user is None:
+                _.set_password('secret')
+                self.db.session.add(_)
 
         fake = Faker()
         for _ in range(5):
             client = User({
                 "phone": fake.msisdn(),
                 "email": fake.email(),
-                "role": clientRole.id,
+                "role_id": clientRole.id,
             })
             client.set_password("secret")
             self.db.session.add(client)

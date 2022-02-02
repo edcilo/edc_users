@@ -14,5 +14,7 @@ class RoleSeeder(Seeder):
             Role({"name": "financial"}),
         )
 
-        for r in roles:
-            self.db.session.add(r)
+        for _ in roles:
+            role = Role.query.filter_by(name=_.name).first()
+            if role is None:
+                self.db.session.add(_)

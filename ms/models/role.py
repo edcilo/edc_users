@@ -18,6 +18,8 @@ class Role(db.Model):
         default=datetime.datetime.utcnow,
         nullable=False)
 
+    users = db.relationship('User', back_populates='role', lazy=True)
+
     def __init__(self, data: dict) -> None:
         self.setAttrs(data)
 

@@ -11,7 +11,7 @@ class User(db.Model):
     _fillable = (
         'phone',
         'email',
-        'role',
+        'role_id',
         'name',
         'lastname',
         'mothername',
@@ -28,7 +28,7 @@ class User(db.Model):
     lastname = db.Column(db.String(50), nullable=True)
     mothername = db.Column(db.String(50), nullable=True)
     is_active = db.Column(db.Boolean, default=False, nullable=False)
-    role = db.Column(
+    role_id = db.Column(
         db.String(length=36),
         db.ForeignKey(Role.id, ondelete='CASCADE'),
         nullable=False)
@@ -37,6 +37,8 @@ class User(db.Model):
         db.DateTime,
         default=datetime.datetime.utcnow,
         nullable=False)
+
+    role = db.relationship('Role', back_populates='users', lazy=False)
 
     def __init__(self, data: dict) -> None:
         self.setAttrs(data)

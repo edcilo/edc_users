@@ -1,11 +1,12 @@
 from flask import abort
 from ms.helpers.jwt import jwtHelper
-from ms.repositories import userRepo
+from ms.repositories import UserRepository, userRepository
 from .middleware import MiddlewareBase
 
 
 class AuthMiddleware(MiddlewareBase):
     def handler(self, request) -> None:
+        userRepo = UserRepository()
         auth = request.headers.get('Authorization')
 
         if not auth:

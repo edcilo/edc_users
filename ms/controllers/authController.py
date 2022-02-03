@@ -42,8 +42,3 @@ class AuthController():
 
     def check(self) -> tuple[Response, int]:
         return jsonify(), 204
-
-    def profile(self) -> tuple[Response, int]:
-        user = request.auth.get('user')
-        serializer = UserSerializer(user)
-        return jsonify(serializer.get_data()), 200

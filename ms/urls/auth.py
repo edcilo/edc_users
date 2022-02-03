@@ -25,4 +25,4 @@ def refresh():
 @app.route(f'{url_prefix}/check', methods=['POST'])
 @middleware(AuthMiddleware())
 def check():
-    return {}, 204
+    return AuthController().check()

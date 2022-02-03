@@ -22,6 +22,15 @@ def test_login(client):
     assert response.status_code == 200
 
 
+def test_login_error(client):
+    data = {
+        'username': 'admin@example.com',
+        'password': 'secreto'
+    }
+    response = client.post('/api/v1/users/login', data=data)
+    assert response.status_code == 400
+
+
 def test_refresh_token(client, auth):
     refresh_token = auth.get_refreshtoken()
     headers = {'Authorization': f'Bearer {refresh_token}'}

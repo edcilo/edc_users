@@ -3,6 +3,14 @@ from ms.repositories import RoleRepository
 from helpers import getRole
 
 
+def test_paginate(client, auth, app):
+    with app.app_context():
+        token = auth.get_token()
+        headers = {'Authorization': f'Bearer {token}'}
+        response = client.get('/api/v1/users/admin/roles', headers=headers)
+        assert response.status_code == 200
+
+
 def test_create(client, auth):
     token = auth.get_token()
     headers = {'Authorization': f'Bearer {token}'}

@@ -3,6 +3,14 @@ from helpers import getRole, getUser
 from ms.repositories import UserRepository
 
 
+def test_paginate(client, auth, app):
+    with app.app_context():
+        token = auth.get_token()
+        headers = {'Authorization': f'Bearer {token}'}
+        response = client.get('/api/v1/users/admin', headers=headers)
+        assert response.status_code == 200
+
+
 def test_create(client, auth, app):
     with app.app_context():
         role = getRole('client')
@@ -36,11 +44,23 @@ def test_update(client, auth, app):
         data = {
             'phone': '1231231232',
             'email': 'jhon.doe.2@example.com',
-            'password': 'secret',
             'role_id': role.id
         }
         response = client.put(f'/api/v1/users/admin/{user.id}', headers=headers, data=data)
         assert response.status_code == 200
+
+
+def test_update_password(client, auth, app):
+    with app.app_context():
+        user = getUser('client@example.com')
+        token = auth.get_token()
+        headers = {'Authorization': f'Bearer {token}'}
+        data = {
+            'password': 'secret',
+            'password_confirmation': 'secret'
+        }
+        response = client.put(f'/api/v1/users/admin/{user.id}/password', headers=headers, data=data)
+        assert response.status_code == 204
 
 
 def test_active(client, auth, app):

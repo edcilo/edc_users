@@ -44,7 +44,8 @@ class AdminController():
         return jsonify(serializer.get_data()), 200
 
     @form_validator(UpdatePasswordForm)
-    def update_password(self, id, form: Type[FormRequest]) -> tuple[Response, int]:
+    def update_password(
+            self, id, form: Type[FormRequest]) -> tuple[Response, int]:
         self.userRepo.update_password(id, form.data.get('password'), fail=True)
         return jsonify(), 204
 

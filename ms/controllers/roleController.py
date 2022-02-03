@@ -46,6 +46,6 @@ class RoleController():
     def delete(self, id: str) -> tuple[Response, int]:
         role = self.repo.delete(id, fail=True)
         if role is None:
-            return jsonify({'errors':
-                {"uuid": "Cannot delete a role with related users"}}), 400
+            return jsonify(
+                {'errors': {"uuid": "Cannot delete a role with related users"}}), 400
         return jsonify({}), 204

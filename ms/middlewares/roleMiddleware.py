@@ -12,9 +12,9 @@ class RoleMiddleware(MiddlewareBase):
 
         auth = request.auth
 
-        if not 'role' in auth:
+        if 'role' not in auth:
             abort(403)
 
         role = auth.get('role')
-        if not 'name' in role or not role.get('name') in self.roles:
+        if 'name' not in role or not role.get('name') in self.roles:
             abort(403)

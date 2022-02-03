@@ -16,12 +16,12 @@ def login():
 
 
 @app.route(f'{url_prefix}/refresh', methods=['POST'])
-@middleware(AuthMiddleware)
+@middleware(AuthMiddleware())
 def refresh():
     return authController.refresh()
 
 
 @app.route(f'{url_prefix}/check', methods=['POST'])
-@middleware(AuthMiddleware)
+@middleware(AuthMiddleware())
 def check():
     return {}, 204

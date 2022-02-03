@@ -56,7 +56,6 @@ def test_find_by_attribute(app):
         userRepo.soft_delete(user_found.id)
         user_found = userRepo.find_by_attr('email', 'client@example.com', with_deleted=True)
         assert user_found is not None
-        userRepo.restore(user_found.id)
 
 
 def test_find_optional(app):
@@ -69,7 +68,7 @@ def test_find_optional(app):
         assert user_found.email == 'client@example.com'
 
 
-def test_find_optional(app):
+def test_all(app):
     with app.app_context():
         userRepo = UserRepository()
         users = userRepo.all()

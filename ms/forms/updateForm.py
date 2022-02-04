@@ -14,7 +14,6 @@ from ms.helpers.regex import phone_regex
 from ms.models import Role, User
 
 
-
 class UpdateForm(FormRequest):
     def rules(self) -> dict[str, Iterable]:
         user_id = self.request.view_args.get('id')

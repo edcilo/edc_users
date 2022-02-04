@@ -9,11 +9,10 @@ class MiddlewareBase(ABC):
         pass
 
 
-def middleware(middlewareClass):
+def middleware(middleware):
     def decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
-            middleware = middlewareClass()
             middleware.handler(request)
 
             return f(*args, **kwargs)

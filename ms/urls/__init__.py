@@ -8,6 +8,7 @@ from .account import *
 
 url_prefix = app.config.get('URL_PREFIX')
 
+
 @app.route(f"{url_prefix}/about")
 def about():
     return jsonify({

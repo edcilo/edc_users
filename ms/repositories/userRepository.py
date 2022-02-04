@@ -102,7 +102,11 @@ class UserRepository(Repository):
         self.db_save(user)
         return user
 
-    def update_password(self, id: str, password: str, fail: bool = False) -> User:
+    def update_password(
+            self,
+            id: str,
+            password: str,
+            fail: bool = False) -> User:
         user = self.find(id, fail)
         user.set_password(password)
         self.db_save(user)

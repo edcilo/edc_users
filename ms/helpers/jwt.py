@@ -42,6 +42,3 @@ class JwtHelper():
                 jwt.ExpiredSignatureError,
                 KeyError):
             return False
-
-
-jwtHelper = JwtHelper()

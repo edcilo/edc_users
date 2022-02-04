@@ -1,5 +1,4 @@
-from fixture import client
-from helpers import createJhonDoe, createJWT
+from fixture import app, auth, client
 
 
 def test_register(client):
@@ -13,27 +12,42 @@ def test_register(client):
     assert response.status_code == 200
     assert response.content_type == 'application/json'
 
+
 def test_login(client):
-    createJhonDoe()
     data = {
-        'username': '1231231231',
+        'username': 'admin@example.com',
         'password': 'secret'
     }
     response = client.post('/api/v1/users/login', data=data)
     assert response.status_code == 200
 
-def test_refresh_token(client):
-    user = createJhonDoe()
-    refresh_token = createJWT({'id': user.id})['refresh_token']
+
+def test_login_error(client):
+    data = {
+        'username': 'admin@example.com',
+        'password': 'secreto'
+    }
+    response = client.post('/api/v1/users/login', data=data)
+    assert response.status_code == 400
+
+
+def test_refresh_token(client, auth):
+    refresh_token = auth.get_refreshtoken()
     headers = {'Authorization': f'Bearer {refresh_token}'}
-    print(refresh_token, headers)
     response = client.post('/api/v1/users/refresh', headers=headers)
-    print(response)
     assert response.status_code == 200
 
-def test_check(client):
-    user = createJhonDoe()
-    token = createJWT({'id': user.id})['token']
+
+def test_check(client, auth):
+    token = auth.get_token()
     headers = {'Authorization': f'Bearer {token}'}
     response = client.post('/api/v1/users/check', headers=headers)
     assert response.status_code == 204
+
+    headers = {}
+    response = client.post('/api/v1/users/check', headers=headers)
+    assert response.status_code == 403
+
+    headers = {'Authorization': f'Bearer abcde12345'}
+    response = client.post('/api/v1/users/check', headers=headers)
+    assert response.status_code == 403

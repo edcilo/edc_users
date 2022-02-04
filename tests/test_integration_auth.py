@@ -43,3 +43,11 @@ def test_check(client, auth):
     headers = {'Authorization': f'Bearer {token}'}
     response = client.post('/api/v1/users/check', headers=headers)
     assert response.status_code == 204
+
+    headers = {}
+    response = client.post('/api/v1/users/check', headers=headers)
+    assert response.status_code == 403
+
+    headers = {'Authorization': f'Bearer abcde12345'}
+    response = client.post('/api/v1/users/check', headers=headers)
+    assert response.status_code == 403

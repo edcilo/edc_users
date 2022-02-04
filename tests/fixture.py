@@ -43,6 +43,11 @@ def auth(client):
     return AuthActions(client)
 
 
+@pytest.fixture
+def runner(app):
+    return app.test_cli_runner()
+
+
 def exec_seeders(app, root):
     db = app.extensions["flask_seeder"].db
     for seeder in cli.get_seeders(root):

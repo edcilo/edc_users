@@ -7,14 +7,11 @@ class RoleMiddleware(MiddlewareBase):
         self.roles = args
 
     def handler(self, request) -> None:
-        if not hasattr(request, 'auth'):
-            abort(403)
+        if hasattr(request, 'auth'):
+            auth = request.auth
+            role = auth.get('role', None)
 
-        auth = request.auth
+            if role is not None and 'name' in role and role.get('name') in self.roles:
+                return True
 
-        if 'role' not in auth:
-            abort(403)
-
-        role = auth.get('role')
-        if 'name' not in role or not role.get('name') in self.roles:
-            abort(403)
+        abort(403)

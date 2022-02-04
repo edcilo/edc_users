@@ -5,10 +5,15 @@ from helpers import getRole
 
 def test_paginate(client, auth, app):
     with app.app_context():
-        token = auth.get_token()
+        token = auth.get_token(username='admin@example.com', password='secret')
         headers = {'Authorization': f'Bearer {token}'}
         response = client.get('/api/v1/users/admin/roles', headers=headers)
         assert response.status_code == 200
+
+        token = auth.get_token(username='client@example.com', password='secret')
+        headers = {'Authorization': f'Bearer {token}'}
+        response = client.get('/api/v1/users/admin/roles', headers=headers)
+        assert response.status_code == 403
 
 
 def test_create(client, auth):

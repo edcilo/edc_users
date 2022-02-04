@@ -1,6 +1,6 @@
 from flask import abort
 from ms.helpers.jwt import JwtHelper
-from ms.repositories import UserRepository, userRepository
+from ms.repositories import UserRepository
 from .middleware import MiddlewareBase
 
 

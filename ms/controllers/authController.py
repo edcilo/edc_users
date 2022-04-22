@@ -1,44 +1,45 @@
-from flask import jsonify, request, Response
-from ms.forms import RegisterForm, LoginForm
+from flask import jsonify, request
+from flaskFormRequest.decorators import form_validator
+from ms import app
+from ms.forms import AuthLoginForm, AuthRegisterForm
 from ms.helpers.jwt import JwtHelper
-from ms.repositories import RoleRepository, UserRepository
-from ms.serializers import UserSerializer, JwtSerializer
-from ms.decorators import form_validator
+from ms.repositories import UserRepository
+from ms.serializers import JwtSerializer
+from .controller import Controller
 
 
-class AuthController():
-    def __init__(self) -> None:
-        self.repo = UserRepository()
-        self.roleRepo = RoleRepository()
-        self.jwtHelper = JwtHelper()
+class AuthController(Controller):
+    def __init__(self):
+        self.jwt = JwtHelper()
+        self.userRepo = UserRepository()
 
-    @form_validator(RegisterForm)
-    def register(self, form) -> tuple[Response, int]:
-        form.data['role_id'] = self.roleRepo.find_by_attr("name", "client").id
-        user = self.repo.add(form.data)
+    def get_token(self, user):
         serializer = JwtSerializer(user)
-        token = self.jwtHelper.get_tokens(serializer.get_data())
-        return jsonify(token), 200
+        return self.jwt.get_tokens(serializer.get_data())
 
-    @form_validator(LoginForm)
-    def login(self, form) -> tuple[Response, int]:
+    @form_validator(AuthRegisterForm)
+    def register(self, form):
+        user = self.userRepo.add(form.data)
+        token = self.get_token(user)
+        return jsonify(token), 201
+
+    @form_validator(AuthLoginForm)
+    def login(self, form):
         username = form.data.get('username')
         password = form.data.get('password')
-        user = self.repo.find_optional(
-            {'phone': username, 'email': username}, fail=True)
-        if not user.verify_password(password):
+        user = self.userRepo.find_optional(
+            {'phone': username, 'email': username}, fail=False)
+        if user is None or not user.verify_password(password):
             return jsonify({
                 'message': 'The credentials do not match our records.'
             }), 400
-        serializer = JwtSerializer(user)
-        token = self.jwtHelper.get_tokens(serializer.get_data())
+        token = self.get_token(user)
         return jsonify(token), 200
 
-    def refresh(self) -> tuple[Response, int]:
+    def refresh_token(self):
         user = request.auth.get('user')
-        serializer = JwtSerializer(user)
-        token = self.jwtHelper.get_tokens(serializer.get_data())
+        token = self.get_token(user)
         return jsonify(token), 200
 
-    def check(self) -> tuple[Response, int]:
+    def check(self):
         return jsonify(), 204

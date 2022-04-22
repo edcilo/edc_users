@@ -1,113 +1,135 @@
-import uuid
-from typing import Any, Iterable, Optional, Union
+import datetime
 from sqlalchemy import or_
-from flask_sqlalchemy import Pagination
 from ms.models import User
+from .permissionRepository import PermissionRepository
+from .roleRepository import RoleRepository
 from .repository import Repository
 
 
 class UserRepository(Repository):
-    def get_model(self) -> User:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.roleRepo = RoleRepository()
+
+    def get_model(self):
         return User
 
-    def activate(self, id: uuid, fail: bool = False) -> User:
-        user = self.find(id, fail=fail)
-        if not user.is_active:
-            user.is_active = True
-            self.db_save(user)
-        return user
-
-    def add(self, data: dict) -> User:
+    def add(self, data):
+        role_id = data.get("role_id") if "role_id" in data else self.roleRepo.find_by_attr(
+            'name', self._model._default_role).id
+        role = self.roleRepo.find(role_id)
         user = self._model(data)
+        user.roles.append(role)
         if 'password' in data:
             user.set_password(data['password'])
+        else:
+            return None
         self.db_save(user)
         return user
 
-    def all(self, search: str = None,
-            order_column: str = 'created_at',
-            order: str = 'desc',
-            paginate: bool = False,
-            page: int = 1,
-            per_page: int = 15,
-            with_deleted: bool = False) -> Union[list, Pagination]:
+    def all(
+            self,
+            search=None,
+            order_column='created_at',
+            order='desc',
+            paginate=False,
+            page=1,
+            per_page=15,
+            deleted=False):
         column = getattr(self._model, order_column)
         order_by = getattr(column, order)
         q = self._model.query
         if search is not None:
-            q = q.filter(or_(self._model.email.like(f'%{search}%'),
-                             self._model.phone.like(f'%{search}%')))
-        if not with_deleted:
-            q = q.filter_by(deleted=False)
+            q = q.filter(or_(self._model.id.like(f'%{search}%'),
+                             self._model.email.like(f'%{search}%'),
+                             self._model.phone.like(f'%{search}%'),
+                             self._model.name.like(f'%{search}%'),
+                             self._model.lastname.like(f'%{search}%')))
+        if not deleted:
+            q = q.filter(self._model.deleted_at.is_(None))
+        else:
+            q = q.filter(self._model.deleted_at.is_not(None))
         q = q.order_by(order_by())
-        users = q.paginate(page, per_page=per_page) if paginate else q.all()
-        return users
+        return q.paginate(page, per_page=per_page) if paginate else q.all()
 
-    def deactivate(self, id: uuid, fail: bool = False) -> User:
+    def find(self, id, fail=True, with_deleted=False):
+        filters = {'id': id}
+        if not with_deleted:
+            filters['deleted_at'] = None
+        q = self._model.query.filter_by(**filters)
+        return q.first_or_404() if fail else q.first()
+
+    def find_by_attr(self, column, value, fail=True, with_deleted=False):
+        q = self._model.query.filter_by(**{column: value})
+        if not with_deleted:
+            q = q.filter(self._model.deleted_at.is_(None))
+        return q.first_or_404() if fail else q.first()
+
+    def find_optional(self, filter, fail=True, with_deleted=False):
+        filters = [
+            getattr(self._model, key) == val for key, val in filter.items()
+        ]
+        q = self._model.query.filter(or_(*filters))
+        if not with_deleted:
+            q = q.filter(self._model.deleted_at.is_(None))
+        return q.first_or_404() if fail else q.first()
+
+    def update_password(self, id, password, fail=True) -> User:
+        user = self.find(id, fail)
+        if user is not None:
+            user.set_password(password)
+            self.db_save(user)
+        return user
+
+    def sync_permissions(self, id, permissions):
+        permissionRepo = PermissionRepository()
+        user = self.find(id)
+        user.permissions = list()
+        for permission_id in permissions:
+            permission = permissionRepo.find(permission_id)
+            user.permissions.append(permission)
+        self.db_save(user)
+
+    def sync_roles(self, id, roles):
+        roleRepo = RoleRepository()
+        user = self.find(id)
+        user.roles = list()
+        for role_id in roles:
+            role = roleRepo.find(role_id)
+            user.roles.append(role)
+        self.db_save(user)
+
+    def activate(self, id, fail=True):
         user = self.find(id, fail=fail)
-        if user.is_active:
+        if user is not None and not user.is_active:
+            user.is_active = True
+            self.db_save(user)
+        return user
+
+    def deactivate(self, id, fail=True):
+        user = self.find(id, fail=fail)
+        if user is not None and user.is_active:
             user.is_active = False
             self.db_save(user)
         return user
 
-    def delete(self, id: uuid, fail: bool = False) -> User:
+    def soft_delete(self, id, fail=True):
+        user = self.find(id, fail=fail)
+        if user is not None and user.deleted_at is None:
+            user.deleted_at = datetime.datetime.now()
+            self.db_save(user)
+        return user
+
+    def restore(self, id, fail=True):
         user = self.find(id, fail=fail, with_deleted=True)
+        if user is not None and user.deleted_at is not None:
+            user.deleted_at = None
+            self.db_save(user)
+        return user
+
+    def delete(self, id, fail=True):
+        user = self.find(id, fail=fail, with_deleted=True)
+        user.permissions = list()
+        user.roles = list()
         self.db_delete(user)
-        return user
-
-    def find(self, id: str, fail: bool = False,
-             with_deleted: bool = False) -> User:
-        filters: dict[str, Any] = {'id': id}
-        if not with_deleted:
-            filters['deleted'] = False
-        q = self._model.query.filter_by(**filters)
-        user = q.first_or_404() if fail else q.first()
-        return user
-
-    def find_by_attr(self, column: str, value: str, fail: bool = False,
-                     with_deleted: bool = False) -> User:
-        q = self._model.query.filter_by(**{column: value})
-        if not with_deleted:
-            q = q.filter_by(deleted=False)
-        user = q.first_or_404() if fail else q.first()
-        return user
-
-    def find_optional(self, filter: dict, fail: bool = False,
-                      with_deleted: bool = False) -> User:
-        filters = [
-            getattr(self._model, key) == val for key,
-            val in filter.items()
-        ]
-        q = self._model.query.filter(or_(*filters))
-        if not with_deleted:
-            q = q.filter_by(deleted=False)
-        user = q.first_or_404() if fail else q.first()
-        return user
-
-    def restore(self, id: uuid, fail: bool = False) -> User:
-        user = self.find(id, fail=fail, with_deleted=True)
-        user.deleted = False
-        self.db_save(user)
-        return user
-
-    def soft_delete(self, id: uuid, fail: bool = False) -> User:
-        user = self.find(id, fail=fail)
-        user.deleted = True
-        self.db_save(user)
-        return user
-
-    def update(self, id: int, data: dict, fail: bool = False) -> User:
-        user = self.find(id, fail=fail)
-        user.update(data)
-        self.db_save(user)
-        return user
-
-    def update_password(
-            self,
-            id: str,
-            password: str,
-            fail: bool = False) -> User:
-        user = self.find(id, fail)
-        user.set_password(password)
-        self.db_save(user)
         return user

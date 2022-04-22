@@ -9,40 +9,37 @@ class UsersSeeder(Seeder):
         self.priority = 20
 
     def run(self):
-        adminRole = Role.query.filter_by(name="admin").first()
+        faker = Faker()
+
+        adminRole = Role.query.filter_by(name="root").first()
         clientRole = Role.query.filter_by(name="client").first()
-        financialRole = Role.query.filter_by(name="financial").first()
 
-        users = (
-            User({
-                "phone": "5512312312",
-                "email": "admin@example.com",
-                "role_id": adminRole.id,
-            }),
-            User({
-                "phone": "5512312313",
-                "email": "client@example.com",
-                "role_id": clientRole.id,
-            }),
-            User({
-                "phone": "5512312314",
-                "email": "financial@example.com",
-                "role_id": financialRole.id,
-            })
-        )
+        root = User({
+            "phone": "0000000000",
+            "email": "root@example.com",
+        })
+        client = User({
+            "phone": "1111111111",
+            "email": "client@example.com",
+        })
 
-        for _ in users:
-            user = User.query.filter_by(email=_.email).first()
-            if user is None:
-                _.set_password('secret')
-                self.db.session.add(_)
+        user = User.query.filter_by(email=root.email).first()
+        if user is None:
+            root.set_password('secret')
+            root.roles.append(adminRole)
+            self.db.session.add(root)
 
-        fake = Faker()
+        user = User.query.filter_by(email=client.email).first()
+        if user is None:
+            client.set_password('secret')
+            client.roles.append(clientRole)
+            self.db.session.add(client)
+
         for _ in range(5):
             client = User({
-                "phone": fake.msisdn(),
-                "email": fake.email(),
-                "role_id": clientRole.id,
+                "phone": faker.msisdn(),
+                "email": faker.email(),
             })
             client.set_password("secret")
+            client.roles.append(clientRole)
             self.db.session.add(client)

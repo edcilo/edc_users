@@ -8,8 +8,8 @@ services:
     - 8080:5000
     volumes:
     - ./:/app
-    environment:
-    - FLASK_ENV=development
+    env_file:
+    - .env
     depends_on:
     - ms_aq_db
     networks:

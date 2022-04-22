@@ -3,18 +3,18 @@ from abc import ABC, abstractmethod
 from functools import wraps
 
 
-class MiddlewareBase(ABC):
+class Middleware(ABC):
     @abstractmethod
-    def handler(self, request) -> None:
+    def handler(self, request):
         pass
 
 
-def middleware(middleware):
+def middleware(middlewareCls, *dargs, **dkwargs):
     def decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
-            middleware.handler(request)
-
+            mid = middlewareCls(*dargs, **dkwargs)
+            mid.handler(request)
             return f(*args, **kwargs)
         return wrapper
     return decorator

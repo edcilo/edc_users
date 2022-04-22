@@ -1,55 +1,52 @@
-import uuid
-from flask_sqlalchemy import Pagination
-from typing import Any, Union
+from sqlalchemy import or_
 from ms.models import Role
+from .permissionRepository import PermissionRepository
 from .repository import Repository
 
 
 class RoleRepository(Repository):
-    def get_model(self) -> Role:
+    def get_model(self):
         return Role
 
-    def add(self, data: dict) -> Role:
-        role = self._model(data)
-        self.db_save(role)
-        return role
-
-    def all(self, search: str = None,
-            order_column: str = 'created_at',
-            order: str = 'desc',
-            paginate: bool = False,
-            page: int = 1,
-            per_page: int = 15) -> Union[list, Pagination]:
+    def all(
+            self,
+            search=None,
+            order_column='created_at',
+            order='desc',
+            paginate=False,
+            page=1,
+            per_page=15):
         column = getattr(self._model, order_column)
         order_by = getattr(column, order)
         q = self._model.query
         if search is not None:
-            q = q.filter(self._model.name.like(f'%{search}%'))
+            q = q.filter(or_(self._model.name.like(f'%{search}%')))
         q = q.order_by(order_by())
-        users = q.paginate(page, per_page=per_page) if paginate else q.all()
-        return users
+        return q.paginate(page, per_page=per_page) if paginate else q.all()
 
-    def delete(self, id: uuid, fail: bool = False) -> Role:
+    def update(self, id, data, fail=True):
         role = self.find(id, fail=fail)
-        if len(role.users) == 0:
-            self.db_delete(role)
-            return role
-        else:
-            return None
+        success = False
+        if role.name != "root":
+            role.update(data)
+            self.db_save(role)
+            success = True
+        return role, success
 
-    def find(self, id: str, fail: bool = False) -> Role:
-        filters = {'id': id}
-        q = self._model.query.filter_by(**filters)
-        return q.first_or_404() if fail else q.first()
-
-    def find_by_attr(self, column: str, value: str,
-                     fail: bool = False) -> Role:
-        q = self._model.query.filter_by(**{column: value})
-        user = q.first_or_404() if fail else q.first()
-        return user
-
-    def update(self, id: int, data: dict, fail: bool = False) -> Role:
-        role = self.find(id, fail=fail)
-        role.update(data)
+    # TODO: add form validator
+    def sync_permissions(self, id, permissions):
+        permissionRepo = PermissionRepository()
+        role = self.find(id)
+        role.permissions = list()
+        for permission_id in permissions:
+            permission = permissionRepo.find(permission_id)
+            role.permissions.append(permission)
         self.db_save(role)
-        return role
+
+    def delete(self, id, fail=True):
+        role = self.find(id, fail=fail)
+        success = False
+        if role.name != "root" and role.fixed == False:
+            self.db_delete(role)
+            success = True
+        return role, success

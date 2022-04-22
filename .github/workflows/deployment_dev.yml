@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  DOCKER_IMAGE: edcilo/aq_ms_users_dev
+  DOCKER_IMAGE: gravitimx/aq_ms_users
 
 jobs:
   testing:

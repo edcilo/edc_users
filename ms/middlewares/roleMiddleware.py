@@ -1,17 +1,21 @@
 from flask import abort
-from .middleware import MiddlewareBase
+from sqlalchemy import or_
+from ms.models import Role
+from .middleware import Middleware
 
 
-class RoleMiddleware(MiddlewareBase):
-    def __init__(self, *args) -> None:
-        self.roles = args
+class RoleMiddleware(Middleware):
+    def __init__(self, roles):
+        self.roles = roles
 
-    def handler(self, request) -> None:
-        if hasattr(request, 'auth'):
-            auth = request.auth
-            role = auth.get('role', None)
+    def handler(self, request):
+        user = request.auth.get("user")
 
-            if role is not None and 'name' in role and role.get('name') in self.roles:
-                return True
+        if user.roles.filter_by(name="root").count() > 0:
+            return True
+
+        filters = [Role.name == role for role in self.roles]
+        if user.roles.filter(or_(*filters)).count() > 0:
+            return True
 
         abort(403)

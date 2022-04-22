@@ -1,4 +1,4 @@
-from .accountSerializer import AccountSerializer
 from .jwtSerializer import JwtSerializer
-from .roleSerializer import RoleSerializer, UserRoleSerializer
-from .userSerializer import UserSerializer
+from .permissionSerializer import PermissionSerializer
+from .roleSerializer import RoleSerializer, RolePermissionsSerializer
+from .userSerializer import UserSerializer, UserPermissionsSerializer

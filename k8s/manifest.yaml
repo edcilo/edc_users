@@ -48,6 +48,11 @@ spec:
             configMapKeyRef:
               name: ms-users-configmap
               key: APP_TIMEZONE
+        - name: DB_CONNECTION
+          valueFrom:
+            configMapKeyRef:
+              name: ms-users-configmap
+              key: DB_CONNECTION
         - name: DB_HOST
           valueFrom:
             configMapKeyRef:
@@ -58,11 +63,11 @@ spec:
             configMapKeyRef:
               name: ms-users-configmap
               key: DB_PORT
-        - name: DB_NAME
+        - name: DB_DATABASE
           valueFrom:
             configMapKeyRef:
               name: ms-users-configmap
-              key: DB_NAME
+              key: DB_DATABASE
         - name: DB_USER
           valueFrom:
             configMapKeyRef:
@@ -77,6 +82,12 @@ spec:
           limits:
             memory: "1Gi"
             cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /api/v1/users/
+            port: 5000
+          initialDelaySeconds: 10
+          periodSeconds: 60
 
 
 ---
@@ -93,4 +104,3 @@ spec:
     protocol: TCP
   selector:
     app: ms-users
-

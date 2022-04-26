@@ -8,3 +8,8 @@ from ms.routes.blueprints import api
 @middleware(AuthMiddleware)
 def profile():
     return AccountController.action("profile")
+
+@api.route('/profile/permissions')
+@middleware(AuthMiddleware)
+def permissions():
+    return AccountController.action("permissions")

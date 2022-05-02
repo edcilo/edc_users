@@ -12,6 +12,7 @@ services:
     - .env
     depends_on:
     - ms_aq_db
+    - ms_aq_redis
     networks:
     - aqUsersNetwork
 
@@ -28,6 +29,14 @@ services:
       POSTGRES_PASSWORD: secret
     networks:
     - aqUsersNetwork
+
+  ms_aq_redis:
+    container_name: ms_aq_redis
+    image: redis:6-alpine
+    ports:
+      - 6379:6379
+    networks:
+      - aqUsersNetwork
 
 
 volumes:

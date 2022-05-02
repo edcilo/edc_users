@@ -5,8 +5,7 @@ from ms.forms import (
     AdminListUsersForm,
     AdminCreateUserForm,
     AdminUpdateUserForm,
-    AdminUpdateUserPasswordForm,
-)
+    AdminUpdateUserPasswordForm)
 from ms.repositories import UserRepository, RoleRepository
 from ms.serializers import UserSerializer, UserPermissionsSerializer
 from .controller import Controller

@@ -8,6 +8,7 @@ from .makeModel import makemodel
 from .makeRepository import makerepository
 from .makeSeeder import makeseeder
 from .makeSerializer import makeserializer
+from .updateCache import updateCache
 
 
 app.cli.add_command(pep8)
@@ -19,3 +20,4 @@ app.cli.add_command(makemodel)
 app.cli.add_command(makerepository)
 app.cli.add_command(makeseeder)
 app.cli.add_command(makeserializer)
+app.cli.add_command(updateCache)

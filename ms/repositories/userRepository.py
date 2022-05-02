@@ -1,5 +1,6 @@
 import datetime
 from sqlalchemy import or_
+from ms.db.cache import Cache
 from ms.models import User
 from .permissionRepository import PermissionRepository
 from .roleRepository import RoleRepository
@@ -10,6 +11,7 @@ class UserRepository(Repository):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.roleRepo = RoleRepository()
+        self.cache = Cache()
 
     def get_model(self):
         return User
@@ -25,6 +27,7 @@ class UserRepository(Repository):
         else:
             return None
         self.db_save(user)
+        self.setCache(user)
         return user
 
     def all(
@@ -89,6 +92,7 @@ class UserRepository(Repository):
             permission = permissionRepo.find(permission_id)
             user.permissions.append(permission)
         self.db_save(user)
+        self.setCache(user)
 
     def sync_roles(self, id, roles):
         roleRepo = RoleRepository()
@@ -98,6 +102,7 @@ class UserRepository(Repository):
             role = roleRepo.find(role_id)
             user.roles.append(role)
         self.db_save(user)
+        self.setCache(user)
 
     def activate(self, id, fail=True):
         user = self.find(id, fail=fail)
@@ -118,6 +123,7 @@ class UserRepository(Repository):
         if user is not None and user.deleted_at is None:
             user.deleted_at = datetime.datetime.now()
             self.db_save(user)
+            self.deleteCache(user)
         return user
 
     def restore(self, id, fail=True):
@@ -125,11 +131,27 @@ class UserRepository(Repository):
         if user is not None and user.deleted_at is not None:
             user.deleted_at = None
             self.db_save(user)
+            self.setCache(user)
         return user
 
     def delete(self, id, fail=True):
         user = self.find(id, fail=fail, with_deleted=True)
-        user.permissions = list()
-        user.roles = list()
-        self.db_delete(user)
+        if user is not None:
+            user.permissions = list()
+            user.roles = list()
+            self.db_delete(user)
+            self.deleteCache(user)
         return user
+
+    def setCache(self, user):
+        permissions = [p.name for p in user.all_permissions]
+        data = {
+            "id": user.id,
+            "email": user.email,
+            "permissions": permissions,
+            "roles": user.roles_list
+        }
+        self.cache.set(user.id, data)
+
+    def deleteCache(self, user):
+        self.cache.delete(user.id)

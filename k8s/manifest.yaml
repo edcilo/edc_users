@@ -78,6 +78,21 @@ spec:
             secretKeyRef:
               name: ms-users-secrets
               key: DB_PASSWORD
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: ms-users-configmap
+              key: REDIS_HOST
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: ms-users-configmap
+              key: REDIS_PORT
+        - name: REDIS_DB
+          valueFrom:
+            configMapKeyRef:
+              name: ms-users-configmap
+              key: REDIS_DB
         resources:
           limits:
             memory: "1Gi"

@@ -13,6 +13,10 @@ if [ $env = "production" ]
 then
     echo $(date '+%F %T.%3N %Z') "[flask] INFO: running production environment"
     gunicorn --bind 0.0.0.0:5000 --chdir ./ms ms:app --timeout 120 --workers=2 --access-logfile /var/log/gunicorn-access.log --error-logfile /var/log/gunicorn-error.log --log-level info
+elif [ $env = 'celery' ]
+then
+    echo $(date '+%F %T.%3N %Z') "[flask] INFO: running celery worker"
+    celery --app ms.tasks.worker.celery worker --loglevel=INFO
 elif [ $env = 'testing' ]
 then
     echo $(date '+%F %T.%3N %Z') "[flask] INFO: running testing environment"

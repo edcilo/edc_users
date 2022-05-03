@@ -9,7 +9,4 @@ from ms.repositories import UserRepository
 @with_appcontext
 def updatecache():
     userRepo = UserRepository()
-    users = userRepo.all()
-    userRepo.cache.truncate()
-    for user in users:
-        userRepo.setCache(user)
+    userRepo.updateCache()

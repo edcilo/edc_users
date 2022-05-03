@@ -1,7 +1,5 @@
 import os
 import pytest
-import random
-import string
 import shutil
 import tempfile
 from flask_migrate import init, migrate, upgrade
@@ -9,6 +7,7 @@ from flask_seeder import cli
 from ms import app as app_
 from ms.helpers.utils import random_string
 from ms.repositories import RoleRepository, UserRepository
+from helpers import RedisWrapper
 
 
 @pytest.fixture
@@ -21,6 +20,7 @@ def app():
         app_.config.update(TESTING=True)
         app_.config.update(SECRET_KEY='testingapp')
         app_.config.update(SQLALCHEMY_DATABASE_URI=f'sqlite:///{db_path}')
+        app_.cache.conn = RedisWrapper()
         init(directory=migrations_path)
         migrate(directory=migrations_path)
         upgrade(directory=migrations_path)

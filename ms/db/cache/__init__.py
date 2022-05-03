@@ -44,10 +44,11 @@ class Cache:
         return self.conn.delete(key)
 
     def truncate(self) -> bool:
-        cursor = 0
+        cursor = None
         while cursor != 0:
+            c = cursor or 0
             cursor, keys = self.conn.scan(
-                cursor=cursor,
+                cursor=c,
                 match="*",
                 count=self.chunk_size)
             if keys:
@@ -59,3 +60,6 @@ class Cache:
 
     def ping(self) -> bool:
         return self.conn.ping()
+
+
+setattr(app, 'cache', Cache())

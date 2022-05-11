@@ -107,5 +107,8 @@ jobs:
       - name: Save AWS kubeconfig
         run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.DEV_CLUSTER_NAME }}
 
+      - name: Delete Pod
+        run: kubectl delete -f $GITHUB_WORKSPACE/k8s/manifest.yaml
+
       - name: Deploy to EKS
         run: kubectl apply -f $GITHUB_WORKSPACE/k8s/manifest.yaml

@@ -15,8 +15,17 @@ class RoleController(Controller):
     def __init__(self):
         self.roleRepo = RoleRepository()
 
+    def list(self):
+        collection = self.roleRepo.all(**{
+            'paginate': False,
+            'order': 'asc',
+            'order_column': 'name',
+        })
+        serializer = RoleSerializer(collection, collection=True)
+        return jsonify(serializer.get_data()), 200
+
     @form_validator(AdminListRolesForm)
-    def list(self, form):
+    def paginate(self, form):
         collection = self.roleRepo.all(**{
             'paginate': True,
             'per_page': form.data.get('per_page', 15),

@@ -69,13 +69,17 @@ class User(db.Model):
         return check_password_hash(self.password, password)
 
     @property
-    def all_permissions(self):
-        permissions = self.permissions.all() or list()
+    def roles_permissions(self):
+        permissions = list()
         roles = self.roles.all()
-
         for role in roles:
             permissions = list(set(permissions + role.permissions.all()))
+        return permissions
 
+    @property
+    def all_permissions(self):
+        permissions = self.permissions.all() or list()
+        permissions += list(permissions + self.roles_permissions)
         return permissions
 
     @property

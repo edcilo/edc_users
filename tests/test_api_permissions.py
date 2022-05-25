@@ -12,6 +12,14 @@ def test_api_paginate(client, auth, app):
     assert "pagination" in response.json
 
 
+def test_api_list(client, auth, app):
+    token = auth.get_token(username="root@example.com", password="secret")
+    headers = {'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'}
+    response = client.get('/api/v1/users/admin/permissions/list', headers=headers)
+    assert response.status_code == 200
+    assert isinstance(response.json, list)
+
+
 def test_api_create(client, auth, app):
     token = auth.get_token(username="root@example.com", password="secret")
     headers = {'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'}

@@ -79,7 +79,9 @@ class User(db.Model):
     @property
     def all_permissions(self):
         permissions = self.permissions.all() or list()
-        permissions += list(permissions + self.roles_permissions)
+        for p in self.roles_permissions:
+            if p not in permissions:
+                permissions.append(p)
         return permissions
 
     @property

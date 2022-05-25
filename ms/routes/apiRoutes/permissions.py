@@ -7,6 +7,13 @@ from ms.routes.blueprints import api
 @api.route('/admin/permissions')
 @middleware(AuthMiddleware)
 @middleware(RoleMiddleware, roles=('root',))
+def permission_paginate():
+    return PermissionController.action('paginate')
+
+
+@api.route('/admin/permissions/list')
+@middleware(AuthMiddleware)
+@middleware(RoleMiddleware, roles=('root',))
 def permission_list():
     return PermissionController.action('list')
 

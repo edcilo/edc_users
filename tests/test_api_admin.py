@@ -87,6 +87,17 @@ def test_api_update_password(client, auth, app):
     assert response.status_code == 204
 
 
+def test_api_permissions(client, auth, app):
+    auth.register(email="jhon.doe@example.com")
+    token = auth.get_token(username="root@example.com", password="secret")
+    user = getUser("jhon.doe@example.com")
+    headers = {'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'}
+    response = client.get(f'/api/v1/users/admin/{user.id}/permissions', headers=headers)
+    assert response.status_code == 200
+    assert 'permissions' in response.json
+    assert 'roles_permissions' in response.json
+
+
 def test_api_syncpermissions(client, auth, app):
     auth.register(email="jhon.doe@example.com")
     token = auth.get_token(username="root@example.com", password="secret")

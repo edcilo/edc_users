@@ -46,6 +46,13 @@ def api_users_update_password(id):
     return AdminUserController.action('update_password', id)
 
 
+@api.route('/admin/<id>/permissions', methods=['GET'])
+@middleware(AuthMiddleware)
+@middleware(PermissionMiddleware, permissions=('User - detail',))
+def api_users_permissions(id):
+    return AdminUserController.action('permissions', id)
+
+
 @api.route('/admin/<id>/sync-permissions', methods=['POST'])
 @middleware(AuthMiddleware)
 @middleware(PermissionMiddleware, permissions=('User - permissions',))

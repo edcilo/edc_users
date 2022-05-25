@@ -27,7 +27,7 @@ def test_all(app):
         roleRepo = RoleRepository()
         roles = roleRepo.all()
         assert isinstance(roles, list)
-        assert len(roles) == 3
+        assert len(roles) > 1
         results = roleRepo.all('root')
         assert len(results) == 1
         results = roleRepo.all('foo')

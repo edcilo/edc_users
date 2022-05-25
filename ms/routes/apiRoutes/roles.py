@@ -7,6 +7,13 @@ from ms.routes.blueprints import api
 @api.route('/admin/roles')
 @middleware(AuthMiddleware)
 @middleware(RoleMiddleware, roles=('root',))
+def role_paginate():
+    return RoleController.action('paginate')
+
+
+@api.route('/admin/roles/list')
+@middleware(AuthMiddleware)
+@middleware(RoleMiddleware, roles=('root',))
 def role_list():
     return RoleController.action('list')
 

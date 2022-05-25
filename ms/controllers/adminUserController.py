@@ -7,7 +7,7 @@ from ms.forms import (
     AdminUpdateUserForm,
     AdminUpdateUserPasswordForm)
 from ms.repositories import UserRepository, RoleRepository
-from ms.serializers import UserSerializer, UserPermissionsSerializer
+from ms.serializers import UserSerializer, UserPermissionsSerializer, PermissionSerializer
 from .controller import Controller
 
 
@@ -64,6 +64,17 @@ class AdminUserController(Controller):
     def update_password(self, id, form):
         self.userRepo.update_password(id, form.data.get('password'))
         return jsonify(), 204
+
+    def permissions(self, id):
+        user = self.userRepo.find(id)
+        permissions_serializer = PermissionSerializer(
+            user.permissions.all(), collection=True)
+        role_psermissions_serializer = PermissionSerializer(
+            user.all_permissions, collection=True)
+        return jsonify({
+            "permissions": permissions_serializer.get_data(),
+            "roles_permissions": role_psermissions_serializer.get_data()
+        }), 200
 
     # TODO: add form validator
     def sync_permissions(self, id):

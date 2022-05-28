@@ -18,5 +18,4 @@ def test_api_permissions(app, client, auth):
         headers = {'Authorization': f'Bearer {token}'}
         res = client.get('/api/v1/users/profile/permissions', headers=headers)
         assert res.status_code == 200
-        assert "permissions" in res.json
-        assert "roles_permissions" in res.json
+        assert isinstance(res.json, list)

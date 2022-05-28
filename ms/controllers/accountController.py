@@ -12,10 +12,5 @@ class AccountController(Controller):
     def permissions(self):
         user = request.auth.get('user')
         permissions_serializer = PermissionSerializer(
-            user.permissions.all(), collection=True)
-        role_psermissions_serializer = PermissionSerializer(
             user.all_permissions, collection=True)
-        return jsonify({
-            "permissions": permissions_serializer.get_data(),
-            "roles_permissions": role_psermissions_serializer.get_data()
-        }), 200
+        return jsonify(permissions_serializer.get_data()), 200

@@ -1,3 +1,4 @@
+from .accountUpdatePassword import AccountUpdatePassword
 from .adminCreatePermissionForm import AdminCreatePermissionForm
 from .adminCreateRoleForm import AdminCreateRoleForm
 from .adminCreateUserForm import AdminCreateUserForm

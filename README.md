@@ -31,6 +31,11 @@ flask db migrate
 flask db upgrade
 ```
 
+Execute seeders to populate database
+```
+flask seed run --root=./ms/db/seeders
+```
+
 Run tests
 ```
 coverage run -m pytest

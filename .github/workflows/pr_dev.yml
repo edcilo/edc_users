@@ -1,0 +1,36 @@
+name: Testing application
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+  workflow_dispatch:
+
+jobs:
+  testing:
+    name: Run tests
+    runs-on: ubuntu-latest
+
+    env:
+      APP_SECRET_KEY: my-secret-key
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Install application
+        run: pip install -e .
+
+      - name: Run testing
+        run: coverage run -m pytest
+
+      - name: Show coverage report
+        run: coverage report

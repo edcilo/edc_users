@@ -94,9 +94,12 @@ spec:
               name: ms-users-configmap
               key: REDIS_DB
         resources:
+          requests:
+            cpu: 250m
+            memory: 200Mi
           limits:
-            memory: "1Gi"
-            cpu: "500m"
+            cpu: 500m
+            memory: 500Mi
         livenessProbe:
           httpGet:
             path: /api/v1/users/

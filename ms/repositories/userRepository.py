@@ -145,7 +145,7 @@ class UserRepository(Repository):
 
     def updateCache(self) -> bool:
         users = self.all()
-        app.cache.truncate()
+        app.cache.truncate(self.cache_key_prefix)
         for user in users:
             self.setCache(user)
         return True

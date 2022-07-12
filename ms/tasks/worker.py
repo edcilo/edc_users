@@ -9,7 +9,7 @@ redisDB = redisConfig.get("DATABASE")
 redisUser = redisConfig.get("USERNAME")
 redisPass = redisConfig.get("PASSWORD")
 
-auth = f'{redisUser}:{redisPass}' if len(redisPass) > 0 else redisUser
+auth = f'{redisUser}:{redisPass}' if redisPass else redisUser
 
 
 celery = Celery('worker')

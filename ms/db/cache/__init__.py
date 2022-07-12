@@ -43,13 +43,13 @@ class Cache:
     def delete(self, key: str) -> int:
         return self.conn.delete(key)
 
-    def truncate(self) -> bool:
+    def truncate(self, prefix=None) -> bool:
         cursor = None
         while cursor != 0:
             c = cursor or 0
             cursor, keys = self.conn.scan(
                 cursor=c,
-                match="*",
+                match=f"{prefix}*" if prefix else "*",
                 count=self.chunk_size)
             if keys:
                 self.conn.delete(*keys)

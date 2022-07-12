@@ -1,7 +1,6 @@
 import datetime
 from sqlalchemy import or_
 from ms import app
-from ms.db.cache import Cache
 from ms.models import User
 from .permissionRepository import PermissionRepository
 from .roleRepository import RoleRepository
@@ -12,6 +11,7 @@ class UserRepository(Repository):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.roleRepo = RoleRepository()
+        self.cache_key_prefix = "ms-users-"
 
     def get_model(self):
         return User
@@ -145,7 +145,7 @@ class UserRepository(Repository):
 
     def updateCache(self) -> bool:
         users = self.all()
-        app.cache.truncate()
+        app.cache.truncate(self.cache_key_prefix)
         for user in users:
             self.setCache(user)
         return True
@@ -158,7 +158,7 @@ class UserRepository(Repository):
             "permissions": permissions,
             "roles": user.roles_list
         }
-        app.cache.set(f"ms-users-{user.id}", data)
+        app.cache.set(f"{self.cache_key_prefix}{user.id}", data)
 
     def deleteCache(self, user):
-        app.cache.delete(user.id)
+        app.cache.delete(f"{self.cache_key_prefix}{user.id}")

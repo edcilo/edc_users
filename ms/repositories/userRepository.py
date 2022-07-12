@@ -158,7 +158,7 @@ class UserRepository(Repository):
             "permissions": permissions,
             "roles": user.roles_list
         }
-        app.cache.set(user.id, data)
+        app.cache.set(f"ms-users-{user.id}", data)
 
     def deleteCache(self, user):
         app.cache.delete(user.id)

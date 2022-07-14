@@ -122,8 +122,8 @@ class UserRepository(Repository):
 
     def soft_delete(self, id, fail=True):
         user = self.find(id, fail=fail)
-        self.canBeDeleted(user)
         if user is not None and user.deleted_at is None:
+            self.canBeDeleted(user)
             user.deleted_at = datetime.datetime.now()
             self.db_save(user)
             self.deleteCache(user)
@@ -139,8 +139,8 @@ class UserRepository(Repository):
 
     def delete(self, id, fail=True):
         user = self.find(id, fail=fail, with_deleted=True)
-        self.canBeDeleted(user)
         if user is not None:
+            self.canBeDeleted(user)
             user.permissions = list()
             user.roles = list()
             self.db_delete(user)

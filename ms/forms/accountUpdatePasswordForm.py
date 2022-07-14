@@ -11,7 +11,7 @@ from ms.helpers import regex
 from ms.models import User
 
 
-class AccountUpdatePassword(FormRequest):
+class AccountUpdatePasswordForm(FormRequest):
     def rules(self):
         user = self.request.auth.get('user')
         return {

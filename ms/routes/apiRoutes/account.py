@@ -13,7 +13,19 @@ def profile():
 @api.route('/profile', methods=['PUT'])
 @middleware(AuthMiddleware)
 def update():
-    return AccountController.action('update')
+    return AccountController.action('updateProfile')
+
+
+@api.route('/profile/account', methods=['PUT'])
+@middleware(AuthMiddleware)
+def update_account():
+    return AccountController.action('updateAccount')
+
+
+@api.route('/profile/auth', methods=['PUT'])
+@middleware(AuthMiddleware)
+def update_auth():
+    return AccountController.action('updateAuth')
 
 
 @api.route('/profile/update-password', methods=['POST'])

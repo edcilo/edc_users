@@ -12,7 +12,6 @@ class Profile(db.Model):
         'home_phone',
         'birthday',
         'gender',
-        'user_id',
         'legal_id_front',
         'legal_id_back',
         'proof_of_address',

@@ -42,7 +42,8 @@ class User(db.Model):
     profile = db.relationship(
         "Profile",
         back_populates="user",
-        uselist=False
+        uselist=False,
+        cascade="all,delete",
     )
     permissions = db.relationship(
         "Permission",

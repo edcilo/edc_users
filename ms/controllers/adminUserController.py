@@ -1,13 +1,12 @@
 from flask import jsonify, request
 from flaskFormRequest.decorators import form_validator
-from ms import app
 from ms.forms import (
     AdminListUsersForm,
     AdminCreateUserForm,
     AdminUpdateUserForm,
     AdminUpdateUserPasswordForm)
 from ms.repositories import UserRepository, RoleRepository
-from ms.serializers import UserSerializer, UserPermissionsSerializer, UserProfileSerializer, PermissionSerializer
+from ms.serializers import UserSerializer, UserProfileSerializer, PermissionSerializer
 from .controller import Controller
 
 

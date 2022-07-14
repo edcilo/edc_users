@@ -12,7 +12,10 @@ class Profile(db.Model):
         'home_phone',
         'birthday',
         'gender',
-        'user_id'
+        'user_id',
+        'legal_id_front',
+        'legal_id_back',
+        'proof_of_address',
     )
 
     id = db.Column(
@@ -24,6 +27,10 @@ class Profile(db.Model):
     home_phone = db.Column(db.String(15), nullable=True)
     birthday = db.Column(db.DateTime, nullable=True)
     gender = db.Column(db.String(50), nullable=True)
+
+    legal_id_front = db.Column(db.String(255), nullable=True)
+    legal_id_back = db.Column(db.String(255), nullable=True)
+    proof_of_address = db.Column(db.String(255), nullable=True)
 
     user_id = db.Column(
         db.String(36),

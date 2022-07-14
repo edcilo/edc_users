@@ -1,3 +1,4 @@
+from ms.helpers.files import generate_client_filename, upload_file
 from ms.models import User, Profile
 from ms.repositories.userRepository import UserRepository
 from ms.repositories.roleRepository import RoleRepository
@@ -30,3 +31,21 @@ class ClientRepository(Repository):
             user.profile = Profile(data)
             self.db_save(user.profile)
         return user
+
+    def upload_files(self, id, data):
+        user = id if isinstance(id, User) else self.userRepo.find(id)
+        fields = ("legal_id_front", "legal_id_back", "proof_of_address")
+        fields_url = {}
+        for field in fields:
+            if not field in data or data.get(field).content_type is None:
+                continue
+            file = data.get(field)
+            filename = generate_client_filename(user, file)
+            path = f"/tmp/{filename}"
+            ext = path.split(".")[-1]
+            destination = f"/clients/{user.id}/{field}.{ext}"
+            file.save(path)
+            url = upload_file(path, destination)
+            fields_url[field] = url
+        if len(fields_url) > 0:
+            self.update(user, fields_url)

@@ -16,3 +16,10 @@ def api_client_create():
 @middleware(PermissionMiddleware, permissions=('Client - update',))
 def api_client_update(id):
     return ClientController.action('update', id)
+
+
+@api.route("/client/<id>/files", methods=['POST'])
+@middleware(AuthMiddleware)
+@middleware(PermissionMiddleware, permissions=('Client - upload files',))
+def api_client_upload_id_files(id):
+    return ClientController.action('upload_id_files', id)

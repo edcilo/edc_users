@@ -40,7 +40,7 @@ class UsersSeeder(Seeder):
             client.roles.append(clientRole)
             self.db.session.add(client)
 
-        user = User.query.filter_by(email=client.email).first()
+        user = User.query.filter_by(email=merchant.email).first()
         if user is None:
             merchant.set_password('secret')
             merchant.roles.append(merchantRole)

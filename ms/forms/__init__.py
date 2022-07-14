@@ -13,3 +13,4 @@ from .adminUpdateUserPasswordForm import AdminUpdateUserPasswordForm
 from .authLoginForm import AuthLoginForm
 from .authRegisterForm import AuthRegisterForm
 from .clientCreateForm import ClientCreateForm
+from .clientUpdateForm import ClientUpdateForm

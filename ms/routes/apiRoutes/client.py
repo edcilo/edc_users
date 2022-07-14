@@ -9,3 +9,10 @@ from ms.routes.blueprints import api
 @middleware(PermissionMiddleware, permissions=('Client - create',))
 def api_client_create():
     return ClientController.action('create')
+
+
+@api.route('/client/<id>', methods=['PUT'])
+@middleware(AuthMiddleware)
+@middleware(PermissionMiddleware, permissions=('Client - update',))
+def api_client_update(id):
+    return ClientController.action('update', id)

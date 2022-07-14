@@ -23,6 +23,8 @@ class PermissionSeeder(Seeder):
             Permission({"name": "User - soft delete", "fixed": True}),
             Permission({"name": "User - restore", "fixed": True}),
             Permission({"name": "User - delete", "fixed": True}),
+            Permission({"name": "Client - create", "fixed": True}),
+            Permission({"name": "Client - update", "fixed": True}),
         )
 
         for _ in permissions:

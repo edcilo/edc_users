@@ -7,7 +7,7 @@ from ms.forms import (
     AdminUpdateUserForm,
     AdminUpdateUserPasswordForm)
 from ms.repositories import UserRepository, RoleRepository
-from ms.serializers import UserSerializer, UserPermissionsSerializer, PermissionSerializer
+from ms.serializers import UserSerializer, UserPermissionsSerializer, UserProfileSerializer, PermissionSerializer
 from .controller import Controller
 
 
@@ -51,7 +51,7 @@ class AdminUserController(Controller):
 
     def detail(self, id):
         user = self.userRepo.find(id)
-        serializer = UserPermissionsSerializer(user)
+        serializer = UserProfileSerializer(user)
         return jsonify(serializer.get_data()), 200
 
     @form_validator(AdminUpdateUserForm)

@@ -13,7 +13,6 @@ class User(db.Model):
     _fillable = (
         'phone',
         'email',
-        'role_id',
         'name',
         'lastname',
         'mothername',
@@ -40,6 +39,11 @@ class User(db.Model):
         default=datetime.datetime.utcnow,
         nullable=False)
 
+    profile = db.relationship(
+        "Profile",
+        back_populates="user",
+        uselist=False
+    )
     permissions = db.relationship(
         "Permission",
         lazy='dynamic',

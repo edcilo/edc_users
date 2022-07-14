@@ -1,13 +1,16 @@
 import time
-from datetime import datetime, timezone
+import datetime
 
 
 def now():
-    utc = timezone.utc
-    return datetime.now(tz=utc)
+    utc = datetime.timezone.utc
+    return datetime.datetime.now(tz=utc)
 
 
 def datetime_to_epoch(date):
+    if isinstance(date, datetime.date):
+        date = datetime.datetime.combine(
+            date, datetime.datetime.min.time())
     return int(date.timestamp())
 
 

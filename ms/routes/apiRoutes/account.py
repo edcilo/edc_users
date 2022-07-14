@@ -9,6 +9,11 @@ from ms.routes.blueprints import api
 def profile():
     return AccountController.action("profile")
 
+@api.route('/profile', methods=['PUT'])
+@middleware(AuthMiddleware)
+def update():
+    return AccountController.action('update')
+
 @api.route('/profile/update-password', methods=['POST'])
 @middleware(AuthMiddleware)
 def updatePassword():

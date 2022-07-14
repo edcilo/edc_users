@@ -37,7 +37,7 @@ class ClientRepository(Repository):
         fields = ("legal_id_front", "legal_id_back", "proof_of_address")
         fields_url = {}
         for field in fields:
-            if not field in data or data.get(field).content_type is None:
+            if field not in data or data.get(field).content_type is None:
                 continue
             file = data.get(field)
             filename = generate_client_filename(user, file)

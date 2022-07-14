@@ -5,6 +5,7 @@ from flaskFormRequest.validators import (
     MimeTypes
 )
 
+
 class ClientUpdloaFilesForm(FormRequest):
     def rules(self):
         image_types = ('image/png', 'image/jpeg', 'image/gif',)

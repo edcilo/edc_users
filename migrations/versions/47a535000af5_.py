@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 6e7397366311
+Revision ID: 47a535000af5
 Revises: 
-Create Date: 2022-04-21 20:25:15.830636
+Create Date: 2022-07-14 16:41:58.745204
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '6e7397366311'
+revision = '47a535000af5'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -49,6 +49,22 @@ def upgrade():
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('phone')
     )
+    op.create_table('profile',
+    sa.Column('id', sa.String(length=36), nullable=False),
+    sa.Column('rfc', sa.String(length=13), nullable=True),
+    sa.Column('curp', sa.String(length=18), nullable=True),
+    sa.Column('home_phone', sa.String(length=15), nullable=True),
+    sa.Column('birthday', sa.DateTime(), nullable=True),
+    sa.Column('gender', sa.String(length=50), nullable=True),
+    sa.Column('legal_id_front', sa.String(length=255), nullable=True),
+    sa.Column('legal_id_back', sa.String(length=255), nullable=True),
+    sa.Column('proof_of_address', sa.String(length=255), nullable=True),
+    sa.Column('user_id', sa.String(length=36), nullable=False),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE'),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('curp'),
+    sa.UniqueConstraint('rfc')
+    )
     op.create_table('role_has_permissions',
     sa.Column('role_id', sa.String(length=36), nullable=True),
     sa.Column('permission_id', sa.String(length=36), nullable=True),
@@ -59,13 +75,13 @@ def upgrade():
     sa.Column('user_id', sa.String(length=36), nullable=True),
     sa.Column('permission_id', sa.String(length=36), nullable=True),
     sa.ForeignKeyConstraint(['permission_id'], ['permission.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], )
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE')
     )
     op.create_table('user_has_roles',
     sa.Column('user_id', sa.String(length=36), nullable=True),
     sa.Column('role_id', sa.String(length=36), nullable=True),
     sa.ForeignKeyConstraint(['role_id'], ['role.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], )
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ondelete='CASCADE')
     )
     # ### end Alembic commands ###
 
@@ -75,6 +91,7 @@ def downgrade():
     op.drop_table('user_has_roles')
     op.drop_table('user_has_permissions')
     op.drop_table('role_has_permissions')
+    op.drop_table('profile')
     op.drop_table('user')
     op.drop_table('role')
     op.drop_table('permission')

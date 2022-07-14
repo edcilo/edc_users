@@ -26,6 +26,4 @@ class UserProfileSerializer(Serializer):
         "created_at": time.datetime_to_epoch,
         "deleted_at": lambda date: time.datetime_to_epoch(date) if date else None,
         "profile": {
-            "type": ProfileSerializer
-        }
-    }
+            "type": ProfileSerializer}}

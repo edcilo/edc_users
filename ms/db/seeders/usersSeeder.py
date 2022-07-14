@@ -13,6 +13,7 @@ class UsersSeeder(Seeder):
 
         adminRole = Role.query.filter_by(name="root").first()
         clientRole = Role.query.filter_by(name="client").first()
+        merchantRole = Role.query.filter_by(name="merchant").first()
 
         root = User({
             "phone": "0000000000",
@@ -21,6 +22,10 @@ class UsersSeeder(Seeder):
         client = User({
             "phone": "1111111111",
             "email": "client@example.com",
+        })
+        merchant = User({
+            "phone": "2222222222",
+            "email": "merchant_single@example.com",
         })
 
         user = User.query.filter_by(email=root.email).first()
@@ -34,6 +39,12 @@ class UsersSeeder(Seeder):
             client.set_password('secret')
             client.roles.append(clientRole)
             self.db.session.add(client)
+
+        user = User.query.filter_by(email=client.email).first()
+        if user is None:
+            merchant.set_password('secret')
+            merchant.roles.append(merchantRole)
+            self.db.session.add(merchant)
 
         for _ in range(5):
             client = User({

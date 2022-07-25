@@ -105,4 +105,4 @@ class AdminUserController(Controller):
 
     def delete(self, id):
         self.userRepo.delete(id)
-        return jsonify({}), 204
+        return jsonify(None), 204

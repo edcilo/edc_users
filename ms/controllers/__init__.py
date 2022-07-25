@@ -6,3 +6,4 @@ from .clientController import ClientController
 from .permissionController import PermissionController
 from .roleController import RoleController
 from .webController import WebController
+from .appController import AppController

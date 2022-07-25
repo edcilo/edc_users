@@ -6,6 +6,7 @@ from .apiRoutes.admin import *
 from .apiRoutes.permissions import *
 from .apiRoutes.roles import *
 from .apiRoutes.client import *
+from .apiRoutes.app import *
 
 
 @api.route("/")

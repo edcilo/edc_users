@@ -23,8 +23,17 @@ class PermissionSeeder(Seeder):
             Permission({"name": "User - soft delete", "fixed": True}),
             Permission({"name": "User - restore", "fixed": True}),
             Permission({"name": "User - delete", "fixed": True}),
-            Permission({"name": "Client - create", "fixed": True}),
-            Permission({"name": "Client - update", "fixed": True}),
+            Permission({"name": "Shopper - create", "fixed": True}),
+            Permission({"name": "Shopper - update", "fixed": True}),
+            Permission({"name": "Shopper - upload files", "fixed": True}),
+            Permission({"name": "App - create", "fixed": True}),
+            Permission({"name": "App - list", "fixed": True}),
+            Permission({"name": "App - detail", "fixed": True}),
+            Permission({"name": "App - generate token", "fixed": True}),
+            Permission({"name": "App - update", "fixed": True}),
+            Permission({"name": "App - permissions", "fixed": True}),
+            Permission({"name": "App - roles", "fixed": True}),
+            Permission({"name": "App - delete", "fixed": True}),
         )
 
         for _ in permissions:

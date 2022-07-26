@@ -39,6 +39,20 @@ def api_app_update(id):
     return AppController.action('update', id)
 
 
+@api.route('/admin/app/<id>/sync-permissions', methods=['POST'])
+@middleware(AuthMiddleware)
+@middleware(PermissionMiddleware, permissions=('App - permissions',))
+def api_app_sync_permissions(id):
+    return AppController.action('sync_permissions', id)
+
+
+@api.route('/admin/app/<id>/sync-roles', methods=['POST'])
+@middleware(AuthMiddleware)
+@middleware(PermissionMiddleware, permissions=('App - roles',))
+def api_app_sync_roles(id):
+    return AppController.action('sync_roles', id)
+
+
 @api.route('/admin/app/<id>', methods=['DELETE'])
 @middleware(AuthMiddleware)
 @middleware(PermissionMiddleware, permissions=('App - delete',))

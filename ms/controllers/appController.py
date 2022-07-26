@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import jsonify, request
 from flaskFormRequest.decorators import form_validator
 from ms.forms import (
     AppListForm,
@@ -50,6 +50,16 @@ class AppController(Controller):
         app = self.appRepo.update(id, form.data)
         serializer = AppSerializer(app)
         return jsonify(serializer.get_data()), 200
+
+    def sync_permissions(self, id):
+        data = request.get_json()
+        self.appRepo.sync_permissions(id, data.get('permissions', []))
+        return jsonify(None), 204
+
+    def sync_roles(self, id):
+        data = request.get_json()
+        self.appRepo.sync_roles(id, data.get('roles', []))
+        return jsonify(None), 204
 
     def delete(self, id):
         self.appRepo.delete(id)

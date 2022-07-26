@@ -43,7 +43,7 @@ class ClientRepository(Repository):
             filename = generate_client_filename(user, file)
             path = f"/tmp/{filename}"
             ext = path.split(".")[-1]
-            destination = f"/clients/{user.id}/{field}.{ext}"
+            destination = f"/shoppers/{user.id}/{field}.{ext}"
             file.save(path)
             url = upload_file(path, destination)
             fields_url[field] = url

@@ -78,13 +78,13 @@ class AdminUserController(Controller):
     # TODO: add form validator
     def sync_permissions(self, id):
         data = request.get_json()
-        self.userRepo.sync_permissions(id, data.get("permissions"))
+        self.userRepo.sync_permissions(id, data.get("permissions", []))
         return jsonify(None), 204
 
     # TODO: add form validator
     def sync_roles(self, id):
         data = request.get_json()
-        self.userRepo.sync_roles(id, data.get("roles"))
+        self.userRepo.sync_roles(id, data.get("roles", []))
         return jsonify(None), 204
 
     def activate(self, id):

@@ -1,6 +1,8 @@
 from sqlalchemy import or_
 from ms.models import App
 from .repository import Repository
+from .permissionRepository import PermissionRepository
+from .roleRepository import RoleRepository
 
 
 class AppRepository(Repository):
@@ -22,3 +24,21 @@ class AppRepository(Repository):
                              self._model.description.like(f'%{search}%')))
         q = q.order_by(order_by())
         return q.paginate(page, per_page=per_page) if paginate else q.all()
+
+    def sync_permissions(self, id, permissions):
+        permissionRepo = PermissionRepository()
+        app = self.find(id)
+        app.permissions = list()
+        for permission_id in permissions:
+            permission = permissionRepo.find(permission_id)
+            app.permissions.append(permission)
+        self.db_save(app)
+
+    def sync_roles(self, id, roles):
+        roleRepo = RoleRepository()
+        app = self.find(id)
+        app.roles = list()
+        for role_id in roles:
+            role = roleRepo.find(role_id)
+            app.roles.append(role)
+        self.db_save(app)

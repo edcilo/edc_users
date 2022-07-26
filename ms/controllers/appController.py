@@ -4,13 +4,15 @@ from ms.forms import (
     AppListForm,
     AppCreateForm,
     AppUpdateForm)
+from ms.helpers.jwt import JwtHelper
 from ms.repositories import AppRepository
-from ms.serializers import AppSerializer
+from ms.serializers import AppSerializer, JwtSerializer
 from .controller import Controller
 
 
 class AppController(Controller):
     def __init__(self):
+        self.jwt = JwtHelper()
         self.appRepo = AppRepository()
 
     @form_validator(AppListForm)
@@ -36,6 +38,12 @@ class AppController(Controller):
         app = self.appRepo.find(id)
         serializer = AppSerializer(app)
         return jsonify(serializer.get_data()), 200
+
+    def generate_token(self, id):
+        app = self.appRepo.find(id)
+        serializer = JwtSerializer(app, token_lifetime=1576800000)
+        token = self.jwt.get_tokens(serializer.get_data())
+        return jsonify(token), 200
 
     @form_validator(AppUpdateForm)
     def update(self, id, form):

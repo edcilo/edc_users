@@ -25,6 +25,13 @@ def api_app_detail(id):
     return AppController.action('detail', id)
 
 
+@api.route('/admin/app/<id>/token', methods=['POST'])
+@middleware(AuthMiddleware)
+@middleware(PermissionMiddleware, permissions=('App - generate token',))
+def api_app_generate_token(id):
+    return AppController.action('generate_token', id)
+
+
 @api.route('/admin/app/<id>', methods=['PUT'])
 @middleware(AuthMiddleware)
 @middleware(PermissionMiddleware, permissions=('App - update',))

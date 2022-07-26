@@ -39,6 +39,13 @@ def api_app_update(id):
     return AppController.action('update', id)
 
 
+@api.route('/admin/apps/<id>/permissions')
+@middleware(AuthMiddleware)
+@middleware(PermissionMiddleware, permissions=('App - detail',))
+def api_app_permissions(id):
+    return AppController.action('permissions', id)
+
+
 @api.route('/admin/apps/<id>/sync-permissions', methods=['POST'])
 @middleware(AuthMiddleware)
 @middleware(PermissionMiddleware, permissions=('App - permissions',))

@@ -68,11 +68,11 @@ class AdminUserController(Controller):
         user = self.userRepo.find(id)
         permissions_serializer = PermissionSerializer(
             user.permissions.all(), collection=True)
-        role_psermissions_serializer = PermissionSerializer(
+        role_permissions_serializer = PermissionSerializer(
             user.all_permissions, collection=True)
         return jsonify({
             "permissions": permissions_serializer.get_data(),
-            "roles_permissions": role_psermissions_serializer.get_data()
+            "roles_permissions": role_permissions_serializer.get_data()
         }), 200
 
     # TODO: add form validator

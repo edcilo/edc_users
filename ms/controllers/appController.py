@@ -6,7 +6,10 @@ from ms.forms import (
     AppUpdateForm)
 from ms.helpers.jwt import JwtHelper
 from ms.repositories import AppRepository
-from ms.serializers import AppSerializer, JwtSerializer
+from ms.serializers import (
+    AppSerializer,
+    JwtSerializer,
+    PermissionSerializer)
 from .controller import Controller
 
 
@@ -50,6 +53,17 @@ class AppController(Controller):
         app = self.appRepo.update(id, form.data)
         serializer = AppSerializer(app)
         return jsonify(serializer.get_data()), 200
+
+    def permissions(self, id):
+        app = self.appRepo.find(id)
+        permissions_serializer = PermissionSerializer(
+            app.permissions.all(), collection=True)
+        role_permissions_serializer = PermissionSerializer(
+            app.all_permissions, collection=True)
+        return jsonify({
+            "permissions": permissions_serializer.get_data(),
+            "roles_permissions": role_permissions_serializer.get_data()
+        }), 200
 
     def sync_permissions(self, id):
         data = request.get_json()

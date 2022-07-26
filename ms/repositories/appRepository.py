@@ -59,13 +59,6 @@ class AppRepository(Repository):
         app = super().delete(id)
         self.deleteCache(app)
 
-    def updateCache(self) -> bool:
-        apps = self.all()
-        ms_app.cache.truncate(self.cache_key_prefix)
-        for app in apps:
-            self.setCache(app)
-        return True
-
     def setCache(self, app):
         permissions = [p.name for p in app.all_permissions]
         data = {

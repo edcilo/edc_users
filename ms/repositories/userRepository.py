@@ -151,13 +151,6 @@ class UserRepository(Repository):
         if self.rootRole in user.roles_list:
             abort(403)
 
-    def updateCache(self) -> bool:
-        users = self.all()
-        app.cache.truncate(self.cache_key_prefix)
-        for user in users:
-            self.setCache(user)
-        return True
-
     def setCache(self, user):
         permissions = [p.name for p in user.all_permissions]
         data = {

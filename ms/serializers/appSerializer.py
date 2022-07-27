@@ -9,6 +9,7 @@ class AppSerializer(Serializer):
         "id": str,
         "name": str,
         "description": str,
+        "token": str,
         "created_at": time.datetime_to_epoch,
         "all_permissions": {
             "label": "permissions",

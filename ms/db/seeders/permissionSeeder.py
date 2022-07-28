@@ -12,6 +12,10 @@ class PermissionSeeder(Seeder):
         faker = Faker()
 
         permissions = (
+            Permission({"name": "Role - list", "fixed": True}),
+            Permission({"name": "Role - detail", "fixed": True}),
+            Permission({"name": "Permission - list", "fixed": True}),
+            Permission({"name": "Permission - detail", "fixed": True}),
             Permission({"name": "User - create", "fixed": True}),
             Permission({"name": "User - list", "fixed": True}),
             Permission({"name": "User - detail", "fixed": True}),

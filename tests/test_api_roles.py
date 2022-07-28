@@ -24,7 +24,7 @@ def test_api_create(client, auth, app):
     token = auth.get_token(username="root@example.com", password="secret")
     headers = {'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'}
     data = json.dumps({
-        'name': 'admin',
+        'name': 'foo',
         'fixed': True,
     })
     response = client.post('/api/v1/users/admin/role', headers=headers, data=data)
@@ -44,7 +44,7 @@ def test_api_update(client, auth, app):
     token = auth.get_token(username="root@example.com", password="secret")
     headers = {'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'}
     data = json.dumps({
-        'name': 'admin',
+        'name': 'foo',
         'fixed': False
     })
 

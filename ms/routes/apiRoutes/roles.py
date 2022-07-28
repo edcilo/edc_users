@@ -1,19 +1,19 @@
 from ms.controllers import RoleController
-from ms.middlewares import AuthMiddleware, RoleMiddleware
+from ms.middlewares import AuthMiddleware, RoleMiddleware, PermissionMiddleware
 from ms.middlewares.middleware import middleware
 from ms.routes.blueprints import api
 
 
 @api.route('/admin/roles')
 @middleware(AuthMiddleware)
-@middleware(RoleMiddleware, roles=('root',))
+@middleware(PermissionMiddleware, permissions=('Role - list',))
 def role_paginate():
     return RoleController.action('paginate')
 
 
 @api.route('/admin/roles/list')
 @middleware(AuthMiddleware)
-@middleware(RoleMiddleware, roles=('root',))
+@middleware(PermissionMiddleware, permissions=('Role - list',))
 def role_list():
     return RoleController.action('list')
 
@@ -27,7 +27,7 @@ def role_create():
 
 @api.route('/admin/role/<id>')
 @middleware(AuthMiddleware)
-@middleware(RoleMiddleware, roles=('root',))
+@middleware(PermissionMiddleware, permissions=('Role - detail',))
 def role_detail(id):
     return RoleController.action('detail', id)
 

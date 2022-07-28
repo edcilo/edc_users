@@ -8,12 +8,11 @@ from .associationTables import user_permission_table, user_role_table
 class User(db.Model):
     __tablename__ = 'user'
 
-    _default_role = 'client'
+    _default_role = 'shopper'
 
     _fillable = (
         'phone',
         'email',
-        'role_id',
         'name',
         'lastname',
         'mothername',
@@ -40,6 +39,12 @@ class User(db.Model):
         default=datetime.datetime.utcnow,
         nullable=False)
 
+    profile = db.relationship(
+        "Profile",
+        back_populates="user",
+        uselist=False,
+        cascade="all,delete",
+    )
     permissions = db.relationship(
         "Permission",
         lazy='dynamic',

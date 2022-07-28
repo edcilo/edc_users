@@ -4,7 +4,7 @@ from helpers import getUser
 
 def test_api_register(client):
     data = {
-        'phone': '0000000001',
+        'phone': '9000000001',
         'email': 'jhon.doe@example.com',
         'password': 'secret',
         'password_confirmation': 'secret',

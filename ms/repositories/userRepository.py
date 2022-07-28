@@ -1,4 +1,5 @@
 import datetime
+from flask import abort
 from sqlalchemy import or_
 from ms import app
 from ms.models import User
@@ -11,6 +12,7 @@ class UserRepository(Repository):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.roleRepo = RoleRepository()
+        self.rootRole = "root"
         self.cache_key_prefix = "ms-users-"
 
     def get_model(self):
@@ -121,6 +123,7 @@ class UserRepository(Repository):
     def soft_delete(self, id, fail=True):
         user = self.find(id, fail=fail)
         if user is not None and user.deleted_at is None:
+            self.canBeDeleted(user)
             user.deleted_at = datetime.datetime.now()
             self.db_save(user)
             self.deleteCache(user)
@@ -137,18 +140,16 @@ class UserRepository(Repository):
     def delete(self, id, fail=True):
         user = self.find(id, fail=fail, with_deleted=True)
         if user is not None:
+            self.canBeDeleted(user)
             user.permissions = list()
             user.roles = list()
             self.db_delete(user)
             self.deleteCache(user)
         return user
 
-    def updateCache(self) -> bool:
-        users = self.all()
-        app.cache.truncate(self.cache_key_prefix)
-        for user in users:
-            self.setCache(user)
-        return True
+    def canBeDeleted(self, user):
+        if self.rootRole in user.roles_list:
+            abort(403)
 
     def setCache(self, user):
         permissions = [p.name for p in user.all_permissions]

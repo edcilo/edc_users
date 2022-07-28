@@ -1,19 +1,19 @@
 from ms.controllers import PermissionController
-from ms.middlewares import AuthMiddleware, RoleMiddleware
+from ms.middlewares import AuthMiddleware, RoleMiddleware, PermissionMiddleware
 from ms.middlewares.middleware import middleware
 from ms.routes.blueprints import api
 
 
 @api.route('/admin/permissions')
 @middleware(AuthMiddleware)
-@middleware(RoleMiddleware, roles=('root',))
+@middleware(PermissionMiddleware, permissions=('Permission - list',))
 def permission_paginate():
     return PermissionController.action('paginate')
 
 
 @api.route('/admin/permissions/list')
 @middleware(AuthMiddleware)
-@middleware(RoleMiddleware, roles=('root',))
+@middleware(PermissionMiddleware, permissions=('Permission - list',))
 def permission_list():
     return PermissionController.action('list')
 
@@ -28,6 +28,7 @@ def permission_create():
 @api.route('/admin/permission/<id>')
 @middleware(AuthMiddleware)
 @middleware(RoleMiddleware, roles=('root',))
+@middleware(PermissionMiddleware, permissions=('Permission - detail',))
 def permission_detail(id):
     return PermissionController.action('detail', id)
 

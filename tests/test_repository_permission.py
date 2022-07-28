@@ -27,9 +27,9 @@ def test_all(app):
         permissionRepo = PermissionRepository()
         permissions = permissionRepo.all()
         assert isinstance(permissions, list)
-        assert len(permissions) == 11
+        assert len(permissions) == 26
         results = permissionRepo.all('list')
-        assert len(results) == 1
+        assert len(results) == 4
         results = permissionRepo.all('foo')
         assert len(results) == 0
 

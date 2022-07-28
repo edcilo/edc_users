@@ -12,6 +12,10 @@ class PermissionSeeder(Seeder):
         faker = Faker()
 
         permissions = (
+            Permission({"name": "Role - list", "fixed": True}),
+            Permission({"name": "Role - detail", "fixed": True}),
+            Permission({"name": "Permission - list", "fixed": True}),
+            Permission({"name": "Permission - detail", "fixed": True}),
             Permission({"name": "User - create", "fixed": True}),
             Permission({"name": "User - list", "fixed": True}),
             Permission({"name": "User - detail", "fixed": True}),
@@ -23,6 +27,17 @@ class PermissionSeeder(Seeder):
             Permission({"name": "User - soft delete", "fixed": True}),
             Permission({"name": "User - restore", "fixed": True}),
             Permission({"name": "User - delete", "fixed": True}),
+            Permission({"name": "Shopper - create", "fixed": True}),
+            Permission({"name": "Shopper - update", "fixed": True}),
+            Permission({"name": "Shopper - upload files", "fixed": True}),
+            Permission({"name": "App - create", "fixed": True}),
+            Permission({"name": "App - list", "fixed": True}),
+            Permission({"name": "App - detail", "fixed": True}),
+            Permission({"name": "App - generate token", "fixed": True}),
+            Permission({"name": "App - update", "fixed": True}),
+            Permission({"name": "App - permissions", "fixed": True}),
+            Permission({"name": "App - roles", "fixed": True}),
+            Permission({"name": "App - delete", "fixed": True}),
         )
 
         for _ in permissions:

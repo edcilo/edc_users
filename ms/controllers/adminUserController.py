@@ -1,13 +1,12 @@
 from flask import jsonify, request
 from flaskFormRequest.decorators import form_validator
-from ms import app
 from ms.forms import (
     AdminListUsersForm,
     AdminCreateUserForm,
     AdminUpdateUserForm,
     AdminUpdateUserPasswordForm)
 from ms.repositories import UserRepository, RoleRepository
-from ms.serializers import UserSerializer, UserPermissionsSerializer, PermissionSerializer
+from ms.serializers import UserSerializer, UserProfileSerializer, PermissionSerializer
 from .controller import Controller
 
 
@@ -51,7 +50,7 @@ class AdminUserController(Controller):
 
     def detail(self, id):
         user = self.userRepo.find(id)
-        serializer = UserPermissionsSerializer(user)
+        serializer = UserProfileSerializer(user)
         return jsonify(serializer.get_data()), 200
 
     @form_validator(AdminUpdateUserForm)
@@ -69,23 +68,23 @@ class AdminUserController(Controller):
         user = self.userRepo.find(id)
         permissions_serializer = PermissionSerializer(
             user.permissions.all(), collection=True)
-        role_psermissions_serializer = PermissionSerializer(
+        role_permissions_serializer = PermissionSerializer(
             user.all_permissions, collection=True)
         return jsonify({
             "permissions": permissions_serializer.get_data(),
-            "roles_permissions": role_psermissions_serializer.get_data()
+            "roles_permissions": role_permissions_serializer.get_data()
         }), 200
 
     # TODO: add form validator
     def sync_permissions(self, id):
         data = request.get_json()
-        self.userRepo.sync_permissions(id, data.get("permissions"))
+        self.userRepo.sync_permissions(id, data.get("permissions", []))
         return jsonify(None), 204
 
     # TODO: add form validator
     def sync_roles(self, id):
         data = request.get_json()
-        self.userRepo.sync_roles(id, data.get("roles"))
+        self.userRepo.sync_roles(id, data.get("roles", []))
         return jsonify(None), 204
 
     def activate(self, id):
@@ -106,4 +105,4 @@ class AdminUserController(Controller):
 
     def delete(self, id):
         self.userRepo.delete(id)
-        return jsonify({}), 204
+        return jsonify(None), 204

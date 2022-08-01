@@ -46,7 +46,7 @@ class AppController(Controller):
         app = self.appRepo.find(id)
         serializer = JwtSerializer(app)
         token = self.jwt.get_tokens(serializer.get_data())
-        self.appRepo.update_token(app, token)
+        self.appRepo.update_token(app, token.get('token'))
         return jsonify(token), 200
 
     @form_validator(AppUpdateForm)

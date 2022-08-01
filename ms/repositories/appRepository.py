@@ -35,6 +35,13 @@ class AppRepository(Repository):
         q = q.order_by(order_by())
         return q.paginate(page, per_page=per_page) if paginate else q.all()
 
+    def update_token(self, app, token):
+        app = app if isinstance(app, App) else self.find(app)
+        app.token = token
+        self.db_save(app)
+        self.setCache(app)
+        return app
+
     def sync_permissions(self, id, permissions):
         permissionRepo = PermissionRepository()
         app = self.find(id)

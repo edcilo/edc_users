@@ -15,7 +15,7 @@ from .controller import Controller
 
 class AppController(Controller):
     def __init__(self):
-        self.jwt = JwtHelper()
+        self.jwt = JwtHelper(token_lifetime=1576800000)
         self.appRepo = AppRepository()
 
     @form_validator(AppListForm)
@@ -44,7 +44,7 @@ class AppController(Controller):
 
     def generate_token(self, id):
         app = self.appRepo.find(id)
-        serializer = JwtSerializer(app, token_lifetime=1576800000)
+        serializer = JwtSerializer(app)
         token = self.jwt.get_tokens(serializer.get_data())
         return jsonify(token), 200
 

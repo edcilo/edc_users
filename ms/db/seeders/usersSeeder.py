@@ -59,7 +59,7 @@ class UsersSeeder(Seeder):
                 "email": faker.unique.email(),
                 "name": faker.first_name(),
                 "lastname": faker.last_name(),
-                "mothername": faker.last_name(),
+                "second_lastname": faker.last_name(),
             })
             shopper.is_active = True if randint(0, 1) else False
             shopper.set_password("secret")

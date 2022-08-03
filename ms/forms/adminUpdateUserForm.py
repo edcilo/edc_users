@@ -40,9 +40,9 @@ class AdminUpdateUserForm(FormRequest):
                 Max(50),
                 Regex(regex.personal_name_regex, message='The lastname is invalid'),
             ],
-            'mothername': [
+            'second_lastname': [
                 Nullable(),
                 Max(50),
-                Regex(regex.personal_name_regex, message='The mothername is invalid'),
+                Regex(regex.personal_name_regex, message='The second lastname is invalid'),
             ],
         }

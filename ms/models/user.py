@@ -15,7 +15,7 @@ class User(db.Model):
         'email',
         'name',
         'lastname',
-        'mothername',
+        'second_lastname',
     )
 
     id = db.Column(
@@ -27,7 +27,7 @@ class User(db.Model):
     password = db.Column(db.String(250), nullable=False)
     name = db.Column(db.String(50), nullable=True)
     lastname = db.Column(db.String(50), nullable=True)
-    mothername = db.Column(db.String(50), nullable=True)
+    second_lastname = db.Column(db.String(50), nullable=True)
     is_active = db.Column(db.Boolean, default=False, nullable=False)
     deleted_at = db.Column(
         db.DateTime,
@@ -65,7 +65,7 @@ class User(db.Model):
 
     @property
     def fullname(self) -> str:
-        return f'{self.name} {self.lastname} {self.mothername}'
+        return f'{self.name} {self.lastname} {self.second_lastname}'
 
     def set_password(self, password: str) -> None:
         self.password = generate_password_hash(password)

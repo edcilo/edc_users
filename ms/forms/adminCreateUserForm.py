@@ -24,8 +24,8 @@ class AdminCreateUserForm(FormRequest):
             ],
             'phone': [
                 Required(),
-                Min(9),
-                Max(15),
+                Min(10),
+                Max(10),
                 Regex(regex.phone_regex, message='The phone is invalid'),
                 Unique(User)
             ],

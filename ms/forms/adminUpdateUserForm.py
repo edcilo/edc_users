@@ -32,14 +32,17 @@ class AdminUpdateUserForm(FormRequest):
             ],
             'name': [
                 Nullable(),
-                Max(50)
+                Max(50),
+                Regex(regex.personal_name_regex, message='The name is invalid'),
             ],
             'lastname': [
                 Nullable(),
-                Max(50)
+                Max(50),
+                Regex(regex.personal_name_regex, message='The lastname is invalid'),
             ],
             'mothername': [
                 Nullable(),
-                Max(50)
+                Max(50),
+                Regex(regex.personal_name_regex, message='The mothername is invalid'),
             ],
         }

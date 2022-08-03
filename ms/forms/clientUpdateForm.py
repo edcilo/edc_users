@@ -44,16 +44,18 @@ class ClientUpdateForm(FormRequest):
             ],
             'name': [
                 Required(),
-                Max(50)
+                Max(50),
+                Regex(regex.personal_name_regex, message='The name is invalid'),
             ],
             'lastname': [
                 Required(),
-                Max(50)
+                Max(50),
+                Regex(regex.personal_name_regex, message='The lastname is invalid'),
             ],
             'mothername': [
                 Required(),
-                Nullable(),
-                Max(50)
+                Max(50),
+                Regex(regex.personal_name_regex, message='The mothername is invalid'),
             ],
             'rfc': [
                 Required(),

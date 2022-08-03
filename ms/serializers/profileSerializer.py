@@ -21,7 +21,7 @@ class UserProfileSerializer(Serializer):
         "phone": str,
         "name": str,
         "lastname": str,
-        "mothername": str,
+        "second_lastname": str,
         "is_active": bool,
         "created_at": time.datetime_to_epoch,
         "deleted_at": lambda date: time.datetime_to_epoch(date) if date else None,

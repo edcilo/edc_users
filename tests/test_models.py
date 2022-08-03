@@ -48,7 +48,7 @@ def test_user():
         'phone': '1231231231',
         'name': 'jhon',
         'lastname': 'doe',
-        'mothername': 'foo'
+        'second_lastname': 'foo'
     })
     assert str(user) == f'<User {user.id} {user.email}>'
     assert user.email == 'jhon.doe@example'

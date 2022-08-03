@@ -25,21 +25,24 @@ class AdminUpdateUserForm(FormRequest):
             ],
             'phone': [
                 Required(),
-                Min(9),
-                Max(15),
+                Min(10),
+                Max(10),
                 Regex(regex.phone_regex, message='The phone is invalid'),
                 Unique(User, except_id=user_id)
             ],
             'name': [
                 Nullable(),
-                Max(50)
+                Max(50),
+                Regex(regex.personal_name_regex, message='The name is invalid'),
             ],
             'lastname': [
                 Nullable(),
-                Max(50)
+                Max(50),
+                Regex(regex.personal_name_regex, message='The lastname is invalid'),
             ],
-            'mothername': [
+            'second_lastname': [
                 Nullable(),
-                Max(50)
+                Max(50),
+                Regex(regex.personal_name_regex, message='The second lastname is invalid'),
             ],
         }

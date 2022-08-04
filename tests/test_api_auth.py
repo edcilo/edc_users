@@ -54,12 +54,12 @@ def test_api_check(client, auth):
 
     userRepo.delete(user.id)
     res = client.post('/api/v1/users/check', headers=headers)
-    assert res.status_code == 403
+    assert res.status_code == 401
 
     headers = {}
     res = client.post('/api/v1/users/check', headers=headers)
-    assert res.status_code == 403
+    assert res.status_code == 401
 
     headers = {'Authorization': f'Bearer abcde12345'}
     res = client.post('/api/v1/users/check', headers=headers)
-    assert res.status_code == 403
+    assert res.status_code == 401

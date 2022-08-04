@@ -26,7 +26,7 @@ class AccountController(Controller):
         data = {
             "name": form.data.get("name"),
             "lastname": form.data.get("lastname"),
-            "mothername": form.data.get("mothername"),
+            "second_lastname": form.data.get("second_lastname"),
         }
         user = self.userRepo.update(user.id, data)
         serializer = UserProfileSerializer(user)

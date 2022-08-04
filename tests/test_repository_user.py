@@ -35,7 +35,7 @@ def test_all(app):
         userRepo = UserRepository()
         users = userRepo.all()
         assert isinstance(users, list)
-        assert len(users) == 9
+        assert len(users) == 10
         results = userRepo.all('shopper')
         assert len(results) == 1
         results = userRepo.all('foo')

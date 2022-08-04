@@ -29,7 +29,7 @@ def test_all(app):
         assert isinstance(roles, list)
         assert len(roles) > 1
         results = roleRepo.all('root')
-        assert len(results) == 1
+        assert len(results) == 2
         results = roleRepo.all('foo')
         assert len(results) == 0
 

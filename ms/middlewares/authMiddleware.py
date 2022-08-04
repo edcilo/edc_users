@@ -11,17 +11,17 @@ class AuthMiddleware(Middleware):
         auth = request.headers.get('Authorization')
 
         if not auth:
-            abort(403)
+            abort(401)
 
         valid = jwtHelper.check(auth)
 
         if not valid:
-            abort(403)
+            abort(401)
 
         payload = jwtHelper.decode(auth)
         user = userRepo.find(payload['id'], fail=False)
         if not user:
-            abort(403)
+            abort(401)
 
         payload['user'] = user
         setattr(request, 'auth', payload)

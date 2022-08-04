@@ -38,6 +38,23 @@ class PermissionSeeder(Seeder):
             Permission({"name": "App - permissions", "fixed": True}),
             Permission({"name": "App - roles", "fixed": True}),
             Permission({"name": "App - delete", "fixed": True}),
+
+            # Feature flags
+            Permission({"name": "Feature Flags - service - create", "fixed": True}),
+            Permission({"name": "Feature Flags - service - list", "fixed": True}),
+            Permission({"name": "Feature Flags - service - detail", "fixed": True}),
+            Permission({"name": "Feature Flags - service - update", "fixed": True}),
+            Permission({"name": "Feature Flags - service - delete", "fixed": True}),
+            Permission({"name": "Feature Flags - feature - create", "fixed": True}),
+            Permission({"name": "Feature Flags - feature - list", "fixed": True}),
+            Permission({"name": "Feature Flags - feature - detail", "fixed": True}),
+            Permission({"name": "Feature Flags - feature - update", "fixed": True}),
+            Permission({"name": "Feature Flags - feature - update status", "fixed": True}),
+            Permission({"name": "Feature Flags - feature - delete", "fixed": True}),
+
+            # Analytics
+            Permission({"name": "Analytics - event - create", "fixed": True}),
+            Permission({"name": "Analytics - counters - list", "fixed": True}),
         )
 
         for _ in permissions:

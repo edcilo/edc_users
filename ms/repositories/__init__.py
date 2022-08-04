@@ -1,4 +1,6 @@
 from .repository import Repository
 from .userRepository import UserRepository
-
-userRepo = UserRepository()
+from .clientRepository import ClientRepository
+from .roleRepository import RoleRepository
+from .permissionRepository import PermissionRepository
+from .appRepository import AppRepository

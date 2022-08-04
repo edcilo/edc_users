@@ -1,20 +1,18 @@
-import os
 import time
-from datetime import datetime, timezone
-from ms import app
+import datetime
 
 
-utc = timezone.utc
-app_tz = app.config.get('APP_TIMEZONE', 'UTC')
+def now():
+    utc = datetime.timezone.utc
+    return datetime.datetime.now(tz=utc)
 
 
-os.environ['TZ'] = app_tz
-time.tzset()
+def datetime_to_epoch(date):
+    if isinstance(date, datetime.date):
+        date = datetime.datetime.combine(
+            date, datetime.datetime.min.time())
+    return int(date.timestamp())
 
 
-def now() -> datetime:
-    return datetime.now(tz=utc)
-
-
-def epoch_now() -> int:
+def epoch_now():
     return int(time.time())

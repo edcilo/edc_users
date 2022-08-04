@@ -1,8 +1,9 @@
 from .accountController import AccountController
-from .adminController import AdminController
+from .adminUserController import AdminUserController
+from .apiController import ApiController
 from .authController import AuthController
-
-
-accountController = AccountController()
-adminController = AdminController()
-authController = AuthController()
+from .clientController import ClientController
+from .permissionController import PermissionController
+from .roleController import RoleController
+from .webController import WebController
+from .appController import AppController

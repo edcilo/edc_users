@@ -18,6 +18,9 @@ _mailinglist
 .idea/
 docs/_build/
 .vscode
+*.sqlite
+
+!migrations/env.py
 
 # Coverage reports
 htmlcov/

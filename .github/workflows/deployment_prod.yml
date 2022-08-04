@@ -88,7 +88,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Update deployment file
-        run: TAG=$(echo ${{ needs.image.outputs.version }}) && sed -i 's|<IMAGE>|${{ env.DOCKER_IMAGE }}:'${TAG}'|' $GITHUB_WORKSPACE/k8s/manifest.yml
+        run: TAG=$(echo ${{ needs.image.outputs.version }}) && sed -i 's|<IMAGE>|${{ env.DOCKER_IMAGE }}:'${TAG}'|' $GITHUB_WORKSPACE/k8s/manifest_prod.yml
 
       - name: Update deployment celery file
         run: TAG=$(echo ${{ needs.image.outputs.version }}) && sed -i 's|<IMAGE>|${{ env.DOCKER_IMAGE }}:'${TAG}'|' $GITHUB_WORKSPACE/k8s/manifest_celery.yml
@@ -104,7 +104,7 @@ jobs:
         run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.DEV_CLUSTER_NAME }}
 
       - name: Deploy to EKS
-        run: kubectl apply -f $GITHUB_WORKSPACE/k8s/manifest.yml
+        run: kubectl apply -f $GITHUB_WORKSPACE/k8s/manifest_prod.yml
 
       - name: Deploy Celery to EKS
         run: kubectl apply -f $GITHUB_WORKSPACE/k8s/manifest_celery.yml

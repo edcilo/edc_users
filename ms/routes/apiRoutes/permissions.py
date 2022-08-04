@@ -27,7 +27,6 @@ def permission_create():
 
 @api.route('/admin/permission/<id>')
 @middleware(AuthMiddleware)
-@middleware(RoleMiddleware, roles=('root',))
 @middleware(PermissionMiddleware, permissions=('Permission - detail',))
 def permission_detail(id):
     return PermissionController.action('detail', id)

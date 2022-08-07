@@ -4,4 +4,4 @@ phone_regex = '\\d{9,15}$'
 
 password_regex = '^\\S*$'
 
-personal_name_regex = "^[a-zA-Z ,.'-]+$"
+personal_name_regex = "^[a-zA-Z ,.'-]*$"

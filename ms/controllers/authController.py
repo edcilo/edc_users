@@ -3,7 +3,7 @@ from flaskFormRequest.decorators import form_validator
 from ms import app
 from ms.forms import AuthLoginForm, AuthRegisterForm
 from ms.helpers.jwt import JwtHelper
-from ms.repositories import UserRepository, ClientRepository
+from ms.repositories import UserRepository, ShopperRepository
 from ms.serializers import JwtSerializer
 from .controller import Controller
 
@@ -12,7 +12,7 @@ class AuthController(Controller):
     def __init__(self):
         self.jwt = JwtHelper()
         self.userRepo = UserRepository()
-        self.clientRepo = ClientRepository()
+        self.shopperRepo = ShopperRepository()
 
     def get_token(self, user):
         serializer = JwtSerializer(user)
@@ -20,7 +20,7 @@ class AuthController(Controller):
 
     @form_validator(AuthRegisterForm)
     def register(self, form):
-        user = self.clientRepo.add(form.data)
+        user = self.shopperRepo.add(form.data)
         token = self.get_token(user)
         return jsonify(token), 201
 

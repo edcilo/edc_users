@@ -24,7 +24,7 @@ services:
     env_file:
     - .env
     environment:
-    - FLASK_ENV=celery
+    - APP_ENV=celery
     depends_on:
     - ms_aq_db
     - ms_aq_redis

@@ -52,6 +52,8 @@ class Serializer:
                     raise Exception(
                         f"The key `type` is required on the attribute {attr}")
             value = getattr(model, attr, None)
+            if value is None and isinstance(model, dict):
+                value = model.get(attr, None)
             if isinstance(attrType, types.FunctionType):
                 data[label] = attrType(value)
             elif issubclass(attrType, Serializer):

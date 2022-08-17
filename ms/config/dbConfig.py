@@ -34,6 +34,7 @@ def db_connection(db_config):
         raise Exception("The database engine does not exist")
 
     return {
+        "DB_ENGINE": engine,
         "SQLALCHEMY_DATABASE_URI": connection,
         "SQLALCHEMY_TRACK_MODIFICATIONS": False
     }

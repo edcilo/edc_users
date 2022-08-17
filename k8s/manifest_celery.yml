@@ -23,11 +23,16 @@ spec:
         - name: http
           containerPort: 5000
         env:
-        - name: FLASK_ENV
+        - name: APP_ENV
           valueFrom:
             configMapKeyRef:
               name: ms-users-configmap
-              key: FLASK_ENV_CELERY
+              key: APP_ENV_CELERY
+        - name: FLASK_DEBUG
+          valueFrom:
+            configMapKeyRef:
+              name: ms-users-configmap
+              key: FLASK_DEBUG
         - name: APP_NAME
           valueFrom:
             configMapKeyRef:

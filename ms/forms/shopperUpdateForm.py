@@ -13,23 +13,29 @@ from flaskFormRequest.validators import (
 )
 from ms.helpers import regex
 from ms.models import User, Profile
+from ms.repositories import UserRepository
 
 
-class ClientCreateForm(FormRequest):
+class ShopperUpdateForm(FormRequest):
     def rules(self):
+        userRepo = UserRepository()
+        user_id = self.request.view_args.get('id')
+        user = userRepo.find(user_id)
+        profile_id = user.profile.id
+
         return {
             'email': [
                 Required(),
                 Max(255),
                 Email(),
-                Unique(User)
+                Unique(User, except_id=user_id)
             ],
             'phone': [
                 Required(),
                 Min(10),
                 Max(10),
                 Regex(regex.phone_regex, message='The phone is invalid'),
-                Unique(User)
+                Unique(User, except_id=user_id)
             ],
             'password': [
                 Required(),
@@ -48,19 +54,18 @@ class ClientCreateForm(FormRequest):
             ],
             'second_lastname': [
                 Required(),
-                Nullable(),
                 Max(50),
                 Regex(regex.personal_name_regex, message='The second lastname is invalid'),
             ],
             'rfc': [
                 Required(),
                 Size(13),
-                Unique(Profile)
+                Unique(Profile, except_id=profile_id)
             ],
             'curp': [
                 Required(),
                 Size(18),
-                Unique(Profile)
+                Unique(Profile, except_id=profile_id)
             ],
             'home_phone': [
                 Nullable(),

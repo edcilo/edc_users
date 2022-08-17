@@ -4,7 +4,7 @@ set -e
 
 echo $(date '+%F %T.%3N %Z') "[flask] INFO: running start.sh"
 
-env=${FLASK_ENV:-development}
+env=${APP_ENV:-development}
 
 if [ $env = "production" ]
 then

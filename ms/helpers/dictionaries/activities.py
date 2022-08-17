@@ -1,0 +1,17 @@
+activities = [
+    "Alimentos",
+    "Automotriz",
+    "Comercio",
+    "Comida",
+    "Construcción",
+    "Educación",
+    "Gobierno",
+    "Independiente",
+    "Otros",
+    "Publico",
+    "Restaurante",
+    "Retail",
+    "Salud",
+    "Servicios",
+    "Transporte",
+]

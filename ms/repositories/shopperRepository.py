@@ -5,7 +5,7 @@ from ms.repositories.roleRepository import RoleRepository
 from .repository import Repository
 
 
-class ClientRepository(Repository):
+class ShopperRepository(Repository):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.userRepo = UserRepository()

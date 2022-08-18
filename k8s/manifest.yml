@@ -128,16 +128,16 @@ spec:
             configMapKeyRef:
               name: ms-users-configmap
               key: RFC_API_HOST
-        - name: CURP_API_URL
+        - name: RFC_API_KEY
           valueFrom:
             secretKeyRef:
               name: ms-secrets
-              key: CURP_API_URL
-        - name: RFC_API_HOST
+              key: RFC_API_KEY
+        - name: CURP_API_URL
           valueFrom:
             configMapKeyRef:
               name: ms-users-configmap
-              key: RFC_API_HOST
+              key: CURP_API_URL
         - name: CURP_API_TOKEN
           valueFrom:
             secretKeyRef:

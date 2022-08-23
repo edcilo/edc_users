@@ -16,7 +16,7 @@ class Profile(db.Model):
         default=lambda: str(uuid.uuid4()),
         primary_key=True)
     birthday = db.Column(db.DateTime, nullable=True)
-    gender = db.Column(db.String(50), nullable=True) # M -> Male, F -> Female
+    gender = db.Column(db.String(50), nullable=True)  # M -> Male, F -> Female
 
     user_id = db.Column(
         db.String(36),

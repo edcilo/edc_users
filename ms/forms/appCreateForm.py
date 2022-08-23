@@ -13,4 +13,4 @@ class AppCreateForm(FormRequest):
                 Unique(App)],
             'description': [
                 Nullable(),
-                Max(512)],}
+                Max(512)], }

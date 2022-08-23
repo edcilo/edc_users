@@ -9,7 +9,7 @@ class App(db.Model):
 
     _fillable = [
         'name',
-        'description',]
+        'description', ]
 
     id = db.Column(
         db.String(length=36),
@@ -42,7 +42,7 @@ class App(db.Model):
         passive_deletes=True)
 
     def __init__(self, data=None):
-        if not data is None:
+        if data is not None:
             self.setAttrs(data)
 
     def __repr__(self):

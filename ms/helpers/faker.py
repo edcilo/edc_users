@@ -2,7 +2,33 @@ import random
 from datetime import date
 
 
-letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+letters = [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g",
+    "h",
+    "i",
+    "j",
+    "k",
+    "l",
+    "m",
+    "n",
+    "o",
+    "p",
+    "q",
+    "r",
+    "s",
+    "t",
+    "u",
+    "v",
+    "w",
+    "x",
+    "y",
+    "z"]
 numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 
@@ -31,9 +57,14 @@ def birthday():
     return f"{year}-{month:02d}-{day:02d}"
 
 
-def name_birthday(name: str = None, lastname: str = None, second_lastname : str = None, birthday: str = birthday):
+def name_birthday(
+        name: str = None,
+        lastname: str = None,
+        second_lastname: str = None,
+        birthday: str = birthday):
     prefix = get_random_letters(2) if lastname is None else lastname[:2]
-    prefix += get_random_letters(1) if second_lastname is None else second_lastname[:1]
+    prefix += get_random_letters(1) \
+        if second_lastname is None else second_lastname[:1]
     prefix += get_random_letters(1) if name is None else name[:1]
 
     birthday = birthday if isinstance(birthday, str) else birthday()
@@ -45,13 +76,23 @@ def name_birthday(name: str = None, lastname: str = None, second_lastname : str 
     return prefix
 
 
-def rfc(name: str = None, lastname: str = None, second_lastname : str = None, birthday: str = birthday):
+def rfc(
+        name: str = None,
+        lastname: str = None,
+        second_lastname: str = None,
+        birthday: str = birthday):
     rfc = name_birthday(name, lastname, second_lastname, birthday)
     rfc += get_random_letters_with_numbers(3)
     return rfc.upper()
 
 
-def curp(name: str = None, lastname: str = None, second_lastname : str = None, birthday: str = birthday, entity_birth: str = None, gender: str = None):
+def curp(
+        name: str = None,
+        lastname: str = None,
+        second_lastname: str = None,
+        birthday: str = birthday,
+        entity_birth: str = None,
+        gender: str = None):
     curp = name_birthday(name, lastname, second_lastname, birthday)
     curp += gender or random.choice(["H", "M"])
     curp += entity_birth or get_random_letters(2)

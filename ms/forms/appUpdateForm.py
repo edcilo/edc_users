@@ -15,4 +15,4 @@ class AppUpdateForm(FormRequest):
                 Unique(App, except_id=app_id)],
             'description': [
                 Nullable(),
-                Max(512)],}
+                Max(512)], }

@@ -23,7 +23,10 @@ class Make:
 
     @property
     def source(self):
-        return os.path.join(self.appPath, self.templatesPath, self.templateFile)
+        return os.path.join(
+            self.appPath,
+            self.templatesPath,
+            self.templateFile)
 
     @property
     def filename(self):

@@ -5,18 +5,16 @@ from datetime import (
 from ms import app
 
 
-app_tz = app.config.get('TIMEZONE')
+app_tz: str = app.config.get('TIMEZONE')
 
 
-def now(tz=app_tz):
+def now(tz: str = app_tz) -> datetime:
     return datetime.now(tz=pytz.timezone(tz))
 
 
-def datetime_to_epoch(date):
-    if isinstance(date, datetime_instance):
-        date = datetime.combine(date, datetime.min.time())
+def datetime_to_epoch(date: datetime) -> int:
     return int(date.timestamp())
 
 
-def epoch_now():
+def epoch_now() -> int:
     return datetime_to_epoch(now())

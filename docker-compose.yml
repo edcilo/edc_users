@@ -1,8 +1,8 @@
 version: '3.9'
 
 services:
-  ms_aq_users:
-    container_name: ms_aq_users
+  ms_users:
+    container_name: ms_users
     build: .
     ports:
     - 8080:5000
@@ -11,54 +11,39 @@ services:
     env_file:
     - .env
     depends_on:
-    - ms_aq_db
-    - ms_aq_redis
+    - ms_db
+    - ms_redis
     networks:
-    - aqUsersNetwork
+    - msUsersNetwork
 
-  ms_aq_celery:
-    container_name: ms_aq_celery
-    build: .
-    volumes:
-    - ./:/app
-    env_file:
-    - .env
-    environment:
-    - APP_ENV=celery
-    depends_on:
-    - ms_aq_db
-    - ms_aq_redis
-    networks:
-    - aqUsersNetwork
-
-  ms_aq_db:
-    container_name: ms_aq_db
+  ms_db:
+    container_name: ms_db
     image: postgres
     ports:
     - 5432:5432
     volumes:
-    - aqUsersDbVolume:/var/lib/postgresql/data
+    - msUsersDbVolume:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: ms_users
       POSTGRES_USER: ms_users
       POSTGRES_PASSWORD: secret
     networks:
-    - aqUsersNetwork
+    - msUsersNetwork
 
-  ms_aq_redis:
-    container_name: ms_aq_redis
+  ms_redis:
+    container_name: ms_redis
     image: redis:6-alpine
     ports:
       - 6379:6379
     networks:
-      - aqUsersNetwork
+      - msUsersNetwork
 
 
 volumes:
-  aqUsersDbVolume:
+  msUsersDbVolume:
     driver: local
 
 
 networks:
-  aqUsersNetwork:
+  msUsersNetwork:
     driver: "bridge"

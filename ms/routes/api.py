@@ -9,6 +9,6 @@ from .apiRoutes.shopper import *
 from .apiRoutes.app import *
 
 
-@api.route("/")
+@api.route('/')
 def api_index():
     return ApiController.action('index')

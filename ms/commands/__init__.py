@@ -8,7 +8,6 @@ from .makeModel import makemodel
 from .makeRepository import makerepository
 from .makeSeeder import makeseeder
 from .makeSerializer import makeserializer
-from .updateCache import updatecache
 
 
 app.cli.add_command(pep8)

@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ms-users
-  namespace: dev
+  namespace: <NAMESPACE>
 spec:
   replicas: <REPLICAS>
   selector:

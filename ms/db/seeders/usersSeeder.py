@@ -13,7 +13,7 @@ class UsersSeeder(Seeder):
         faker = Faker()
 
         adminRole = Role.query.filter_by(name="root").first()
-        shopperRole = Role.query.filter_by(name="shopper").first()
+        userRole = Role.query.filter_by(name="user").first()
         merchantRootRole = Role.query.filter_by(name="merchant_root").first()
         merchantAdminRole = Role.query.filter_by(name="merchant_admin").first()
         merchantRole = Role.query.filter_by(name="merchant").first()
@@ -49,11 +49,11 @@ class UsersSeeder(Seeder):
             },
             {
                 "id": "4bd7a357-0670-4aa9-a261-6234b774f7fe",
-                "name": "shopper",
-                "email": "shopper@example.com",
+                "name": "user",
+                "email": "user@example.com",
                 "phone": "9999999999",
-                "role": shopperRole,
-            }
+                "role": userRole,
+            },
         )
 
         for user in users:
@@ -67,14 +67,14 @@ class UsersSeeder(Seeder):
                 self.db.session.add(model)
 
         for _ in range(5):
-            shopper = User({
+            user = User({
                 "phone": faker.unique.msisdn(),
                 "email": faker.unique.email(),
                 "name": faker.first_name(),
                 "lastname": faker.last_name(),
                 "second_lastname": faker.last_name(),
             })
-            shopper.is_active = True if randint(0, 1) else False
-            shopper.set_password("secret")
-            shopper.roles.append(shopperRole)
-            self.db.session.add(shopper)
+            user.is_active = True if randint(0, 1) else False
+            user.set_password("secret")
+            user.roles.append(userRole)
+            self.db.session.add(user)

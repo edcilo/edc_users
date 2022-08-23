@@ -8,7 +8,7 @@ from .associationTables import user_permission_table, user_role_table
 class User(db.Model):
     __tablename__ = 'user'
 
-    _default_role = 'shopper'
+    _default_role = 'user'
 
     _fillable = (
         'phone',

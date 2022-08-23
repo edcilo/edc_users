@@ -5,7 +5,6 @@ from .apiRoutes.auth import *
 from .apiRoutes.admin import *
 from .apiRoutes.permissions import *
 from .apiRoutes.roles import *
-from .apiRoutes.shopper import *
 from .apiRoutes.app import *
 
 

@@ -4,9 +4,6 @@ from datetime import (
     datetime)
 from ms import app
 
-import time
-import datetime
-
 
 app_tz = app.config.get('TIMEZONE')
 

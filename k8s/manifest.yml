@@ -3,8 +3,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ms-users
+  namespace: develop
 spec:
-  replicas: 1
+  replicas: <REPLICAS>
   selector:
     matchLabels:
       app: ms-users
@@ -23,16 +24,16 @@ spec:
         - name: http
           containerPort: 5000
         env:
-        - name: APP_ENV
-          valueFrom:
-            configMapKeyRef:
-              name: ms-users-configmap
-              key: APP_ENV
         - name: FLASK_DEBUG
           valueFrom:
             configMapKeyRef:
               name: ms-users-configmap
               key: FLASK_DEBUG
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: ms-users-configmap
+              key: APP_ENV
         - name: APP_NAME
           valueFrom:
             configMapKeyRef:
@@ -118,31 +119,6 @@ spec:
             configMapKeyRef:
               name: ms-users-configmap
               key: S3_BUCKET
-        - name: RFC_API_URL
-          valueFrom:
-            configMapKeyRef:
-              name: ms-users-configmap
-              key: RFC_API_URL
-        - name: RFC_API_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: ms-users-configmap
-              key: RFC_API_HOST
-        - name: RFC_API_KEY
-          valueFrom:
-            secretKeyRef:
-              name: ms-secrets
-              key: RFC_API_KEY
-        - name: CURP_API_URL
-          valueFrom:
-            configMapKeyRef:
-              name: ms-users-configmap
-              key: CURP_API_URL
-        - name: CURP_API_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: ms-secrets
-              key: CURP_API_TOKEN
         resources:
           requests:
             cpu: 250m

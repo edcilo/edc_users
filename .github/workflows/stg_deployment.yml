@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  DOCKER_IMAGE: gravitimx/aq_ms_users
+  DOCKER_IMAGE: edcilo/edc_users
 
 jobs:
   testing:
@@ -79,7 +79,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DEV_CLUSTER_NAME: ${{ secrets.STG_CLUSTER_NAME }}
+      CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: ${{ secrets.AWS_REGION }}
@@ -91,9 +91,6 @@ jobs:
       - name: Update deployment file
         run: TAG=$(echo ${{ needs.image.outputs.version }}) && sed -i 's|<IMAGE>|${{ env.DOCKER_IMAGE }}:'${TAG}'|' $GITHUB_WORKSPACE/k8s/manifest.yml
 
-      - name: Update deployment celery file
-        run: TAG=$(echo ${{ needs.image.outputs.version }}) && sed -i 's|<IMAGE>|${{ env.DOCKER_IMAGE }}:'${TAG}'|' $GITHUB_WORKSPACE/k8s/manifest_celery.yml
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -102,16 +99,10 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Save AWS kubeconfig
-        run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.DEV_CLUSTER_NAME }}
+        run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.CLUSTER_NAME }}
 
       - name: Delete Pod
         run: kubectl delete -f $GITHUB_WORKSPACE/k8s/manifest.yml
 
       - name: Deploy to EKS
         run: kubectl apply -f $GITHUB_WORKSPACE/k8s/manifest.yml
-
-      - name: Delete Celery Pod
-        run: kubectl delete -f $GITHUB_WORKSPACE/k8s/manifest_celery.yml
-
-      - name: Deploy Celery to EKS
-        run: kubectl apply -f $GITHUB_WORKSPACE/k8s/manifest_celery.yml

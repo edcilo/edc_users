@@ -16,9 +16,6 @@ class RoleSeeder(Seeder):
             Role({"name": "admin", "fixed": True}),
             Role({"name": "application", "fixed": True}),
             Role({"name": "user", "fixed": True}),
-            Role({"name": "merchant_root", "fixed": True}),
-            Role({"name": "merchant_admin", "fixed": True}),
-            Role({"name": "merchant", "fixed": True}),
         )
 
         for _ in roles:

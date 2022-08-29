@@ -3,7 +3,7 @@ from flask_cors import CORS
 
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=['localhost', 'edcilo.com', 'vercel.app'])
 
 
 import ms.config

@@ -6,18 +6,19 @@ from ms.db import db
 class Repository(abc.ABC):
     def __init__(self) -> None:
         self._model = self.get_model()
+        self.session = db.session
 
     @abc.abstractmethod
     def get_model(self):
         pass
 
     def db_save(self, model=None):
-        db.session.add(model)
-        db.session.commit()
+        self.session.add(model)
+        self.session.commit()
 
     def db_delete(self, model):
-        db.session.delete(model)
-        db.session.commit()
+        self.session.delete(model)
+        self.session.commit()
 
     def add(self, data):
         user = self._model(data)

@@ -19,6 +19,7 @@ def app():
     with app_.app_context():
         app_.config.update(TESTING=True)
         app_.config.update(SECRET_KEY='testingapp')
+        app_.config.update(DB_ENGINE='sqlite')
         app_.config.update(SQLALCHEMY_DATABASE_URI=f'sqlite:///{db_path}')
         app_.cache.conn = RedisWrapper()
         init(directory=migrations_path)

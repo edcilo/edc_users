@@ -9,6 +9,8 @@ on:
 
 env:
   DOCKER_IMAGE: edcilo/edc_users
+  NAMESPACE: dev
+  REPLICAS: 1
 
 jobs:
   testing:
@@ -73,36 +75,42 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-  # deploy:
-  #   needs: image
-  #   name: Deploy image in eks
-  #   runs-on: ubuntu-latest
+  deploy:
+    needs: image
+    name: Deploy image in eks
+    runs-on: ubuntu-latest
 
-  #   env:
-  #     CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
-  #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #     AWS_REGION: ${{ secrets.AWS_REGION }}
+    env:
+      CLUSTER_NAME: ${{ secrets.CLUSTER_NAME }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
 
-  #   steps:
-  #     - name: Check out the repo
-  #       uses: actions/checkout@v2
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
 
-  #     - name: Update deployment file
-  #       run: TAG=$(echo ${{ needs.image.outputs.version }}) && sed -i 's|<IMAGE>|${{ env.DOCKER_IMAGE }}:'${TAG}'|' $GITHUB_WORKSPACE/k8s/manifest.yml
+      - name: Update namespace
+        run: sed -i 's|<NAMESPACE>|${{ env.NAMESPACE }}|' $GITHUB_WORKSPACE/k8s/manifest.yml
 
-  #     - name: Configure AWS credentials
-  #       uses: aws-actions/configure-aws-credentials@v1
-  #       with:
-  #         aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-  #         aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-  #         aws-region: ${{ env.AWS_REGION }}
+      - name: Update deployment replicas
+        run: sed -i 's|<REPLICAS>|${{ env.REPLICAS }}|' $GITHUB_WORKSPACE/k8s/manifest.yml
 
-  #     - name: Save AWS kubeconfig
-  #       run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.CLUSTER_NAME }}
+      - name: Update deployment image name
+        run: TAG=$(echo ${{ needs.image.outputs.version }}) && sed -i 's|<IMAGE>|${{ env.DOCKER_IMAGE }}:'${TAG}'|' $GITHUB_WORKSPACE/k8s/manifest.yml
 
-  #     - name: Delete Pod
-  #       run: kubectl delete -f $GITHUB_WORKSPACE/k8s/manifest.yml
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
-  #     - name: Deploy to EKS
-  #       run: kubectl apply -f $GITHUB_WORKSPACE/k8s/manifest.yml
+      - name: Save AWS kubeconfig
+        run: aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.CLUSTER_NAME }}
+
+      - name: Delete Pod
+        run: kubectl delete -f $GITHUB_WORKSPACE/k8s/manifest.yml
+
+      - name: Deploy to EKS
+        run: kubectl apply -f $GITHUB_WORKSPACE/k8s/manifest.yml

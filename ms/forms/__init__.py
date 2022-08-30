@@ -14,9 +14,6 @@ from .adminUpdateUserForm import AdminUpdateUserForm
 from .adminUpdateUserPasswordForm import AdminUpdateUserPasswordForm
 from .authLoginForm import AuthLoginForm
 from .authRegisterForm import AuthRegisterForm
-from .clientCreateForm import ClientCreateForm
-from .clientUpdateForm import ClientUpdateForm
-from .clientUploadIdFilesForm import ClientUpdloaFilesForm
 from .appListForm import AppListForm
 from .appCreateForm import AppCreateForm
 from .appUpdateForm import AppUpdateForm

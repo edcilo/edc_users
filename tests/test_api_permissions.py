@@ -6,7 +6,7 @@ from helpers import getPermission
 def test_api_paginate(client, auth, app):
     token = auth.get_token(username="root@example.com", password="secret")
     headers = {'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'}
-    response = client.get('/api/v1/users/admin/permissions', headers=headers)
+    response = client.get('/api/v1/users/admin/permission', headers=headers)
     assert response.status_code == 200
     assert "data" in response.json
     assert "pagination" in response.json
@@ -15,7 +15,7 @@ def test_api_paginate(client, auth, app):
 def test_api_list(client, auth, app):
     token = auth.get_token(username="root@example.com", password="secret")
     headers = {'Authorization': f'Bearer {token}', 'Content-Type': 'application/json'}
-    response = client.get('/api/v1/users/admin/permissions/list', headers=headers)
+    response = client.get('/api/v1/users/admin/permission/list', headers=headers)
     assert response.status_code == 200
     assert isinstance(response.json, list)
 

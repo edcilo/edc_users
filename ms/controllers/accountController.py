@@ -5,14 +5,14 @@ from ms.forms import (
     AccountUpdateAuthForm,
     AccountUpdatePasswordForm,
     AccountUpdateProfileForm)
-from ms.repositories import ClientRepository, UserRepository
+from ms.repositories import ProfileRepository, UserRepository
 from ms.serializers import UserProfileSerializer, PermissionSerializer
 from .controller import Controller
 
 
 class AccountController(Controller):
     def __init__(self):
-        self.clientRepo = ClientRepository()
+        self.profileRepo = ProfileRepository()
         self.userRepo = UserRepository()
 
     def profile(self):
@@ -46,7 +46,7 @@ class AccountController(Controller):
     @form_validator(AccountUpdateProfileForm)
     def updateProfile(self, form):
         user = request.auth.get('user')
-        user = self.clientRepo.update(user, form.data)
+        user = self.profileRepo.update(user, form.data)
         serializer = UserProfileSerializer(user)
         return jsonify(serializer.get_data()), 200
 

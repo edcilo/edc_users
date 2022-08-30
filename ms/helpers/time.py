@@ -1,18 +1,20 @@
-import time
-import datetime
+import pytz
+from datetime import (
+    date as datetime_instance,
+    datetime)
+from ms import app
 
 
-def now():
-    utc = datetime.timezone.utc
-    return datetime.datetime.now(tz=utc)
+app_tz: str = app.config.get('TIMEZONE')
 
 
-def datetime_to_epoch(date):
-    if isinstance(date, datetime.date):
-        date = datetime.datetime.combine(
-            date, datetime.datetime.min.time())
+def now(tz: str = app_tz) -> datetime:
+    return datetime.now(tz=pytz.timezone(tz))
+
+
+def datetime_to_epoch(date: datetime) -> int:
     return int(date.timestamp())
 
 
-def epoch_now():
-    return int(time.time())
+def epoch_now() -> int:
+    return datetime_to_epoch(now())

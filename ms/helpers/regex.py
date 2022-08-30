@@ -4,4 +4,8 @@ phone_regex = '\\d{9,15}$'
 
 password_regex = '^\\S*$'
 
-personal_name_regex = "^[a-zA-Z ,.'-]+$"
+personal_name_regex = "^[a-zA-ZÀ-ÖØ-Ýà-öø-ÿ ,.'-]*$"
+
+text = "^[a-zA-ZÀ-ÖØ-Ýà-öø-ÿ ]*$"
+
+text_with_numbers = "^[a-zA-ZÀ-ÖØ-Ýà-öø-ÿ0-9 ]*$"

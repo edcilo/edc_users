@@ -27,3 +27,6 @@ htmlcov/
 .coverage
 .coverage.*
 *,cover
+
+# migrations env file
+!migrations/env.py

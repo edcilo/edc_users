@@ -4,14 +4,14 @@ from ms.middlewares.middleware import middleware
 from ms.routes.blueprints import api
 
 
-@api.route('/admin/roles')
+@api.route('/admin/role')
 @middleware(AuthMiddleware)
 @middleware(PermissionMiddleware, permissions=('Role - list',))
 def role_paginate():
     return RoleController.action('paginate')
 
 
-@api.route('/admin/roles/list')
+@api.route('/admin/role/list')
 @middleware(AuthMiddleware)
 @middleware(PermissionMiddleware, permissions=('Role - list',))
 def role_list():

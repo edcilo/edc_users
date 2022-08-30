@@ -6,11 +6,8 @@ from .roleSerializer import RoleSerializer
 
 class ProfileSerializer(Serializer):
     response = {
-        "rfc": str,
-        "curp": str,
-        "home_phone": str,
         "birthday": lambda date: date.strftime("%Y-%m-%d") if date else None,
-        "gender": str
+        "gender": str,
     }
 
 

@@ -1,8 +1,9 @@
 FROM python:3.10-alpine
 
 ENV PYTHONUNBUFFERED=1
+ENV APP_ENV=production
 ENV FLASK_APP=ms
-ENV FLASK_ENV=production
+ENV FLASK_DEBUG=false
 
 RUN apk update \
     && apk add --no-cache \
